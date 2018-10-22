@@ -7,6 +7,7 @@ import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import LoginScreen from '../screens/LoginScreen';
+import LegalScreen from '../screens/LegalScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -54,23 +55,27 @@ SettingsStack.navigationOptions = {
   ),
 };
 
-const LoginStack = createStackNavigator({
-  Login: LoginScreen,
+const LegalStack = createStackNavigator({
+  Legal: LegalScreen,
 });
 
-LoginStack.navigationOptions = {
-  tabBarLabel: 'Login WIP',
+LegalStack.navigationOptions = {
+  tabBarLabel: 'Legal',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? `ios-link${focused ? '' : '-outline'}` : 'md-link'}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-information-circle${focused ? '' : '-outline'}`
+          : 'md-information-circle'
+      }
     />
   ),
-}
+};
 
 export default createBottomTabNavigator({
   HomeStack,
   LinksStack,
+  LegalStack,
   SettingsStack,
-  LoginStack,
 });

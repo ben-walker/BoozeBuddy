@@ -30,7 +30,9 @@ export default class LoginScreen extends React.Component {
           rounded
           title='Log In'
           backgroundColor={colors.actionButton}
-        />        
+          // Authentication logic should live below.
+          onPress={() => this.props.navigation.navigate('App')}
+        />
       </View>
     );
   }
