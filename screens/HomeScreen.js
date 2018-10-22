@@ -5,17 +5,17 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
-  View,
+  View
 } from 'react-native';
-import { WebBrowser } from 'expo';
+import { createStackNavigator } from 'react-navigation';
 
 import { MonoText } from '../components/StyledText';
 
 import colour from '../constants/Colors';
+import {Button} from "react-native-elements";
 
 
-export default class HomeScreen extends React.Component {
+class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
@@ -28,32 +28,25 @@ export default class HomeScreen extends React.Component {
             <Image
               source={
                 __DEV__
-                  ? require('../assets/images/robot-dev.png')
-                  : require('../assets/images/robot-prod.png')
+                  ? require('../assets/images/DrinkIcons/cheers.png')
+                  : require('../assets/images/DrinkIcons/cheers.png')
               }
               style={styles.welcomeImage}
             />
           </View>
 
-          <View style={styles.getStartedContainer}>
-            {this._maybeRenderDevelopmentModeWarning()}
+            <Button
+                onPress={() => this.props.navigation.navigate('Calc')}
+                style={styles.button}
+                rounded
+                title='Start Drinking?'
+                backgroundColor={colour.actionButton}
+            />
+            <Text > </Text>
 
-            <Text style={styles.getStartedText}>Get started by opening</Text>
+            <Text style={styles.getStartedText}>Info about drinking here</Text>
 
-            <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-              <MonoText style={styles.codeHighlightText}>screens/HomeScreen.js</MonoText>
-            </View>
 
-            <Text style={styles.getStartedText}>
-              Change text!
-            </Text>
-          </View>
-
-          <View style={styles.helpContainer}>
-            <TouchableOpacity onPress={this._handleHelpPress} style={styles.helpLink}>
-              <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-            </TouchableOpacity>
-          </View>
         </ScrollView>
 
         <View style={styles.tabBarInfoContainer}>
@@ -66,39 +59,32 @@ export default class HomeScreen extends React.Component {
       </View>
     );
   }
+}
 
-  _maybeRenderDevelopmentModeWarning() {
-    if (__DEV__) {
-      const learnMoreButton = (
-        <Text onPress={this._handleLearnMorePress} style={styles.helpLinkText}>
-          Learn more
-        </Text>
-      );
-
-      return (
-        <Text style={styles.developmentModeText}>
-          Development mode is enabled, your app will be slower but you can use useful development
-          tools. {learnMoreButton}
-        </Text>
-      );
-    } else {
-      return (
-        <Text style={styles.developmentModeText}>
-          You are not in development mode, your app will run at full speed.
-        </Text>
-      );
+class CalculatorScreen extends React.Component {
+    render() {
+        return (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <Text>Calculator Screen</Text>
+            </View>
+        );
     }
-  }
+}
 
-  _handleLearnMorePress = () => {
-    WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/guides/development-mode');
-  };
-
-  _handleHelpPress = () => {
-    WebBrowser.openBrowserAsync(
-      'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes'
-    );
-  };
+const RootStack = createStackNavigator
+(
+    {
+        Home: HomeScreen,
+        Calc: CalculatorScreen,
+    },
+    {
+        initialRouteName: 'Home',
+    }
+);
+export default class App extends React.Component {
+    render() {
+        return <RootStack />;
+    }
 }
 
 const styles = StyleSheet.create({
@@ -187,5 +173,6 @@ const styles = StyleSheet.create({
   helpLinkText: {
     fontSize: 14,
     color: colour.accent,
-  },
+  }
+
 });
