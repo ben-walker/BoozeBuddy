@@ -12,6 +12,9 @@ import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
 
+import colour from '../constants/Colors';
+
+
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
@@ -42,7 +45,7 @@ export default class HomeScreen extends React.Component {
             </View>
 
             <Text style={styles.getStartedText}>
-              Change this text and your app will automatically reload.
+              Change text!
             </Text>
           </View>
 
@@ -101,11 +104,11 @@ export default class HomeScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colour.background,
   },
   developmentModeText: {
     marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
+    color: colour.defaultText,
     fontSize: 14,
     lineHeight: 19,
     textAlign: 'center',
@@ -133,16 +136,16 @@ const styles = StyleSheet.create({
     marginVertical: 7,
   },
   codeHighlightText: {
-    color: 'rgba(96,100,109, 0.8)',
+    color: colour.defaultText,
   },
   codeHighlightContainer: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
+    backgroundColor: colour.secondary,
     borderRadius: 3,
     paddingHorizontal: 4,
   },
   getStartedText: {
     fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
+    color: colour.defaultText,
     lineHeight: 24,
     textAlign: 'center',
   },
@@ -163,12 +166,12 @@ const styles = StyleSheet.create({
       },
     }),
     alignItems: 'center',
-    backgroundColor: '#fbfbfb',
+    backgroundColor: colour.secondary,
     paddingVertical: 20,
   },
   tabBarInfoText: {
     fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
+    color: colour.defaultText,
     textAlign: 'center',
   },
   navigationFilename: {
@@ -183,6 +186,6 @@ const styles = StyleSheet.create({
   },
   helpLinkText: {
     fontSize: 14,
-    color: '#2e78b7',
+    color: colour.accent,
   },
 });
