@@ -5,10 +5,9 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
-  View,
+  View
 } from 'react-native';
-import { WebBrowser } from 'expo';
+import { createStackNavigator } from 'react-navigation';
 
 import { MonoText } from '../components/StyledText';
 
@@ -16,7 +15,7 @@ import colour from '../constants/Colors';
 import {Button} from "react-native-elements";
 
 
-export default class HomeScreen extends React.Component {
+class HomeScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
@@ -37,7 +36,7 @@ export default class HomeScreen extends React.Component {
           </View>
 
             <Button
-                onPress={this._handleStartDrinking}
+                onPress={() => this.props.navigation.navigate('Calc')}
                 style={styles.button}
                 rounded
                 title='Start Drinking?'
@@ -60,12 +59,32 @@ export default class HomeScreen extends React.Component {
       </View>
     );
   }
+}
 
+class CalculatorScreen extends React.Component {
+    render() {
+        return (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <Text>Calculator Screen</Text>
+            </View>
+        );
+    }
+}
 
-  _handleStartDrinking = () =>{
-
-
-  };
+const RootStack = createStackNavigator
+(
+    {
+        Home: HomeScreen,
+        Calc: CalculatorScreen,
+    },
+    {
+        initialRouteName: 'Home',
+    }
+);
+export default class App extends React.Component {
+    render() {
+        return <RootStack />;
+    }
 }
 
 const styles = StyleSheet.create({
@@ -154,5 +173,6 @@ const styles = StyleSheet.create({
   helpLinkText: {
     fontSize: 14,
     color: colour.accent,
-  },
+  }
+
 });
