@@ -25,7 +25,6 @@ export default class SplashScreen extends React.Component {
               rounded
               title='Sign Up'
               backgroundColor={colors.actionButton}
-              // Authentication logic should live below.
               onPress={() => this.props.navigation.navigate('Signup')}
               />
           </View>
@@ -35,7 +34,6 @@ export default class SplashScreen extends React.Component {
               rounded
               title='Log In'
               backgroundColor={colors.actionButton}
-              // Authentication logic should live below.
               onPress={() => this.props.navigation.navigate('Login')}
               />
           </View>
