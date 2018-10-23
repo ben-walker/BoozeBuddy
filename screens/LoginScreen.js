@@ -35,9 +35,9 @@ export default class LoginScreen extends React.Component {
     });
     
     if (!rawResponse.ok) return alert("Credentials not recognized.");
+    const response = await rawResponse.json();
 
-    // TODO: store an actual user token on successful login
-    await AsyncStorage.setItem('userToken', 'STUB')
+    await AsyncStorage.setItem('userData', JSON.stringify(response.user));
     this.props.navigation.navigate('App');
   }
 
