@@ -102,6 +102,9 @@ const RootStack = createStackNavigator
     }
 );
 export default class App extends React.Component {
+    static navigationOptions = {
+        header:null
+    };
     render() {
         return <RootStack />;
     }
