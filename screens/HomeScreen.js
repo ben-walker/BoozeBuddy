@@ -22,17 +22,7 @@ export default class HomeScreen extends React.Component {
         header:null
     };
 
-    async logOut() {
-        await fetch('https://dr-robotnik.herokuapp.com/api/logOut', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        });
-        await AsyncStorage.removeItem('userToken');
-        this.props.navigation.navigate('Auth');
-    }
+   
 
     render() {
     return (
@@ -57,13 +47,7 @@ export default class HomeScreen extends React.Component {
                 backgroundColor={colour.accent}
             />
 
-            <Button
-                onPress={this.logOut}
-                style={styles.button}
-                rounded
-                title='Log Out'
-                backgroundColor={colour.errorBackground}
-            />
+
             <Text > </Text>
 
             <Text style={styles.defaultText}>Info about drinking here</Text>

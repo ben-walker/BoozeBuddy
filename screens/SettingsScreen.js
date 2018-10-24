@@ -1,17 +1,58 @@
 import React from 'react';
 import { ExpoConfigView } from '@expo/samples';
 import colour from '../constants/Colors';
-import {StyleSheet} from "react-native";
+import {AsyncStorage, Image, ScrollView, StyleSheet, View} from "react-native";
+import {Button} from "react-native-elements";
 
 export default class SettingsScreen extends React.Component {
+    constructor(props) {
+        super(props);
+        this.logOut = this.logOut.bind(this)
+    }
+
   static navigationOptions = {
-    title: 'app.json',
+    title: 'Settings',
   };
+
+    async logOut() {
+        await fetch('https://dr-robotnik.herokuapp.com/api/logOut', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+        await AsyncStorage.removeItem('userToken');
+        this.props.navigation.navigate('Auth');
+    }
 
   render() {
     /* Go ahead and delete ExpoConfigView and replace it with your
      * content, we just wanted to give you a quick view of your config */
-    return <ExpoConfigView />;
+    return (
+        <View style={styles.container}>
+            <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+                <View style={styles.contentContainer}>
+                    <Image
+                        source={
+                            __DEV__
+                                ? require('../assets/images/DrinkIcons/cheers.png')
+                                : require('../assets/images/DrinkIcons/cheers.png')
+                        }
+                        style={styles.imageIcon}
+                    />
+                </View>
+                <Button
+                    onPress={this.logOut}
+                    style={styles.button}
+                    rounded
+                    title='Log Out'
+                    backgroundColor={colour.errorBackground}
+                />
+            </ScrollView>
+        </View>
+
+    );
   }
 }
 const styles = StyleSheet.create({
