@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import colour from "../constants/Colors";
 
 export default class LegalScreen extends React.Component {
@@ -12,8 +12,9 @@ export default class LegalScreen extends React.Component {
 
   render() {
     return (
-      <ScrollView style={styles.container}>
-        <Text style = {styles.defaultText}>
+      <View style={styles.container}>
+        <ScrollView style={styles.contentContainer}>
+          <Text style = {styles.defaultText}>
 {`Last updated: October 22, 2018
 
 
@@ -73,8 +74,9 @@ Contact Us
 
 If you have any questions about these Terms, please contact us.`}
 
-        </Text>
-      </ScrollView>
+          </Text>
+        </ScrollView>
+      </View>
     );
   }
 }
@@ -84,6 +86,11 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 15,
     backgroundColor: colour.background
+  },
+  contentContainer: {
+      marginTop: 1,
+      marginBottom:1,
+      backgroundColor:colour.background
   },
   defaultText: {
       fontSize: 12,
