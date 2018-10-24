@@ -31,17 +31,8 @@ export default class SettingsScreen extends React.Component {
      * content, we just wanted to give you a quick view of your config */
     return (
         <View style={styles.container}>
-            <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-                <View style={styles.contentContainer}>
-                    <Image
-                        source={
-                            __DEV__
-                                ? require('../assets/images/DrinkIcons/cheers.png')
-                                : require('../assets/images/DrinkIcons/cheers.png')
-                        }
-                        style={styles.imageIcon}
-                    />
-                </View>
+            <ScrollView style={styles.container} >
+                
                 <Button
                     onPress={this.logOut}
                     style={styles.button}

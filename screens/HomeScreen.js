@@ -13,16 +13,10 @@ import colour from '../constants/Colors';
 import {Button} from "react-native-elements";
 
 export default class HomeScreen extends React.Component {
-    constructor(props) {
-        super(props);
-        this.logOut = this.logOut.bind(this)
-    }
-
     static navigationOptions = {
         header:null
     };
 
-   
 
     render() {
     return (
