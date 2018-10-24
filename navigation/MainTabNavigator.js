@@ -7,9 +7,14 @@ import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import LegalScreen from '../screens/LegalScreen';
+import CalculatorScreen from '../screens/CalculatorScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
+  Calculator: CalculatorScreen,
+},
+{
+  initialRouteName: 'Home',
 });
 
 HomeStack.navigationOptions = {
