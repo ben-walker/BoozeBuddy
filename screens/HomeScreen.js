@@ -9,29 +9,28 @@ import {
 } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 
-import { MonoText } from '../components/StyledText';
 
 import colour from '../constants/Colors';
 import {Button} from "react-native-elements";
-
+import SettingsScreen from "./SettingsScreen";
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
-    header: null,
+      header:null
   };
 
   render() {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          <View style={styles.welcomeContainer}>
+          <View style={styles.contentContainer}>
             <Image
               source={
                 __DEV__
                   ? require('../assets/images/DrinkIcons/cheers.png')
                   : require('../assets/images/DrinkIcons/cheers.png')
               }
-              style={styles.welcomeImage}
+              style={styles.imageIcon}
             />
           </View>
 
@@ -40,11 +39,11 @@ class HomeScreen extends React.Component {
                 style={styles.button}
                 rounded
                 title='Start Drinking?'
-                backgroundColor={colour.actionButton}
+                backgroundColor={colour.accent}
             />
             <Text > </Text>
 
-            <Text style={styles.getStartedText}>Info about drinking here</Text>
+            <Text style={styles.defaultText}>Info about drinking here</Text>
 
 
         </ScrollView>
@@ -54,11 +53,40 @@ class HomeScreen extends React.Component {
 }
 
 class CalculatorScreen extends React.Component {
+    static navigationOptions = {
+        header:null
+    };
     render() {
+        var date = new Date();
+        var timestamp = date.getHours() + ":" + date.getMinutes();
+        var bac;
+
         return (
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <Text>Calculator Screen</Text>
-            </View>
+            <ScrollView style={styles.container}>
+                <Text style={styles.defaultText}>Calculator Screen</Text>
+
+                <View style={styles.bacHeader}>
+                    <Text style={styles.bigText}>BAC:</Text>
+
+                </View>
+
+                <View style={styles.timeHeader}>
+                    <Text style={styles.smallText}>Drink display : X X X X X X X X X  </Text>
+                </View>
+
+                <View style={styles.timeHeader}>
+                    <Text style={styles.defaultText}>Started Drinking : </Text>
+                </View>
+
+                <View style={styles.favBar}>
+                    <Text style={styles.smallText}>Favourites</Text>
+                </View>
+
+                <ScrollView style={styles.listContainer}>
+                    <Text style={styles.smallText}>Drink List</Text>
+                </ScrollView>
+            </ScrollView>
+
         );
     }
 }
@@ -80,91 +108,59 @@ export default class App extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colour.background,
-  },
-  developmentModeText: {
-    marginBottom: 20,
-    color: colour.defaultText,
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center',
-  },
-  contentContainer: {
-    paddingTop: 30,
-  },
-  welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  welcomeImage: {
-    width: 100,
-    height: 80,
-    resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
-  },
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
-  },
-  homeScreenFilename: {
-    marginVertical: 7,
-  },
-  codeHighlightText: {
-    color: colour.defaultText,
-  },
-  codeHighlightContainer: {
-    backgroundColor: colour.secondary,
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
-  getStartedText: {
-    fontSize: 17,
-    color: colour.defaultText,
-    lineHeight: 24,
-    textAlign: 'center',
-  },
-  tabBarInfoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: 'center',
-    backgroundColor: colour.secondary,
-    paddingVertical: 20,
-  },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: colour.defaultText,
-    textAlign: 'center',
-  },
-  navigationFilename: {
-    marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  helpLink: {
-    paddingVertical: 15,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: colour.accent,
-  }
+    container: {
+        flex: 1,
+        backgroundColor: colour.background,
+    },
+    contentContainer: {
+        marginTop: 10,
+        marginBottom:20,
+        alignItems: 'center',
+        backgroundColor:colour.secondary
+    },
 
+    imageIcon:{
+        width:100,
+        height:80,
+        marginTop:3,
+        marginLeft: -10,
+        resizeMode: "contain"
+    },
+    defaultText: {
+        fontSize: 17,
+        color: colour.defaultText,
+        lineHeight: 24,
+        textAlign: 'center'
+    },
+
+    bigText:{
+        fontSize: 48,
+        color: colour.defaultText,
+        textAlign: 'center'
+    },
+    smallText:{
+        fontSize: 10,
+        color: colour.defaultText
+    },
+
+    bacHeader:{
+        height:60,
+        backgroundColor: colour.secondary,
+        alignItems: 'flex-end'
+    },
+    timeHeader:{
+        height:30,
+        backgroundColor: colour.background,
+    },
+    favBar:{
+        height:100,
+        backgroundColor: colour.secondary,
+    },
+    listContainer:{
+        backgroundColor: colour.background,
+    },
+    drinkIconContainer:{
+        height:80,
+        backgroundColor: colour.secondary,
+    }
 });
