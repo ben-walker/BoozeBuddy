@@ -4,7 +4,12 @@ import colour from "../constants/Colors";
 
 export default class LegalScreen extends React.Component {
   static navigationOptions = {
-    title: 'Legal'
+      title: 'Legal',
+      headerTintColor: colour.defaultText,
+      headerStyle: {
+          backgroundColor: colour.background
+      },
+
 
   };
 

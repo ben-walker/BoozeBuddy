@@ -11,6 +11,10 @@ export default class SettingsScreen extends React.Component {
 
   static navigationOptions = {
     title: 'Settings',
+      headerTintColor: colour.defaultText,
+      headerStyle: {
+          backgroundColor: colour.background
+      },
   };
 
     async logOut() {
