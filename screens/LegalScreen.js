@@ -8,7 +8,7 @@ export default class LegalScreen extends React.Component {
       headerTintColor: colour.defaultText,
       headerStyle: {
           backgroundColor: colour.dark
-      },
+      }
 
 
   };

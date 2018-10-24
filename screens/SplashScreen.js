@@ -12,7 +12,11 @@ import {
 import colors from '../constants/Colors';
 
 export default class SplashScreen extends React.Component {
-  render() {
+    static navigationOptions = {
+        header:null
+    };
+
+    render() {
     return (
       <View style={{flex: 1 , flexDirection:'column'}}>
         <View style={{flex: 2, justifyContent: 'center', alignItems: 'center'}}>
