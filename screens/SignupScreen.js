@@ -116,7 +116,7 @@ export default class LoginScreen extends React.Component {
                     inputStyle={styles.input}
                 />
 
-                {Platform.OS === 'ios' ? iosAccessoryView : ''}
+                {Platform.OS === 'ios' ? iosAccessoryView : null}
 
                 <Button
                     onPress={this.signUp}
