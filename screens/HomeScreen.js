@@ -54,7 +54,7 @@ export default class HomeScreen extends React.Component {
                 style={styles.button}
                 rounded
                 title='Start Drinking?'
-
+                backgroundColor={colour.accent}
             />
 
             <Button
@@ -86,8 +86,7 @@ const styles = StyleSheet.create({
         backgroundColor:colour.secondary
     },
     button: {
-        padding: 5,
-        backgroundColor:colour.accent
+        padding: 5
     },
     imageIcon:{
         width:100,
