@@ -6,10 +6,12 @@ import {
   Text,
   View,
   AsyncStorage,
+  Alert,
 } from 'react-native';
 
 
 import colour from '../constants/Colors';
+import DrinkButton from '../components/DrinkButton.js';
 import {Button} from "react-native-elements";
 
 export default class HomeScreen extends React.Component {
@@ -41,6 +43,7 @@ export default class HomeScreen extends React.Component {
                 backgroundColor={colour.accent}
             />
 
+            <DrinkButton title="Orange" image="../assets/images/robot-dev.png" onPress={() => Alert.alert("Looks like we ran out of alcohol. Try again later.")}></DrinkButton>
 
             <Text > </Text>
 
