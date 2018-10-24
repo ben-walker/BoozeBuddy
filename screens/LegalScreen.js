@@ -1,9 +1,11 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text } from 'react-native';
+import colour from "../constants/Colors";
 
 export default class LegalScreen extends React.Component {
   static navigationOptions = {
-    title: 'Legal',
+    title: 'Legal'
+
   };
 
 
@@ -11,7 +13,7 @@ export default class LegalScreen extends React.Component {
   render() {
     return (
       <ScrollView style={styles.container}>
-        <Text>
+        <Text style = {styles.defaultText}>
 {`Last updated: October 22, 2018
 
 
@@ -81,6 +83,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 15,
-    backgroundColor: '#fff',
+    backgroundColor: colour.background
   },
+  defaultText: {
+      fontSize: 12,
+      color: colour.defaultText
+  }
 });
