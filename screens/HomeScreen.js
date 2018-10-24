@@ -4,7 +4,8 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  View
+  View,
+  AsyncStorage,
 } from 'react-native';
 
 
@@ -12,11 +13,28 @@ import colour from '../constants/Colors';
 import {Button} from "react-native-elements";
 
 export default class HomeScreen extends React.Component {
-  static navigationOptions = {
-      header:null
-  };
+    constructor(props) {
+        super(props);
+        this.logOut = this.logOut.bind(this)
+    }
 
-  render() {
+    static navigationOptions = {
+        header:null
+    };
+
+    async logOut() {
+        await fetch('https://dr-robotnik.herokuapp.com/api/logOut', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+        await AsyncStorage.removeItem('userToken');
+        this.props.navigation.navigate('Auth');
+    }
+
+    render() {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -37,6 +55,14 @@ export default class HomeScreen extends React.Component {
                 rounded
                 title='Start Drinking?'
                 backgroundColor={colour.accent}
+            />
+
+            <Button
+                onPress={this.logOut}
+                style={styles.button}
+                rounded
+                title='Log Out'
+                backgroundColor='red'
             />
             <Text > </Text>
 
@@ -59,7 +85,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor:colour.secondary
     },
-
+    button: {
+        padding: 5,
+    },
     imageIcon:{
         width:100,
         height:80,
