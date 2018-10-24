@@ -7,6 +7,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import colour from "../constants/Colors";
 
 export default class AuthLoadingScreen extends React.Component {
   constructor(props) {
@@ -33,3 +34,32 @@ export default class AuthLoadingScreen extends React.Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: colour.background,
+        paddingTop: 22
+    },
+    contentContainer: {
+        marginTop: 10,
+        marginBottom:20,
+        alignItems: 'center',
+        backgroundColor:colour.secondary
+    },
+
+    imageIcon:{
+        width:100,
+        height:80,
+        marginTop:3,
+        marginLeft: -10,
+        resizeMode: "contain"
+    },
+    defaultText: {
+        fontSize: 17,
+        color: colour.defaultText,
+        lineHeight: 24,
+        textAlign: 'center'
+    },
+
+});

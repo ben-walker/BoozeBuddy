@@ -1,15 +1,16 @@
 import React from 'react';
 import {
-  InputAccessoryView,
-  Button,
-  Keyboard,
-  KeyboardAvoidingView,
-  AsyncStorage,
+    InputAccessoryView,
+    Button,
+    Keyboard,
+    KeyboardAvoidingView,
+    AsyncStorage, StyleSheet,
 } from 'react-native';
 import {
   FormLabel,
   FormInput,
 } from 'react-native-elements';
+import colour from "../constants/Colors";
 
 export default class LoginScreen extends React.Component {
   constructor(props) {
@@ -107,3 +108,31 @@ export default class LoginScreen extends React.Component {
     );
   }
 }
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: colour.background,
+        paddingTop: 22
+    },
+    contentContainer: {
+        marginTop: 10,
+        marginBottom:20,
+        alignItems: 'center',
+        backgroundColor:colour.secondary
+    },
+
+    imageIcon:{
+        width:100,
+        height:80,
+        marginTop:3,
+        marginLeft: -10,
+        resizeMode: "contain"
+    },
+    defaultText: {
+        fontSize: 17,
+        color: colour.defaultText,
+        lineHeight: 24,
+        textAlign: 'center'
+    },
+
+});
