@@ -1,15 +1,13 @@
 import React from 'react';
 import {
-  View,
-  StyleSheet,
+  KeyboardAvoidingView,
   AsyncStorage,
+  Button,
 } from 'react-native';
 import {
   FormLabel,
   FormInput,
-  Button,
 } from 'react-native-elements';
-import colors from '../constants/Colors';
 
 export default class LoginScreen extends React.Component {
   constructor(props) {
@@ -18,10 +16,10 @@ export default class LoginScreen extends React.Component {
       identifier: '',
       password: '',
     }
-    this.login = this.login.bind(this);
+    this.logIn = this.logIn.bind(this);
   }
 
-  async login() {
+  async logIn() {
     const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/logIn', {
       method: 'POST',
       headers: {
@@ -37,43 +35,40 @@ export default class LoginScreen extends React.Component {
     if (!rawResponse.ok) return alert("Credentials not recognized.");
     const response = await rawResponse.json();
 
-    await AsyncStorage.setItem('userData', JSON.stringify(response.user));
+    await AsyncStorage.setItem('userToken', JSON.stringify(response.user));
     this.props.navigation.navigate('App');
   }
 
   render() {
     return (
-      <View>
+      <KeyboardAvoidingView
+        behavior='position'
+        keyboardVerticalOffset={65}
+      >
         <FormLabel>IDENTIFIER</FormLabel>
         <FormInput
           placeholder='Username or Email'
           onChangeText={(identifier) => this.setState({identifier})}
           value={this.state.identifier}
+          textContentType='username'
+          autoCapitalize='none'
         />
 
         <FormLabel>PASSWORD</FormLabel>
         <FormInput
           placeholder="••••••••"
-          secureTextEntry={true}
+          secureTextEntry
           onChangeText={(password) => this.setState({password})}
           value={this.state.password}
+          textContentType='password'
+          autoCapitalize='none'
         />
 
         <Button
-          style={styles.button}
-          rounded
           title='Log In'
-          backgroundColor={colors.actionButton}
-          onPress={this.login}
+          onPress={this.logIn}
         />
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  button: {
-    width: '50%',
-    padding: 15,
-  },
-});
