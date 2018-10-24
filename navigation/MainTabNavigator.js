@@ -31,7 +31,7 @@ HomeStack.navigationOptions = {
   ),
     tabBarOptions: {
         style: {
-            backgroundColor: colour.background,
+            backgroundColor: colour.dark,
         }
     }
 };
@@ -52,7 +52,7 @@ SettingsStack.navigationOptions = {
   ),
     tabBarOptions: {
         style: {
-            backgroundColor: colour.background,
+            backgroundColor: colour.dark,
         }
     }
 };
@@ -75,7 +75,7 @@ LegalStack.navigationOptions = {
   ),
     tabBarOptions: {
         style: {
-            backgroundColor: colour.background,
+            backgroundColor: colour.dark,
         }
     }
 };

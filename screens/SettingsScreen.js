@@ -13,7 +13,7 @@ export default class SettingsScreen extends React.Component {
     title: 'Settings',
       headerTintColor: colour.defaultText,
       headerStyle: {
-          backgroundColor: colour.background
+          backgroundColor: colour.dark
       },
   };
 
