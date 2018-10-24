@@ -5,6 +5,8 @@ import {
     AsyncStorage,
     StyleSheet,
     ScrollView,
+    Button as RawButton,
+    Platform,
 } from 'react-native';
 import {
   FormLabel,
@@ -58,6 +60,14 @@ export default class LoginScreen extends React.Component {
     }
 
     render() {
+        const iosAccessoryView = <InputAccessoryView nativeID='accessoryView'>
+            <RawButton
+                title='Done'
+                color='white'
+                onPress={Keyboard.dismiss}
+            />
+        </InputAccessoryView>
+
         return (
             <ScrollView style={styles.container}>
                 <FormLabel>USERNAME</FormLabel>
@@ -106,12 +116,7 @@ export default class LoginScreen extends React.Component {
                     inputStyle={styles.input}
                 />
 
-                <InputAccessoryView nativeID='accessoryView'>
-                    <Button
-                        title='Done'
-                        onPress={Keyboard.dismiss}
-                    />
-                </InputAccessoryView>
+                {Platform.OS === 'ios' ? iosAccessoryView : ''}
 
                 <Button
                     onPress={this.signUp}
