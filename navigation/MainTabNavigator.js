@@ -1,6 +1,7 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
+import colour from '../constants/Colors';
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
@@ -28,6 +29,11 @@ HomeStack.navigationOptions = {
       }
     />
   ),
+    tabBarOptions: {
+        style: {
+            backgroundColor: colour.background,
+        }
+    }
 };
 
 
@@ -44,6 +50,11 @@ SettingsStack.navigationOptions = {
       name={Platform.OS === 'ios' ? `ios-options${focused ? '' : '-outline'}` : 'md-options'}
     />
   ),
+    tabBarOptions: {
+        style: {
+            backgroundColor: colour.background,
+        }
+    }
 };
 
 const LegalStack = createStackNavigator({
@@ -62,6 +73,11 @@ LegalStack.navigationOptions = {
       }
     />
   ),
+    tabBarOptions: {
+        style: {
+            backgroundColor: colour.background,
+        }
+    }
 };
 
 export default createBottomTabNavigator({
