@@ -14,8 +14,8 @@ export default class CalculatorScreen extends React.Component {
 
   render() {
     const date = new Date();
-    /* const timestamp = date.getHours() + ":" + date.getMinutes();
-    const bac; */
+    const timestamp = date.getHours() + ":" + date.getMinutes();
+    var bac;
 
     return (
       <ScrollView style={styles.container}>

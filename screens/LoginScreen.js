@@ -1,9 +1,10 @@
 import React from 'react';
 import {
-    KeyboardAvoidingView,
     AsyncStorage,
-    Button, StyleSheet,
+    StyleSheet,
+    ScrollView,
 } from 'react-native';
+import { Button } from 'react-native-elements';
 import {
   FormLabel,
   FormInput,
@@ -11,14 +12,22 @@ import {
 import colour from "../constants/Colors";
 
 export default class LoginScreen extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      identifier: '',
-      password: '',
+    static navigationOptions = {
+        title: 'Booze Buddy Login',
+        headerTintColor: colour.defaultText,
+        headerStyle: {
+            backgroundColor: colour.dark
+        },
+    };
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            identifier: '',
+            password: '',
+        }
+        this.logIn = this.logIn.bind(this);
     }
-    this.logIn = this.logIn.bind(this);
-  }
 
   async logIn() {
     const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/logIn', {
@@ -42,35 +51,38 @@ export default class LoginScreen extends React.Component {
 
   render() {
     return (
-      <KeyboardAvoidingView
-        behavior='position'
-        keyboardVerticalOffset={65}
-      >
-        <FormLabel>IDENTIFIER</FormLabel>
-        <FormInput
-          placeholder='Username or Email'
-          onChangeText={(identifier) => this.setState({identifier})}
-          value={this.state.identifier}
-          textContentType='username'
-          autoCapitalize='none'
-        />
+        <ScrollView style={styles.container}>
+            <FormLabel>IDENTIFIER</FormLabel>
+            <FormInput
+                placeholder='Username or Email'
+                placeholderTextColor='gray'
+                onChangeText={(identifier) => this.setState({identifier})}
+                value={this.state.identifier}
+                textContentType='username'
+                autoCapitalize='none'
+                inputStyle={styles.input}
+            />
 
-        <FormLabel>PASSWORD</FormLabel>
-        <FormInput
-          placeholder="••••••••"
-          secureTextEntry
-          onChangeText={(password) => this.setState({password})}
-          value={this.state.password}
-          textContentType='password'
-          autoCapitalize='none'
-        />
+            <FormLabel>PASSWORD</FormLabel>
+            <FormInput
+                placeholder="••••••••"
+                placeholderTextColor='gray'
+                secureTextEntry
+                onChangeText={(password) => this.setState({password})}
+                value={this.state.password}
+                textContentType='password'
+                autoCapitalize='none'
+                inputStyle={styles.input}
+            />
 
-        <Button
-            style = {styles.button}
-          title='Log In'
-          onPress={this.logIn}
-        />
-      </KeyboardAvoidingView>
+            <Button
+                onPress={this.logIn}
+                style={styles.button}
+                rounded
+                title='Log In'
+                backgroundColor={colour.accent}
+            />
+        </ScrollView>
     );
   }
 }
@@ -84,14 +96,14 @@ const styles = StyleSheet.create({
     contentContainer: {
         marginTop: 10,
         marginBottom:20,
-        alignItems: 'center',
         backgroundColor:colour.secondary
     },
     button: {
-        padding: 5,
-        backgroundColor:colour.accent
+        padding: 5
     },
-
+    input: {
+        color: 'white'
+    },
     imageIcon:{
         width:100,
         height:80,

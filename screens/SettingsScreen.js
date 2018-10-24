@@ -1,5 +1,4 @@
 import React from 'react';
-import { ExpoConfigView } from '@expo/samples';
 import colour from '../constants/Colors';
 import {AsyncStorage, Image, ScrollView, StyleSheet, View} from "react-native";
 import {Button} from "react-native-elements";
@@ -12,6 +11,10 @@ export default class SettingsScreen extends React.Component {
 
   static navigationOptions = {
     title: 'Settings',
+      headerTintColor: colour.defaultText,
+      headerStyle: {
+          backgroundColor: colour.dark
+      },
   };
 
     async logOut() {
@@ -27,12 +30,10 @@ export default class SettingsScreen extends React.Component {
     }
 
   render() {
-    /* Go ahead and delete ExpoConfigView and replace it with your
-     * content, we just wanted to give you a quick view of your config */
     return (
         <View style={styles.container}>
             <ScrollView style={styles.container} >
-                
+
                 <Button
                     onPress={this.logOut}
                     style={styles.button}
