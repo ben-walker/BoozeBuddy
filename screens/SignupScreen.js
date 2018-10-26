@@ -43,6 +43,7 @@ export default class LoginScreen extends React.Component {
   }
 
     async signUp() {
+        if (!this.isValid()) return;
         const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/signUp', {
             method: 'POST',
             headers: {
@@ -63,6 +64,22 @@ export default class LoginScreen extends React.Component {
 
         await AsyncStorage.setItem('userToken', JSON.stringify(response.user));
         this.props.navigation.navigate('App');
+    }
+
+    isValid() {
+        const usernameError = validate('username', this.state.username);
+        const emailError = validate('email', this.state.email);
+        const passwordError = validate('password', this.state.password);
+        const weightKgError = validate('weightKg', this.state.weightKg);
+
+        this.setState({
+            usernameError,
+            emailError,
+            passwordError,
+            weightKgError,
+        });
+
+        return !usernameError && !emailError && !passwordError && !weightKgError;
     }
 
     render() {
