@@ -37,6 +37,7 @@ export default class LoginScreen extends React.Component {
       passwordError: '',
       gender: '',
       weightKg: '',
+      weightKgError: '',
     }
     this.signUp = this.signUp.bind(this)
   }
@@ -143,7 +144,15 @@ export default class LoginScreen extends React.Component {
                     keyboardType='decimal-pad'
                     inputAccessoryViewID='accessoryView'
                     inputStyle={styles.input}
+                    onBlur={() => {
+                        this.setState({
+                            weightKgError: validate('weightKg', this.state.weightKg),
+                        })
+                    }}
                 />
+                <FormValidationMessage>
+                    {this.state.weightKgError}
+                </FormValidationMessage>
 
                 {Platform.OS === 'ios' ? iosAccessoryView : null}
 

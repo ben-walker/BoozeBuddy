@@ -17,4 +17,9 @@ export default {
             minimum: 8,
         },
     },
+    weightKg: {
+        numericality: {
+            message: '^Weight must be a number'
+        },
+    },
 };
