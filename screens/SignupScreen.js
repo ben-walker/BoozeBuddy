@@ -11,8 +11,10 @@ import {
 import {
   FormLabel,
   FormInput,
+  FormValidationMessage,
   Button,
 } from 'react-native-elements';
+import validate from '../utilities/validateWrapper';
 import colour from "../constants/Colors";
 
 export default class LoginScreen extends React.Component {
@@ -28,8 +30,11 @@ export default class LoginScreen extends React.Component {
     super(props);
     this.state = {
       username: '',
+      usernameError: '',
       email: '',
+      emailError: '',
       password: '',
+      passwordError: '',
       gender: '',
       weightKg: '',
     }
@@ -76,7 +81,15 @@ export default class LoginScreen extends React.Component {
                     value={this.state.username}
                     autoCapitalize='none'
                     inputStyle={styles.input}
+                    onBlur={() => {
+                        this.setState({
+                            usernameError: validate('username', this.state.username),
+                        })
+                    }}
                 />
+                <FormValidationMessage>
+                    {this.state.usernameError}
+                </FormValidationMessage>
 
                 <FormLabel>EMAIL</FormLabel>
                 <FormInput
@@ -85,7 +98,15 @@ export default class LoginScreen extends React.Component {
                     keyboardType='email-address'
                     autoCapitalize='none'
                     inputStyle={styles.input}
+                    onBlur={() => {
+                        this.setState({
+                            emailError: validate('email', this.state.email),
+                        })
+                    }}
                 />
+                <FormValidationMessage>
+                    {this.state.emailError}
+                </FormValidationMessage>
 
                 <FormLabel>PASSWORD</FormLabel>
                 <FormInput
@@ -96,7 +117,15 @@ export default class LoginScreen extends React.Component {
                     placeholder='••••••••'
                     placeholderTextColor='gray'
                     inputStyle={styles.input}
+                    onBlur={() => {
+                        this.setState({
+                            passwordError: validate('password', this.state.password),
+                        })
+                    }}
                 />
+                <FormValidationMessage>
+                    {this.state.passwordError}
+                </FormValidationMessage>
 
                 <FormLabel>GENDER</FormLabel>
                 <FormInput
