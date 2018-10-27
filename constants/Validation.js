@@ -1,25 +1,18 @@
 export default {
     email: {
-        length: {
-            minimum: 1,
-            message: '^An email address is required',
-        },
+        presence: { allowEmpty: false },
         email: { message: '^That email doesn\'t look right' },
     },
     username: {
-        length: {
-            minimum: 4,
-            maximum: 20,
-        },
+        presence: { allowEmpty: false },
+        length: { minimum: 4, maximum: 20 },
     },
     password: {
-        length: {
-            minimum: 8,
-        },
+        presence: { allowEmpty: false },
+        length: { minimum: 8, },
     },
     weightKg: {
-        numericality: {
-            message: '^Weight must be a number'
-        },
+        presence: { allowEmpty: false },
+        numericality: { message: '^Weight must be a number' },
     },
 };
