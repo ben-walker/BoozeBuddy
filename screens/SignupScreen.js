@@ -43,7 +43,7 @@ export default class LoginScreen extends React.Component {
   }
 
     async signUp() {
-        if (!this.isValid()) return;
+        if (!await this.isValid()) return;
         const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/signUp', {
             method: 'POST',
             headers: {
@@ -66,11 +66,11 @@ export default class LoginScreen extends React.Component {
         this.props.navigation.navigate('App');
     }
 
-    isValid() {
-        const usernameError = validate('username', this.state.username);
-        const emailError = validate('email', this.state.email);
-        const passwordError = validate('password', this.state.password);
-        const weightKgError = validate('weightKg', this.state.weightKg);
+    async isValid() {
+        const usernameError = await validate('username', this.state.username);
+        const emailError = await validate('email', this.state.email);
+        const passwordError = await validate('password', this.state.password);
+        const weightKgError = await validate('weightKg', this.state.weightKg);
 
         this.setState({
             usernameError,
@@ -79,7 +79,9 @@ export default class LoginScreen extends React.Component {
             weightKgError,
         });
 
-        return !usernameError && !emailError && !passwordError && !weightKgError;
+        return new Promise((resolve) => {
+            resolve(!usernameError && !emailError && !passwordError && !weightKgError);
+        });
     }
 
     render() {
@@ -99,9 +101,9 @@ export default class LoginScreen extends React.Component {
                     value={this.state.username}
                     autoCapitalize='none'
                     inputStyle={styles.input}
-                    onBlur={() => {
+                    onBlur={async () => {
                         this.setState({
-                            usernameError: validate('username', this.state.username),
+                            usernameError: await validate('username', this.state.username),
                         })
                     }}
                 />
@@ -116,9 +118,9 @@ export default class LoginScreen extends React.Component {
                     keyboardType='email-address'
                     autoCapitalize='none'
                     inputStyle={styles.input}
-                    onBlur={() => {
+                    onBlur={async () => {
                         this.setState({
-                            emailError: validate('email', this.state.email),
+                            emailError: await validate('email', this.state.email),
                         })
                     }}
                 />
@@ -135,9 +137,9 @@ export default class LoginScreen extends React.Component {
                     placeholder='••••••••'
                     placeholderTextColor='gray'
                     inputStyle={styles.input}
-                    onBlur={() => {
+                    onBlur={async () => {
                         this.setState({
-                            passwordError: validate('password', this.state.password),
+                            passwordError: await validate('password', this.state.password),
                         })
                     }}
                 />
@@ -161,9 +163,9 @@ export default class LoginScreen extends React.Component {
                     keyboardType='decimal-pad'
                     inputAccessoryViewID='accessoryView'
                     inputStyle={styles.input}
-                    onBlur={() => {
+                    onBlur={async () => {
                         this.setState({
-                            weightKgError: validate('weightKg', this.state.weightKg),
+                            weightKgError: await validate('weightKg', this.state.weightKg),
                         })
                     }}
                 />

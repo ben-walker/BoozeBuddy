@@ -34,7 +34,7 @@ export default class LoginScreen extends React.Component {
     }
 
   async logIn() {
-    if (!this.isValid()) return;
+    if (!await this.isValid()) return;
     const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/logIn', {
       method: 'POST',
       headers: {
@@ -46,7 +46,7 @@ export default class LoginScreen extends React.Component {
         password: this.state.password,
       })
     });
-    
+
     if (!rawResponse.ok) return alert("Credentials not recognized.");
     const response = await rawResponse.json();
 
@@ -54,16 +54,18 @@ export default class LoginScreen extends React.Component {
     this.props.navigation.navigate('App');
   }
 
-  isValid() {
-      const identifierError = validate('identifier', this.state.identifier);
-      const passwordError = validate('loginPassword', this.state.password);
+  async isValid() {
+      const identifierError = await validate('identifier', this.state.identifier);
+      const passwordError = await validate('loginPassword', this.state.password);
 
       this.setState({
           identifierError,
           passwordError,
       });
 
-      return !identifierError && !passwordError;
+      return new Promise((resolve) => {
+        resolve(!identifierError && !passwordError);
+      });
   }
 
   render() {
@@ -78,9 +80,9 @@ export default class LoginScreen extends React.Component {
                 textContentType='username'
                 autoCapitalize='none'
                 inputStyle={styles.input}
-                onBlur={() => {
+                onBlur={async () => {
                     this.setState({
-                        identifierError: validate('identifier', this.state.identifier),
+                        identifierError: await validate('identifier', this.state.identifier),
                     })
                 }}
             />
@@ -98,9 +100,9 @@ export default class LoginScreen extends React.Component {
                 textContentType='password'
                 autoCapitalize='none'
                 inputStyle={styles.input}
-                onBlur={() => {
+                onBlur={async () => {
                     this.setState({
-                        passwordError: validate('loginPassword', this.state.password),
+                        passwordError: await validate('loginPassword', this.state.password),
                     })
                 }}
             />
