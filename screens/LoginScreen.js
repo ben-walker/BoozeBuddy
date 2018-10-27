@@ -8,7 +8,9 @@ import { Button } from 'react-native-elements';
 import {
   FormLabel,
   FormInput,
+  FormValidationMessage,
 } from 'react-native-elements';
+import validate from '../utilities/validateWrapper';
 import colour from "../constants/Colors";
 
 export default class LoginScreen extends React.Component {
@@ -24,12 +26,15 @@ export default class LoginScreen extends React.Component {
         super(props);
         this.state = {
             identifier: '',
+            identifierError: '',
             password: '',
+            passwordError: '',
         }
         this.logIn = this.logIn.bind(this);
     }
 
   async logIn() {
+    if (!this.isValid()) return;
     const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/logIn', {
       method: 'POST',
       headers: {
@@ -49,6 +54,18 @@ export default class LoginScreen extends React.Component {
     this.props.navigation.navigate('App');
   }
 
+  isValid() {
+      const identifierError = validate('identifier', this.state.identifier);
+      const passwordError = validate('loginPassword', this.state.password);
+
+      this.setState({
+          identifierError,
+          passwordError,
+      });
+
+      return !identifierError && !passwordError;
+  }
+
   render() {
     return (
         <ScrollView style={styles.container}>
@@ -61,7 +78,15 @@ export default class LoginScreen extends React.Component {
                 textContentType='username'
                 autoCapitalize='none'
                 inputStyle={styles.input}
+                onBlur={() => {
+                    this.setState({
+                        identifierError: validate('identifier', this.state.identifier),
+                    })
+                }}
             />
+            <FormValidationMessage>
+                {this.state.identifierError}
+            </FormValidationMessage>
 
             <FormLabel>PASSWORD</FormLabel>
             <FormInput
@@ -73,7 +98,15 @@ export default class LoginScreen extends React.Component {
                 textContentType='password'
                 autoCapitalize='none'
                 inputStyle={styles.input}
+                onBlur={() => {
+                    this.setState({
+                        passwordError: validate('loginPassword', this.state.password),
+                    })
+                }}
             />
+            <FormValidationMessage>
+                {this.state.passwordError}
+            </FormValidationMessage>
 
             <Button
                 onPress={this.logIn}

@@ -15,4 +15,10 @@ export default {
         presence: { allowEmpty: false },
         numericality: { message: '^Weight must be a number' },
     },
+    identifier: {
+        presence: { allowEmpty: false },
+    },
+    loginPassword: {
+        presence: { allowEmpty: false, message: '^Password can\'t be blank' },
+    },
 };
