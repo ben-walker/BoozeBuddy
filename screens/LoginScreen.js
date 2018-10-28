@@ -86,7 +86,7 @@ export default class LoginScreen extends React.Component {
                     })
                 }}
             />
-            <FormValidationMessage>
+            <FormValidationMessage labelStyle={styles.errorMsg}>
                 {this.state.identifierError}
             </FormValidationMessage>
 
@@ -106,7 +106,7 @@ export default class LoginScreen extends React.Component {
                     })
                 }}
             />
-            <FormValidationMessage>
+            <FormValidationMessage labelStyle={styles.errorMsg}>
                 {this.state.passwordError}
             </FormValidationMessage>
 
@@ -138,6 +138,9 @@ const styles = StyleSheet.create({
     },
     input: {
         color: 'white'
+    },
+    errorMsg: {
+        color: colour.errorText,
     },
     imageIcon:{
         width:100,
