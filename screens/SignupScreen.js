@@ -158,16 +158,20 @@ export default class LoginScreen extends React.Component {
                         { label: 'Female', value: 'Female' },
                         { label: 'Other', value: 'Other' },
                     ]}
+                    placeholder={{ label: 'Select your gender...', value: null }}
                     onValueChange={async (value) => {
                         await this.setState({ gender: value });
                         this.setState({ genderError: await validate('gender', this.state.gender) });
                     }}
-                    style={{ ...pickerSelectStyles }}
-                    hideIcon
                     hideDoneBar
-                    placeholder={{ label: 'Select your gender...', value: null }}
-                    placeholderTextColor='gray'
-                />
+                >
+                    <FormInput
+                        placeholder='Select your gender...'
+                        placeholderTextColor='gray'
+                        value={this.state.gender}
+                        inputStyle={styles.input}
+                    />
+                </PickerSelect>
                 <FormValidationMessage labelStyle={styles.errorMsg}>
                     {this.state.genderError}
                 </FormValidationMessage>
@@ -238,19 +242,4 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
 
-});
-
-const pickerSelectStyles = StyleSheet.create({
-    inputIOS: {
-        fontSize: 18,
-        padding: 12,
-        marginTop: 20,
-        marginLeft: 20,
-        marginRight: 20,
-        borderWidth: 1,
-        borderColor: 'white',
-        borderRadius: 4,
-        backgroundColor: colour.background,
-        color: 'white',
-    },
 });

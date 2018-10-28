@@ -14,7 +14,7 @@ export default {
     tabBar: '#F6F9FF',
 
     errorBackground: '#75153B',
-    errorText: '#F6F9FF',
+    errorText: '#DBE84C',
 
     warningBackground: '#2C580F',
     warningText: '#F6F9FF',
