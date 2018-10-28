@@ -19,6 +19,9 @@ export default {
         presence: { allowEmpty: false },
         numericality: { message: '^Weight must be a number' },
     },
+    gender: {
+        presence: { allowEmpty: false },
+    },
     identifier: {
         presence: { allowEmpty: false },
     },
