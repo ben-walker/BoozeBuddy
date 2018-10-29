@@ -1,32 +1,28 @@
 import React from 'react';
 import {
   View,
-  StyleSheet,
 } from 'react-native';
 import {
-  FormLabel,
-  FormInput,
   Button,
   Text
 } from 'react-native-elements';
+import style from '../constants/StyleSheet';
 import colors from '../constants/Colors';
 
 export default class SplashScreen extends React.Component {
-    static navigationOptions = {
-        header:null
-    };
+    static navigationOptions = { header: null };
 
     render() {
     return (
-      <View style={styles.container}>
+      <View style={style.container}>
         <View style={{flex: 1 , flexDirection:'column'}}>
           <View style={{flex: 2, justifyContent: 'center', alignItems: 'center'}}>
-            <Text style={styles.titleText}> Booze Buddy </Text>
+            <Text style={style.titleText}> Booze Buddy </Text>
           </View>
           <View style={{flex: 2, flexDirection:'column', justifyContent: "space-around"}}>
             <View>
               <Button
-                style={styles.button}
+                style={style.button}
                 rounded
                 title='Sign Up'
                 backgroundColor={colors.actionButton}
@@ -35,7 +31,7 @@ export default class SplashScreen extends React.Component {
             </View>
             <View>
               <Button
-                style={styles.button}
+                style={style.button}
                 rounded
                 title='Log In'
                 backgroundColor={colors.actionButton}
@@ -50,20 +46,3 @@ export default class SplashScreen extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  button: {
-    width: '50%',
-    padding: 15,
-  },
-  container: {
-      flex: 1,
-      backgroundColor: colors.background,
-      paddingTop: 22
-  },
-  titleText: {
-    fontSize: 30,
-    fontWeight: 'bold',
-    color: colors.defaultText,
-  },
-});
