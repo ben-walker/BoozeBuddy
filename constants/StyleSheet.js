@@ -14,6 +14,12 @@ export default StyleSheet.create({
         marginRight: 10,
         backgroundColor: colors.background,
     },
+    secondaryContentContainer: {
+        marginTop: 10,
+        marginBottom: 20,
+        alignItems: 'center',
+        backgroundColor: colors.secondary,
+    },
     titleText: {
         fontSize: 30,
         fontWeight: 'bold',
@@ -38,5 +44,12 @@ export default StyleSheet.create({
         color: colors.defaultText,
         lineHeight: 24,
         textAlign: 'center',
+    },
+    imageIcon: {
+        width: 100,
+        height: 80,
+        marginTop: 3,
+        marginLeft: -10,
+        resizeMode: 'contain',
     },
 });
