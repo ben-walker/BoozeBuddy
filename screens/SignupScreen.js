@@ -3,7 +3,6 @@ import {
     InputAccessoryView,
     Keyboard,
     AsyncStorage,
-    StyleSheet,
     ScrollView,
     Button as RawButton,
     Platform,
@@ -16,10 +15,10 @@ import {
   Button,
   CheckBox,
   Text,
-  Alert,
 } from 'react-native-elements';
 import PickerSelect from 'react-native-picker-select';
 import validate from '../utilities/validateWrapper';
+import style from '../constants/StyleSheet';
 import colour from "../constants/Colors";
 
 export default class LoginScreen extends React.Component {
@@ -105,20 +104,20 @@ export default class LoginScreen extends React.Component {
         </InputAccessoryView>
 
         return (
-            <ScrollView style={styles.container}>
+            <ScrollView style={style.container}>
                 <FormLabel>USERNAME</FormLabel>
                 <FormInput
                     onChangeText={(username) => this.setState({username})}
                     value={this.state.username}
                     autoCapitalize='none'
-                    inputStyle={styles.input}
+                    inputStyle={style.input}
                     onBlur={async () => {
                         this.setState({
                             usernameError: await validate('username', this.state.username),
                         })
                     }}
                 />
-                <FormValidationMessage labelStyle={styles.errorMsg}>
+                <FormValidationMessage labelStyle={style.errorMsg}>
                     {this.state.usernameError}
                 </FormValidationMessage>
 
@@ -128,14 +127,14 @@ export default class LoginScreen extends React.Component {
                     value={this.state.email}
                     keyboardType='email-address'
                     autoCapitalize='none'
-                    inputStyle={styles.input}
+                    inputStyle={style.input}
                     onBlur={async () => {
                         this.setState({
                             emailError: await validate('email', this.state.email),
                         })
                     }}
                 />
-                <FormValidationMessage labelStyle={styles.errorMsg}>
+                <FormValidationMessage labelStyle={style.errorMsg}>
                     {this.state.emailError}
                 </FormValidationMessage>
 
@@ -147,14 +146,14 @@ export default class LoginScreen extends React.Component {
                     autoCapitalize='none'
                     placeholder='••••••••'
                     placeholderTextColor='gray'
-                    inputStyle={styles.input}
+                    inputStyle={style.input}
                     onBlur={async () => {
                         this.setState({
                             passwordError: await validate('password', this.state.password),
                         })
                     }}
                 />
-                <FormValidationMessage labelStyle={styles.errorMsg}>
+                <FormValidationMessage labelStyle={style.errorMsg}>
                     {this.state.passwordError}
                 </FormValidationMessage>
 
@@ -176,10 +175,10 @@ export default class LoginScreen extends React.Component {
                         placeholder='Select your gender...'
                         placeholderTextColor='gray'
                         value={this.state.gender}
-                        inputStyle={styles.input}
+                        inputStyle={style.input}
                     />
                 </PickerSelect>
-                <FormValidationMessage labelStyle={styles.errorMsg}>
+                <FormValidationMessage labelStyle={style.errorMsg}>
                     {this.state.genderError}
                 </FormValidationMessage>
 
@@ -189,14 +188,14 @@ export default class LoginScreen extends React.Component {
                     value={this.state.weightKg}
                     keyboardType='decimal-pad'
                     inputAccessoryViewID='accessoryView'
-                    inputStyle={styles.input}
+                    inputStyle={style.input}
                     onBlur={async () => {
                         this.setState({
                             weightKgError: await validate('weightKg', this.state.weightKg),
                         })
                     }}
                 />
-                <FormValidationMessage labelStyle={styles.errorMsg}>
+                <FormValidationMessage labelStyle={style.errorMsg}>
                     {this.state.weightKgError}
                 </FormValidationMessage>
 
@@ -206,25 +205,25 @@ export default class LoginScreen extends React.Component {
                     center
                     checkedColor='green'
                     unCheckedColor='gray'
-                    containerStyle={styles.eulaCheckbox}
+                    containerStyle={style.eulaCheckbox}
                     checked={this.state.agreedToEULA}
                     onPress={() => this.setState({agreedToEULA: !this.state.agreedToEULA})}
                   />
                   <View style={{flexDirection:'column', justifyContent:'space-around'}}>
-                    <Text style={styles.defaultText}>I agree to the Terms and Conditions.</Text>
+                    <Text style={style.defaultText}>I agree to the Terms and Conditions.</Text>
                   </View>
                 </View>
 
                 <Button
                     onPress={this.signUp}
-                    style={styles.button}
+                    style={style.button}
                     rounded
                     title='Sign Up'
                     backgroundColor={colour.accent}
                 />
                 <Button
                     onPress={() => this.props.navigation.navigate('Legal')}
-                    style={styles.button}
+                    style={style.button}
                     rounded
                     title='View Terms and Conditions'
                     backgroundColor={colour.secondary}
@@ -233,44 +232,3 @@ export default class LoginScreen extends React.Component {
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: colour.background,
-        paddingTop: 22
-    },
-    input: {
-        color: 'white'
-    },
-    eulaCheckbox: {
-      backgroundColor:colour.background,
-      borderColor:colour.background,
-    },
-    button: {
-        padding: 5
-    },
-    errorMsg: {
-        color: colour.errorText,
-    },
-    contentContainer: {
-        marginTop: 10,
-        marginBottom:20,
-        alignItems: 'center',
-        backgroundColor:colour.secondary
-    },
-    imageIcon:{
-        width:100,
-        height:80,
-        marginTop:3,
-        marginLeft: -10,
-        resizeMode: "contain"
-    },
-    defaultText: {
-        fontSize: 17,
-        color: colour.defaultText,
-        lineHeight: 24,
-        textAlign: 'center'
-    },
-
-});
