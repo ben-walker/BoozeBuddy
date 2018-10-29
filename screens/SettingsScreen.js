@@ -39,7 +39,7 @@ export default class SettingsScreen extends React.Component {
 
                 <Button
                     onPress={this.logOut}
-                    style={styles.button}
+                    style={style.button}
                     rounded
                     title='Log Out'
                     backgroundColor={colors.errorBackground}
