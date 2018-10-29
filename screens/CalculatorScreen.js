@@ -6,7 +6,7 @@ import {
     StyleSheet, Alert,
 } from 'react-native';
 import colour from '../constants/Colors';
-import DrinkButton from '../components/DrinkButton.js';
+import DrinkCard from '../components/DrinkCard.js';
 
 export default class CalculatorScreen extends React.Component {
   static navigationOptions = {
@@ -36,15 +36,15 @@ export default class CalculatorScreen extends React.Component {
 
         <View style={styles.favBar}>
           <Text style={styles.smallText}>Favourites</Text>
-            <DrinkButton title="Red"  onPress={() => Alert.alert("Looks like we ran out of alcohol. Try again later.")}>
-            </DrinkButton>
+            <DrinkCard title="Red"  onPress={() => Alert.alert("Looks like we ran out of alcohol. Try again later.")}>
+            </DrinkCard>
 
         </View>
 
         <ScrollView style={styles.listContainer}>
           <Text style={styles.smallText}>Drink List</Text>
-            <DrinkButton title="Blue" onPress={() => Alert.alert("Looks like we ran out of alcohol. Try again later.")}>
-            </DrinkButton>
+            <DrinkCard title="Blue" onPress={() => Alert.alert("Looks like we ran out of alcohol. Try again later.")}>
+            </DrinkCard>
 
         </ScrollView>
       </ScrollView>
