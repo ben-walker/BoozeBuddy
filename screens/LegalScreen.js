@@ -4,7 +4,7 @@ import colour from "../constants/Colors";
 
 export default class LegalScreen extends React.Component {
   static navigationOptions = {
-      title: 'Legal',
+      title: 'Terms and Conditions',
       headerTintColor: colour.defaultText,
       headerStyle: {
           backgroundColor: colour.dark
@@ -95,6 +95,8 @@ const styles = StyleSheet.create({
   contentContainer: {
       marginTop: 1,
       marginBottom:1,
+      marginLeft:10,
+      marginRight:10,
       backgroundColor:colour.background
   },
   defaultText: {

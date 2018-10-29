@@ -7,12 +7,16 @@ import {
     ScrollView,
     Button as RawButton,
     Platform,
+    View,
 } from 'react-native';
 import {
   FormLabel,
   FormInput,
   FormValidationMessage,
   Button,
+  CheckBox,
+  Text,
+  Alert,
 } from 'react-native-elements';
 import PickerSelect from 'react-native-picker-select';
 import validate from '../utilities/validateWrapper';
@@ -40,11 +44,15 @@ export default class LoginScreen extends React.Component {
       genderError: '',
       weightKg: '',
       weightKgError: '',
+      agreedToEULA: false,
     }
     this.signUp = this.signUp.bind(this);
   }
 
     async signUp() {
+        if (!this.state.agreedToEULA) {
+          return alert("Please accept the Terms and Conditions before signing up.");
+        }
         if (!await this.isValid()) return;
         const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/signUp', {
             method: 'POST',
@@ -63,7 +71,6 @@ export default class LoginScreen extends React.Component {
 
         if (!rawResponse.ok) return alert("Signup failed.");
         const response = await rawResponse.json();
-
         await AsyncStorage.setItem('userToken', JSON.stringify(response.user));
         this.props.navigation.navigate('App');
     }
@@ -194,6 +201,19 @@ export default class LoginScreen extends React.Component {
                 </FormValidationMessage>
 
                 {Platform.OS === 'ios' ? iosAccessoryView : null}
+                <View style={{flex: 1 , flexDirection:'row', justifyContent:'center'}}>
+                  <CheckBox
+                    center
+                    checkedColor='green'
+                    unCheckedColor='gray'
+                    containerStyle={styles.eulaCheckbox}
+                    checked={this.state.agreedToEULA}
+                    onPress={() => this.setState({agreedToEULA: !this.state.agreedToEULA})}
+                  />
+                  <View style={{flexDirection:'column', justifyContent:'space-around'}}>
+                    <Text style={styles.defaultText}>I agree to the Terms and Conditions.</Text>
+                  </View>
+                </View>
 
                 <Button
                     onPress={this.signUp}
@@ -201,6 +221,13 @@ export default class LoginScreen extends React.Component {
                     rounded
                     title='Sign Up'
                     backgroundColor={colour.accent}
+                />
+                <Button
+                    onPress={() => this.props.navigation.navigate('Legal')}
+                    style={styles.button}
+                    rounded
+                    title='View Terms and Conditions'
+                    backgroundColor={colour.secondary}
                 />
             </ScrollView>
         );
@@ -215,6 +242,10 @@ const styles = StyleSheet.create({
     },
     input: {
         color: 'white'
+    },
+    eulaCheckbox: {
+      backgroundColor:colour.background,
+      borderColor:colour.background,
     },
     button: {
         padding: 5
