@@ -25,9 +25,7 @@ export default class LoginScreen extends React.Component {
     static navigationOptions = {
         title: 'Booze Buddy Signup',
         headerTintColor: colors.defaultText,
-        headerStyle: {
-            backgroundColor: colors.dark
-        },
+        headerStyle: { backgroundColor: colors.dark },
     };
 
   constructor(props) {

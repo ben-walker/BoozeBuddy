@@ -25,12 +25,20 @@ export default StyleSheet.create({
         fontWeight: 'bold',
         color: colors.defaultText,
     },
+    smallText: {
+        fontSize: 10,
+        color: colors.defaultText,
+    },
     button: {
         width: '50%',
         padding: 15,
     },
     input: {
         color: 'white',
+    },
+    favouritesBar: {
+        height: 100,
+        backgroundColor: colors.secondary,
     },
     eulaCheckbox: {
         backgroundColor: colors.background,
