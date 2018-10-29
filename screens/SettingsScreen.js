@@ -1,7 +1,12 @@
 import React from 'react';
-import colour from '../constants/Colors';
-import {AsyncStorage, Image, ScrollView, StyleSheet, View} from "react-native";
-import {Button} from "react-native-elements";
+import {
+    AsyncStorage,
+    ScrollView,
+    View
+} from "react-native";
+import { Button } from "react-native-elements";
+import colors from '../constants/Colors';
+import style from '../constants/StyleSheet';
 
 export default class SettingsScreen extends React.Component {
     constructor(props) {
@@ -9,21 +14,19 @@ export default class SettingsScreen extends React.Component {
         this.logOut = this.logOut.bind(this)
     }
 
-  static navigationOptions = {
-    title: 'Settings',
-      headerTintColor: colour.defaultText,
-      headerStyle: {
-          backgroundColor: colour.dark
-      },
-  };
+    static navigationOptions = {
+        title: 'Settings',
+        headerTintColor: colors.defaultText,
+        headerStyle: { backgroundColor: colors.dark },
+    };
 
     async logOut() {
         await fetch('https://dr-robotnik.herokuapp.com/api/logOut', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
+                'Content-Type': 'application/json',
+            },
         });
         await AsyncStorage.removeItem('userToken');
         this.props.navigation.navigate('Auth');
@@ -31,15 +34,15 @@ export default class SettingsScreen extends React.Component {
 
   render() {
     return (
-        <View style={styles.container}>
-            <ScrollView style={styles.container} >
+        <View style={style.container}>
+            <ScrollView style={style.container} >
 
                 <Button
                     onPress={this.logOut}
                     style={styles.button}
                     rounded
                     title='Log Out'
-                    backgroundColor={colour.errorBackground}
+                    backgroundColor={colors.errorBackground}
                 />
             </ScrollView>
         </View>
@@ -47,31 +50,3 @@ export default class SettingsScreen extends React.Component {
     );
   }
 }
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: colour.background,
-        paddingTop: 22
-    },
-    contentContainer: {
-        marginTop: 10,
-        marginBottom:20,
-        alignItems: 'center',
-        backgroundColor:colour.secondary
-    },
-
-    imageIcon:{
-        width:100,
-        height:80,
-        marginTop:3,
-        marginLeft: -10,
-        resizeMode: "contain"
-    },
-    defaultText: {
-        fontSize: 17,
-        color: colour.defaultText,
-        lineHeight: 24,
-        textAlign: 'center'
-    },
-
-});

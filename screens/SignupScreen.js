@@ -19,14 +19,14 @@ import {
 import PickerSelect from 'react-native-picker-select';
 import validate from '../utilities/validateWrapper';
 import style from '../constants/StyleSheet';
-import colour from "../constants/Colors";
+import colors from "../constants/Colors";
 
 export default class LoginScreen extends React.Component {
     static navigationOptions = {
         title: 'Booze Buddy Signup',
-        headerTintColor: colour.defaultText,
+        headerTintColor: colors.defaultText,
         headerStyle: {
-            backgroundColor: colour.dark
+            backgroundColor: colors.dark
         },
     };
 
@@ -219,14 +219,14 @@ export default class LoginScreen extends React.Component {
                     style={style.button}
                     rounded
                     title='Sign Up'
-                    backgroundColor={colour.accent}
+                    backgroundColor={colors.accent}
                 />
                 <Button
                     onPress={() => this.props.navigation.navigate('Legal')}
                     style={style.button}
                     rounded
                     title='View Terms and Conditions'
-                    backgroundColor={colour.secondary}
+                    backgroundColor={colors.secondary}
                 />
             </ScrollView>
         );
