@@ -7,6 +7,13 @@ export default StyleSheet.create({
         backgroundColor: colors.background,
         paddingTop: 22,
     },
+    contentContainer: {
+        marginTop: 1,
+        marginBottom: 1,
+        marginLeft: 10,
+        marginRight: 10,
+        backgroundColor: colors.background,
+    },
     titleText: {
         fontSize: 30,
         fontWeight: 'bold',
