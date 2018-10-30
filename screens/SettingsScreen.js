@@ -23,6 +23,7 @@ export default class SettingsScreen extends React.Component {
     async logOut() {
         await fetch('https://dr-robotnik.herokuapp.com/api/logOut', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',

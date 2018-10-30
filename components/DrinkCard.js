@@ -28,8 +28,8 @@ class DrinkCard extends Component {
 				image={{uri: image}}
 			>
 				<Button
-					icon={<Icon name='code' color='#ffffff'/>}
-					backgroundColor='#03A9F4'
+					icon={<Icon name='code' color='#2A2E30'/>}
+					backgroundColor='#2976EB'
 					title={title}
 					onPress={onPressFunction}
 				/>

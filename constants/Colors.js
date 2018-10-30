@@ -21,6 +21,8 @@ export default {
 
     noticeBackground: tintColor,
     noticeText: '#F6F9FF',
-    actionButton: '#2976EB'
+    actionButton: '#2976EB',
+
+    test: '#03A9F4'
 
 };

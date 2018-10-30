@@ -53,6 +53,7 @@ export default class LoginScreen extends React.Component {
         if (!await this.isValid()) return;
         const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/signUp', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'

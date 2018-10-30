@@ -8,6 +8,7 @@ import {
     AsyncStorage,
     FlatList,
     TouchableOpacity,
+    Alert,
 } from 'react-native';
 import { Card, Button } from 'react-native-elements';
 import Modal from 'react-native-modal';
@@ -32,6 +33,7 @@ export default class CalculatorScreen extends React.Component {
             MR: 0.0,
             Wt: 0.0,
             drinks: [],
+            favourites: [],
             modalVisible: false,
             modalDrink: null,
         };
@@ -39,6 +41,23 @@ export default class CalculatorScreen extends React.Component {
         this.setBacConstants = this.setBacConstants.bind(this);
         this.getFirstPageOfDrinks = this.getFirstPageOfDrinks.bind(this);
         this.setModalVisible = this.setModalVisible.bind(this);
+        this.addToFavourites = this.addToFavourites.bind(this);
+        this.getFavourites = this.getFavourites.bind(this);
+    }
+
+    async componentDidMount() {
+        // parse out user data
+        const userToken = await AsyncStorage.getItem('userToken');
+        const userData = JSON.parse(userToken);
+        this.setBacConstants(userData);
+
+        // store started drinking moment
+        const drinkTimestamp = new moment();
+        await AsyncStorage.setItem('startedDrinkingMoment', drinkTimestamp);
+
+        // get first page of drinks
+        this.getFirstPageOfDrinks();
+        this.getFavourites();
     }
 
     setBacConstants(userData) {
@@ -66,20 +85,6 @@ export default class CalculatorScreen extends React.Component {
         });
     }
 
-    async componentDidMount() {
-        // parse out user data
-        const userToken = await AsyncStorage.getItem('userToken');
-        const userData = JSON.parse(userToken);
-        this.setBacConstants(userData);
-
-        // store started drinking moment
-        const drinkTimestamp = new moment();
-        await AsyncStorage.setItem('startedDrinkingMoment', drinkTimestamp);
-
-        // get first page of drinks
-        this.getFirstPageOfDrinks();
-    }
-
     async getFirstPageOfDrinks() {
         let URL = 'https://dr-robotnik.herokuapp.com/api/pageOfDrinks';
         const queryData = { page: 1, perPage: 20 };
@@ -97,6 +102,20 @@ export default class CalculatorScreen extends React.Component {
         this.setState({ drinks: response });
     }
 
+    async getFavourites() {
+        const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/favourites', {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        });
+        if (!rawResponse.ok) return;
+        const response = await rawResponse.json();
+        this.setState({ favourites: response });
+    }
+
     async calculateBAC() {
         const startedDrinkingMoment = await AsyncStorage.getItem('startedDrinkingMoment');
         const currentMoment = new moment();
@@ -111,6 +130,22 @@ export default class CalculatorScreen extends React.Component {
         const EBAC = ((0.806 * SD * 1.2) / (BW * Wt)) - (MR * drinkingTime);
         this.setState({ BAC: EBAC });
         return EBAC;
+    }
+
+    async addToFavourites(drink) {
+
+        const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/addFavourite', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ lcboId: drink.lcbo_id })
+        });
+
+        if (!rawResponse.ok) return await Alert.alert('Failed!', 'Add to Favourites failed.');
+        return await Alert.alert('Success!',`Added ${drink.name} to your Favourites!`);
     }
 
     setModalVisible(visible) {
@@ -137,9 +172,14 @@ export default class CalculatorScreen extends React.Component {
                         >
                             <Button
                                 title='Add to Favourites'
+                                onPress={() => {
+                                    this.state.modalDrink
+                                        ? this.addToFavourites(this.state.modalDrink)
+                                        : null;
+                                }}
                             />
                             <Button
-                                title='Cancel'
+                                title='Exit'
                                 onPress={() => this.setModalVisible(false)}
                             />
                         </Card>
@@ -151,29 +191,28 @@ export default class CalculatorScreen extends React.Component {
                 </View>
 
                 <View>
-                    <Text style={style.smallText}>Drink display : X X X X X X X X X  </Text>
+                    <Text style={style.smallText}>Drink display :</Text>
                 </View>
                 <ScrollView style={style.container}>
                     <Text style={style.smallText}>Favourites</Text>
                     <ScrollView style={style.favouritesBar}
                                 horizontal={true}>
+                        
                         <FlatList
-                            data={this.state.drinks}
-                            keyExtractor={(item, index) => item._id}
-                            numColumns={2}
+                            data={this.state.favourites}
+                            keyExtractor={(item) => item._id}
+                            horizontal={true}
                             renderItem={(item) => <DrinkCard
                                 title='I Drank This!'
                                 image={item.item.image_url}
                                 description={item.item.name}
+                                drinkData={item.item}
                             >
                             </DrinkCard>}
                         />
-
                     </ScrollView>
 
                     <Text style={style.smallText}>Drink List</Text>
-
-
                     <FlatList
                         data={this.state.drinks}
                         keyExtractor={(item) => item._id}

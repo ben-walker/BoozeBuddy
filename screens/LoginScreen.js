@@ -35,6 +35,7 @@ export default class LoginScreen extends React.Component {
         if (!await this.isValid()) return;
         const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/logIn', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -45,7 +46,7 @@ export default class LoginScreen extends React.Component {
             })
         });
 
-        if (!rawResponse.ok) return alert("Credentials not recognized.");
+        if (!rawResponse.ok) return alert('Credentials not recognized.');
         const response = await rawResponse.json();
 
         await AsyncStorage.setItem('userToken', JSON.stringify(response.user));
