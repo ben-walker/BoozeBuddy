@@ -116,8 +116,6 @@ export default class CustomDrinkScreen extends React.Component {
                     {this.state.drinkVolumeError}
                 </FormValidationMessage>
 
-                {Platform.OS === 'ios' ? iosAccessoryView : null}
-
                 <FormLabel>Alcohol Content (%)</FormLabel>
                 <FormInput
                     onChangeText={(drinkAlcoholContent) => this.setState({drinkAlcoholContent})}
@@ -134,8 +132,6 @@ export default class CustomDrinkScreen extends React.Component {
                 <FormValidationMessage labelStyle={style.errorMsg}>
                     {this.state.drinkAlcoholContentError}
                 </FormValidationMessage>
-
-                {Platform.OS === 'ios' ? iosAccessoryView : null}
 
                 <Button
                     onPress={this.createDrink}
