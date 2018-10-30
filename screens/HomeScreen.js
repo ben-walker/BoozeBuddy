@@ -38,12 +38,7 @@ export default class HomeScreen extends React.Component {
                         backgroundColor={colors.accent}
                     />
 
-                    <DrinkCard
-                        title="Orange"
-                        description="Vodka?"
-                        image="https://picsum.photos/100/?random"
-                        onPressFunction={() => Alert.alert("Looks like we ran out of alcohol. Try again later.")}>
-                    </DrinkCard>
+
 
                     <Text style={style.defaultText}>Info about drinking here</Text>
                 </ScrollView>

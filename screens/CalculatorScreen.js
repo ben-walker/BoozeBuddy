@@ -194,6 +194,7 @@ export default class CalculatorScreen extends React.Component {
                     <Text style={style.smallText}>Favourites</Text>
                     <ScrollView style={style.favouritesBar}
                                 horizontal={true}>
+                        
                         <FlatList
                             data={this.state.favourites}
                             keyExtractor={(item) => item._id}
