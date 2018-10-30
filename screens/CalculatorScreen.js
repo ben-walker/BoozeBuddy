@@ -1,9 +1,11 @@
 import React from 'react';
+import moment from 'moment';
 import {
     ScrollView,
     Text,
     View,
     Alert,
+    AsyncStorage,
 } from 'react-native';
 import colors from '../constants/Colors';
 import style from '../constants/StyleSheet';
@@ -16,6 +18,16 @@ export default class CalculatorScreen extends React.Component {
         headerStyle: { backgroundColor: colors.dark },
         headerLeft: null,
     };
+
+    async componentDidMount() {
+        // parse out user data
+        const userToken = await AsyncStorage.getItem('userToken');
+        const userData = JSON.parse(userToken);
+
+        // store started drinking moment
+        const drinkTimestamp = new moment();
+        await AsyncStorage.setItem('startedDrinkingMoment', drinkTimestamp);
+    }
 
     render() {
         const date = new Date();
