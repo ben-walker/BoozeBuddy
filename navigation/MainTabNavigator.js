@@ -5,6 +5,7 @@ import colour from '../constants/Colors';
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
+import CustomDrinkScreen from '../screens/CustomDrinkScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import LegalScreen from '../screens/LegalScreen';
 import CalculatorScreen from '../screens/CalculatorScreen';
@@ -12,6 +13,7 @@ import CalculatorScreen from '../screens/CalculatorScreen';
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
   Calculator: CalculatorScreen,
+  CustomDrinks: CustomDrinkScreen,
 },
 {
   initialRouteName: 'Home',

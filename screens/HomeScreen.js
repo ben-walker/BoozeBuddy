@@ -37,6 +37,13 @@ export default class HomeScreen extends React.Component {
                         title='Start Drinking?'
                         backgroundColor={colors.accent}
                     />
+                    <Button
+                        onPress={() => this.props.navigation.navigate('CustomDrinks')}
+                        style={style.button}
+                        rounded
+                        title='Add Custom Drink'
+                        backgroundColor={colors.accent}
+                    />
 
                     <DrinkCard
                         title="Orange"

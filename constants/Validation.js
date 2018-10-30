@@ -28,4 +28,17 @@ export default {
     loginPassword: {
         presence: { allowEmpty: false, message: '^Password can\'t be blank' },
     },
+//-----------------------------------------------------------------------------------
+    drinkName: {
+        presence: { allowEmpty: false },
+        length: { minimum: 2, maximum: 30 },
+    },
+    drinkVolume: {
+        presence: { allowEmpty: false },
+        numericality: { message: 'must be a number' },
+    },
+    drinkAlcoholContent: {
+        presence: { allowEmpty: false },
+        numericality: { message: 'must be a percentage between 0 and 100.', greaterThanOrEqualTo: 0, lessThanOrEqualTo: 100 },
+    },
 };
