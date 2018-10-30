@@ -9,6 +9,8 @@ import {
     FlatList,
     TouchableOpacity,
 } from 'react-native';
+import { Card, Button } from 'react-native-elements';
+import Modal from 'react-native-modal';
 import colors from '../constants/Colors';
 import style from '../constants/StyleSheet';
 import DrinkCard from '../components/DrinkCard.js';
@@ -30,10 +32,12 @@ export default class CalculatorScreen extends React.Component {
             MR: 0.0,
             Wt: 0.0,
             drinks: [],
+            modalVisible: false,
         };
         this.calculateBAC = this.calculateBAC.bind(this);
         this.setBacConstants = this.setBacConstants.bind(this);
         this.getFirstPageOfDrinks = this.getFirstPageOfDrinks.bind(this);
+        this.setModalVisible = this.setModalVisible.bind(this);
     }
 
     setBacConstants(userData) {
@@ -108,10 +112,32 @@ export default class CalculatorScreen extends React.Component {
         return EBAC;
     }
 
+    setModalVisible(visible) {
+        this.setState({modalVisible: visible});
+    }
+
     render() {
 
         return (
             <View style={style.container}>
+                <Modal
+                    isVisible={this.state.modalVisible}
+                >
+                    <View style={{ flex: 1 }}>
+                        <Card
+                            title='Add to Favourites'
+                        >
+                            <Button
+                                title='Add to Favourites'
+                            />
+                            <Button
+                                title='Cancel'
+                                onPress={() => this.setModalVisible(false)}
+                            />
+                        </Card>
+                    </View>
+                </Modal>
+
                 <View style={style.secondaryContentContainer}>
                     <Text style={style.titleText}>BAC: </Text>
                 </View>
@@ -145,7 +171,7 @@ export default class CalculatorScreen extends React.Component {
                         keyExtractor={(item) => item._id}
                         numColumns={2}
                         renderItem={(item) => <TouchableOpacity
-                            onLongPress={() => alert('hey')}
+                            onLongPress={() => this.setModalVisible(true)}
                         >
                             <DrinkCard
                                 title='I Drank This!'

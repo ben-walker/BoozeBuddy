@@ -22,6 +22,7 @@
     "react-horizontal-scrolling-menu": "^0.3.5",
     "react-native": "https://github.com/expo/react-native/archive/sdk-30.0.0.tar.gz",
     "react-native-elements": "^0.19.1",
+    "react-native-modal": "^6.5.0",
     "react-native-picker-select": "^5.0.0",
     "react-navigation": "^2.18.2",
     "react-scroll-horizontal": "^1.5.1",
