@@ -5,9 +5,9 @@ import {
     ScrollView,
     Text,
     View,
-    Alert,
     AsyncStorage,
     FlatList,
+    TouchableOpacity,
 } from 'react-native';
 import colors from '../constants/Colors';
 import style from '../constants/StyleSheet';
@@ -142,14 +142,17 @@ export default class CalculatorScreen extends React.Component {
 
                     <FlatList
                         data={this.state.drinks}
-                        keyExtractor={(item, index) => item._id}
+                        keyExtractor={(item) => item._id}
                         numColumns={2}
-                        renderItem={(item) => <DrinkCard
-                            title='I Drank This!'
-                            image={item.item.image_url}
-                            description={item.item.name}
+                        renderItem={(item) => <TouchableOpacity
+                            onLongPress={() => alert('hey')}
                         >
-                        </DrinkCard>}
+                            <DrinkCard
+                                title='I Drank This!'
+                                image={item.item.image_url}
+                                description={item.item.name}
+                            />
+                        </TouchableOpacity>}
                     />
                 </ScrollView>
             </View>
