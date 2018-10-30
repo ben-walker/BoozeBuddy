@@ -32,6 +32,7 @@ export default class CalculatorScreen extends React.Component {
             MR: 0.0,
             Wt: 0.0,
             drinks: [],
+            favourites: [],
             modalVisible: false,
             modalDrink: null,
         };
@@ -40,6 +41,22 @@ export default class CalculatorScreen extends React.Component {
         this.getFirstPageOfDrinks = this.getFirstPageOfDrinks.bind(this);
         this.setModalVisible = this.setModalVisible.bind(this);
         this.addToFavourites = this.addToFavourites.bind(this);
+        this.getFavourites = this.getFavourites.bind(this);
+    }
+
+    async componentDidMount() {
+        // parse out user data
+        const userToken = await AsyncStorage.getItem('userToken');
+        const userData = JSON.parse(userToken);
+        this.setBacConstants(userData);
+
+        // store started drinking moment
+        const drinkTimestamp = new moment();
+        await AsyncStorage.setItem('startedDrinkingMoment', drinkTimestamp);
+
+        // get first page of drinks
+        this.getFirstPageOfDrinks();
+        this.getFavourites();
     }
 
     setBacConstants(userData) {
@@ -67,20 +84,6 @@ export default class CalculatorScreen extends React.Component {
         });
     }
 
-    async componentDidMount() {
-        // parse out user data
-        const userToken = await AsyncStorage.getItem('userToken');
-        const userData = JSON.parse(userToken);
-        this.setBacConstants(userData);
-
-        // store started drinking moment
-        const drinkTimestamp = new moment();
-        await AsyncStorage.setItem('startedDrinkingMoment', drinkTimestamp);
-
-        // get first page of drinks
-        this.getFirstPageOfDrinks();
-    }
-
     async getFirstPageOfDrinks() {
         let URL = 'https://dr-robotnik.herokuapp.com/api/pageOfDrinks';
         const queryData = { page: 1, perPage: 20 };
@@ -96,6 +99,20 @@ export default class CalculatorScreen extends React.Component {
         if (!rawResponse.ok) return;
         const response = await rawResponse.json();
         this.setState({ drinks: response });
+    }
+
+    async getFavourites() {
+        const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/favourites', {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        });
+        if (!rawResponse.ok) return;
+        const response = await rawResponse.json();
+        this.setState({ favourites: response });
     }
 
     async calculateBAC() {
@@ -188,7 +205,6 @@ export default class CalculatorScreen extends React.Component {
                             >
                             </DrinkCard>}
                         />
-
                     </ScrollView>
 
                     <Text style={style.smallText}>Drink List</Text>
