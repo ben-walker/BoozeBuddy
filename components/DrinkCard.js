@@ -17,7 +17,7 @@ class DrinkCard extends Component {
 		return (
 			<Card containerStyle={{minWidth: '40%'}}
 				image={{uri: image}}>
-				<Text style={{marginBottom: 10}}>
+				<Text style={{marginBottom: 10, maxWidth: '50%'}}>
 					{description}
 				</Text>
 				<Button

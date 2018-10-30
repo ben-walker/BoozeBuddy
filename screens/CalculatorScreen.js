@@ -121,10 +121,10 @@ export default class CalculatorScreen extends React.Component {
 
                 <View style={style.favouritesBar}>
                     <Text style={style.smallText}>Favourites</Text>
-                    <DrinkCard
+                    {/* <DrinkCard
                         title="Red"
                         onPress={() => Alert.alert("Looks like we ran out of alcohol. Try again later.")}>
-                    </DrinkCard>
+                    </DrinkCard> */}
                 </View>
 
                 <Text style={style.smallText}>Drink List</Text>
@@ -133,8 +133,10 @@ export default class CalculatorScreen extends React.Component {
                     keyExtractor={(item, index) => item._id}
                     numColumns={2}
                     renderItem={(item) => <DrinkCard
-                        title={item.item.name}
-                        image={item.item.image_thumb_url}>
+                        title='I Drank This!'
+                        image={item.item.image_url}
+                        description={item.item.name}
+                    >
                     </DrinkCard>}
                 />
             </ScrollView>
