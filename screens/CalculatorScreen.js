@@ -133,8 +133,6 @@ export default class CalculatorScreen extends React.Component {
     }
 
     async addToFavourites(drink) {
-        const successAlert = Alert.alert('Success!',`Added ${drink.name} to your Favourites!`);
-        const failAlert = Alert.alert('Failed!', 'Add to Favourites failed.');
 
         const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/addFavourite', {
             method: 'POST',
@@ -146,8 +144,8 @@ export default class CalculatorScreen extends React.Component {
             body: JSON.stringify({ lcboId: drink.lcbo_id })
         });
 
-        if (!rawResponse.ok) return failAlert;
-        return successAlert;
+        if (!rawResponse.ok) return await Alert.alert('Failed!', 'Add to Favourites failed.');
+        return await Alert.alert('Success!',`Added ${drink.name} to your Favourites!`);
     }
 
     setModalVisible(visible) {
@@ -193,7 +191,7 @@ export default class CalculatorScreen extends React.Component {
                 </View>
 
                 <View>
-                    <Text style={style.smallText}>Drink display : X X X X X X X X X  </Text>
+                    <Text style={style.smallText}>Drink display :</Text>
                 </View>
                 <ScrollView style={style.container}>
                     <Text style={style.smallText}>Favourites</Text>
