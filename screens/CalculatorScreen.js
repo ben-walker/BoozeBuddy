@@ -8,6 +8,7 @@ import {
     AsyncStorage,
     FlatList,
     TouchableOpacity,
+    Alert,
 } from 'react-native';
 import { Card, Button } from 'react-native-elements';
 import Modal from 'react-native-modal';
@@ -132,6 +133,9 @@ export default class CalculatorScreen extends React.Component {
     }
 
     async addToFavourites(drink) {
+        const successAlert = Alert.alert('Success!',`Added ${drink.name} to your Favourites!`);
+        const failAlert = Alert.alert('Failed!', 'Add to Favourites failed.');
+
         const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/addFavourite', {
             method: 'POST',
             credentials: 'include',
@@ -141,8 +145,9 @@ export default class CalculatorScreen extends React.Component {
             },
             body: JSON.stringify({ lcboId: drink.lcbo_id })
         });
-        if (!rawResponse.ok) return alert('Add to Favourites failed.');
-        return alert(`Added ${drink.name} to your Favourites!`)
+
+        if (!rawResponse.ok) return failAlert;
+        return successAlert;
     }
 
     setModalVisible(visible) {
@@ -176,7 +181,7 @@ export default class CalculatorScreen extends React.Component {
                                 }}
                             />
                             <Button
-                                title='Cancel'
+                                title='Exit'
                                 onPress={() => this.setModalVisible(false)}
                             />
                         </Card>
