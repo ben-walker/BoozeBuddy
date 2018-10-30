@@ -39,6 +39,7 @@ export default class CalculatorScreen extends React.Component {
         this.setBacConstants = this.setBacConstants.bind(this);
         this.getFirstPageOfDrinks = this.getFirstPageOfDrinks.bind(this);
         this.setModalVisible = this.setModalVisible.bind(this);
+        this.addToFavourites = this.addToFavourites.bind(this);
     }
 
     setBacConstants(userData) {
@@ -113,6 +114,20 @@ export default class CalculatorScreen extends React.Component {
         return EBAC;
     }
 
+    async addToFavourites(drink) {
+        const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/addFavourite', {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ lcboId: drink.lcbo_id })
+        });
+        if (!rawResponse.ok) return alert('Add to Favourites failed.');
+        return alert(`Added ${drink.name} to your Favourites!`)
+    }
+
     setModalVisible(visible) {
         this.setState({modalVisible: visible});
     }
@@ -137,6 +152,11 @@ export default class CalculatorScreen extends React.Component {
                         >
                             <Button
                                 title='Add to Favourites'
+                                onPress={() => {
+                                    this.state.modalDrink
+                                        ? this.addToFavourites(this.state.modalDrink)
+                                        : null;
+                                }}
                             />
                             <Button
                                 title='Cancel'
