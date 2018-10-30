@@ -109,6 +109,7 @@ export default class CalculatorScreen extends React.Component {
     }
 
     render() {
+
         return (
             <View style={style.container}>
                 <View style={style.secondaryContentContainer}>
@@ -119,28 +120,37 @@ export default class CalculatorScreen extends React.Component {
                     <Text style={style.smallText}>Drink display : X X X X X X X X X  </Text>
                 </View>
                 <ScrollView style={style.container}>
-                <View style={style.favouritesBar}>
                     <Text style={style.smallText}>Favourites</Text>
-                    {/* <DrinkCard
-                        title="Red"
-                        onPress={() => Alert.alert("Looks like we ran out of alcohol. Try again later.")}>
-                    </DrinkCard> */}
-                </View>
+                    <ScrollView style={style.favouritesBar}
+                                horizontal={true}>
+                        <FlatList
+                            data={this.state.drinks}
+                            keyExtractor={(item, index) => item._id}
+                            numColumns={2}
+                            renderItem={(item) => <DrinkCard
+                                title='I Drank This!'
+                                image={item.item.image_url}
+                                description={item.item.name}
+                            >
+                            </DrinkCard>}
+                        />
 
-                <Text style={style.smallText}>Drink List</Text>
+                    </ScrollView>
+
+                    <Text style={style.smallText}>Drink List</Text>
 
 
-                <FlatList
-                    data={this.state.drinks}
-                    keyExtractor={(item, index) => item._id}
-                    numColumns={2}
-                    renderItem={(item) => <DrinkCard
-                        title='I Drank This!'
-                        image={item.item.image_url}
-                        description={item.item.name}
-                    >
-                    </DrinkCard>}
-                />
+                    <FlatList
+                        data={this.state.drinks}
+                        keyExtractor={(item, index) => item._id}
+                        numColumns={2}
+                        renderItem={(item) => <DrinkCard
+                            title='I Drank This!'
+                            image={item.item.image_url}
+                            description={item.item.name}
+                        >
+                        </DrinkCard>}
+                    />
                 </ScrollView>
             </View>
         );
