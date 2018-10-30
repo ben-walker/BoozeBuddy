@@ -1,11 +1,13 @@
 import React from 'react';
 import moment from 'moment';
+import url from 'url';
 import {
     ScrollView,
     Text,
     View,
     Alert,
     AsyncStorage,
+    FlatList,
 } from 'react-native';
 import colors from '../constants/Colors';
 import style from '../constants/StyleSheet';
@@ -27,9 +29,11 @@ export default class CalculatorScreen extends React.Component {
             BW: 0.0,
             MR: 0.0,
             Wt: 0.0,
+            drinks: [],
         };
         this.calculateBAC = this.calculateBAC.bind(this);
         this.setBacConstants = this.setBacConstants.bind(this);
+        this.getFirstPageOfDrinks = this.getFirstPageOfDrinks.bind(this);
     }
 
     setBacConstants(userData) {
@@ -66,6 +70,26 @@ export default class CalculatorScreen extends React.Component {
         // store started drinking moment
         const drinkTimestamp = new moment();
         await AsyncStorage.setItem('startedDrinkingMoment', drinkTimestamp);
+
+        // get first page of drinks
+        this.getFirstPageOfDrinks();
+    }
+
+    async getFirstPageOfDrinks() {
+        let URL = 'https://dr-robotnik.herokuapp.com/api/pageOfDrinks';
+        const queryData = { page: 1, perPage: 20 };
+        URL += url.format({ query: queryData });
+        
+        const rawResponse = await fetch(URL, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        });
+        if (!rawResponse.ok) return;
+        const response = await rawResponse.json();
+        this.setState({ drinks: response });
     }
 
     async calculateBAC() {
@@ -103,13 +127,16 @@ export default class CalculatorScreen extends React.Component {
                     </DrinkCard>
                 </View>
 
-                <ScrollView style={style.container}>
-                    <Text style={style.smallText}>Drink List</Text>
-                    <DrinkCard
-                        title="Blue"
-                        onPress={() => Alert.alert("Looks like we ran out of alcohol. Try again later.")}>
-                    </DrinkCard>
-                </ScrollView>
+                <Text style={style.smallText}>Drink List</Text>
+                <FlatList
+                    data={this.state.drinks}
+                    keyExtractor={(item, index) => item._id}
+                    numColumns={2}
+                    renderItem={(item) => <DrinkCard
+                        title={item.item.name}
+                        image={item.item.image_thumb_url}>
+                    </DrinkCard>}
+                />
             </ScrollView>
         );
     }
