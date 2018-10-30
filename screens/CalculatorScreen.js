@@ -19,21 +19,71 @@ export default class CalculatorScreen extends React.Component {
         headerLeft: null,
     };
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            BAC: 0.0,
+            SD: 0,
+            BW: 0.0,
+            MR: 0.0,
+            Wt: 0.0,
+        };
+        this.calculateBAC = this.calculateBAC.bind(this);
+        this.setBacConstants = this.setBacConstants.bind(this);
+    }
+
+    setBacConstants(userData) {
+        let BW = 0.0;
+        let MR = 0.0;
+        const Wt = userData.weightKg;
+        switch (userData.gender) {
+            case 'Male':
+                BW = 0.58;
+                MR = 0.015;
+                break;
+            case 'Female':
+                BW = 0.49;
+                MR = 0.017;
+                break;
+            case 'Other':
+                BW = 0.58;
+                MR = 0.015;
+                break;
+        }
+        this.setState({
+            BW,
+            MR,
+            Wt,
+        });
+    }
+
     async componentDidMount() {
         // parse out user data
         const userToken = await AsyncStorage.getItem('userToken');
         const userData = JSON.parse(userToken);
+        this.setBacConstants(userData);
 
         // store started drinking moment
         const drinkTimestamp = new moment();
         await AsyncStorage.setItem('startedDrinkingMoment', drinkTimestamp);
     }
 
-    render() {
-        const date = new Date();
-        const timestamp = date.getHours() + ":" + date.getMinutes();
-        var bac;
+    async calculateBAC() {
+        const startedDrinkingMoment = await AsyncStorage.getItem('startedDrinkingMoment');
+        const currentMoment = new moment();
+        const drinkingTime = moment.duration(currentMoment.diff(startedDrinkingMoment)).asHours();
 
+        const {
+            SD,
+            BW,
+            Wt,
+            MR,
+        } = this.state;
+        const EBAC = (0.806 * SD * 1.2) / (BW * Wt) - (MR * drinkingTime);
+        this.setState({ BAC: EBAC });
+    }
+
+    render() {
         return (
             <ScrollView style={style.container}>
                 <View style={style.secondaryContentContainer}>
