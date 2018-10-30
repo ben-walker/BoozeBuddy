@@ -195,21 +195,20 @@ export default class CalculatorScreen extends React.Component {
                     <ScrollView style={style.favouritesBar}
                                 horizontal={true}>
                         <FlatList
-                            data={this.state.drinks}
-                            keyExtractor={(item, index) => item._id}
-                            numColumns={2}
+                            data={this.state.favourites}
+                            keyExtractor={(item) => item._id}
+                            horizontal={true}
                             renderItem={(item) => <DrinkCard
                                 title='I Drank This!'
                                 image={item.item.image_url}
                                 description={item.item.name}
+                                drinkData={item.item}
                             >
                             </DrinkCard>}
                         />
                     </ScrollView>
 
                     <Text style={style.smallText}>Drink List</Text>
-
-
                     <FlatList
                         data={this.state.drinks}
                         keyExtractor={(item) => item._id}
