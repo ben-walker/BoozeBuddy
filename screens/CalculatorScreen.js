@@ -177,6 +177,7 @@ export default class CalculatorScreen extends React.Component {
                                 title='I Drank This!'
                                 image={item.item.image_url}
                                 description={item.item.name}
+                                drinkData={item.item}
                             />
                         </TouchableOpacity>}
                     />

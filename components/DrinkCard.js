@@ -12,6 +12,13 @@ import colors from '../constants/Colors';
 import style from '../constants/StyleSheet';
 
 class DrinkCard extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			drinkData: props.drinkData,
+		};
+	}
+
 	render() {
 		const { title, description, onPressFunction, image} = this.props;
 		return (
@@ -32,9 +39,10 @@ class DrinkCard extends Component {
 }
 
 DrinkCard.propTypes = {
-  title: PropTypes.string.isRequired,
+  	title: PropTypes.string.isRequired,
 	image: PropTypes.string.isRequired,
-  onPressFunction: PropTypes.func.isRequired,
+	onPressFunction: PropTypes.func.isRequired,
+	drinkData: PropTypes.object,
 };
 
 const styles = StyleSheet.create({
