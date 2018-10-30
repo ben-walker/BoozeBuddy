@@ -50,8 +50,8 @@ export default class CalculatorScreen extends React.Component {
                 MR = 0.017;
                 break;
             case 'Other':
-                BW = 0.58;
-                MR = 0.015;
+                BW = 0.49;
+                MR = 0.017;
                 break;
         }
         this.setState({
@@ -103,22 +103,22 @@ export default class CalculatorScreen extends React.Component {
             Wt,
             MR,
         } = this.state;
-        const EBAC = (0.806 * SD * 1.2) / (BW * Wt) - (MR * drinkingTime);
+        const EBAC = ((0.806 * SD * 1.2) / (BW * Wt)) - (MR * drinkingTime);
         this.setState({ BAC: EBAC });
+        return EBAC;
     }
 
     render() {
         return (
-            <ScrollView style={style.container}>
+            <View style={style.container}>
                 <View style={style.secondaryContentContainer}>
-                    <Text style={style.titleText}>BAC:</Text>
+                    <Text style={style.titleText}>BAC: </Text>
                 </View>
 
                 <View>
                     <Text style={style.smallText}>Drink display : X X X X X X X X X  </Text>
-                    <Text style={style.defaultText}>Started Drinking : </Text>
                 </View>
-
+                <ScrollView style={style.container}>
                 <View style={style.favouritesBar}>
                     <Text style={style.smallText}>Favourites</Text>
                     {/* <DrinkCard
@@ -128,6 +128,8 @@ export default class CalculatorScreen extends React.Component {
                 </View>
 
                 <Text style={style.smallText}>Drink List</Text>
+
+
                 <FlatList
                     data={this.state.drinks}
                     keyExtractor={(item, index) => item._id}
@@ -139,7 +141,8 @@ export default class CalculatorScreen extends React.Component {
                     >
                     </DrinkCard>}
                 />
-            </ScrollView>
+                </ScrollView>
+            </View>
         );
     }
 }
