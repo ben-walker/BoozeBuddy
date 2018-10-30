@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-    Text,
     StyleSheet,
 } from 'react-native';
 import {
@@ -10,21 +9,23 @@ import {
     Icon,
 } from 'react-native-elements';
 import colors from '../constants/Colors';
+import style from '../constants/StyleSheet';
 
 class DrinkCard extends Component {
 	render() {
 		const { title, description, onPressFunction, image} = this.props;
 		return (
-			<Card containerStyle={{minWidth: '40%'}}
-				image={{uri: image}}>
-				<Text style={{marginBottom: 10, maxWidth: '50%'}}>
-					{description}
-				</Text>
+			<Card
+				containerStyle={{minWidth: '40%'}}
+				featuredTitle={description}
+				image={{uri: image}}
+			>
 				<Button
 					icon={<Icon name='code' color='#ffffff'/>}
 					backgroundColor='#03A9F4'
 					title={title}
-					onPress = {onPressFunction}/>
+					onPress={onPressFunction}
+				/>
 			</Card>
 		);
 	}
