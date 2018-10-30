@@ -33,6 +33,7 @@ export default class CalculatorScreen extends React.Component {
             Wt: 0.0,
             drinks: [],
             modalVisible: false,
+            modalDrink: null,
         };
         this.calculateBAC = this.calculateBAC.bind(this);
         this.setBacConstants = this.setBacConstants.bind(this);
@@ -122,10 +123,17 @@ export default class CalculatorScreen extends React.Component {
             <View style={style.container}>
                 <Modal
                     isVisible={this.state.modalVisible}
+                    onSwipe={() => this.setModalVisible(false)}
+                    swipeDirection='down'
                 >
                     <View style={{ flex: 1 }}>
                         <Card
-                            title='Add to Favourites'
+                            title={this.state.modalDrink
+                                ? this.state.modalDrink.name
+                                : ''}
+                            image={{uri: this.state.modalDrink
+                                ? this.state.modalDrink.image_url
+                                : ''}}
                         >
                             <Button
                                 title='Add to Favourites'
@@ -171,7 +179,10 @@ export default class CalculatorScreen extends React.Component {
                         keyExtractor={(item) => item._id}
                         numColumns={2}
                         renderItem={(item) => <TouchableOpacity
-                            onLongPress={() => this.setModalVisible(true)}
+                            onLongPress={async () => {
+                                await this.setState({ modalDrink: item.item });
+                                this.setModalVisible(true);
+                            }}
                         >
                             <DrinkCard
                                 title='I Drank This!'
