@@ -20,10 +20,16 @@ class DrinkCard extends Component {
 	}
 
 	render() {
-		const { title, description, onPressFunction, image} = this.props;
+		const {
+			title,
+			description,
+			onPressFunction,
+			image,
+			style,
+		} = this.props;
 		return (
 			<Card
-				containerStyle={{minWidth: '40%'}}
+				containerStyle={[style, { minWidth: '40%' }]}
 				featuredTitle={description}
 				image={{uri: image}}
 			>
@@ -43,6 +49,7 @@ DrinkCard.propTypes = {
 	image: PropTypes.string.isRequired,
 	onPressFunction: PropTypes.func.isRequired,
 	drinkData: PropTypes.object,
+	style: PropTypes.object,
 };
 
 const styles = StyleSheet.create({
