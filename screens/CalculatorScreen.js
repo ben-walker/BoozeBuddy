@@ -10,7 +10,12 @@ import {
     TouchableOpacity,
     Alert,
 } from 'react-native';
-import { Card, Button } from 'react-native-elements';
+import {
+    Card,
+    Button,
+    List,
+    ListItem,
+} from 'react-native-elements';
 import Modal from 'react-native-modal';
 import DropdownAlert from 'react-native-dropdownalert';
 import colors from '../constants/Colors';
@@ -201,6 +206,10 @@ export default class CalculatorScreen extends React.Component {
 
     render() {
 
+        const drinkListHeader = <View style={style.container}>
+            <Text style={style.titleText}>Drink List</Text>
+        </View>;
+
         return (
             <View style={style.container}>
                 <Modal
@@ -253,26 +262,30 @@ export default class CalculatorScreen extends React.Component {
                         />}
                     />
 
-                    <Text style={style.titleText}>Drink List</Text>
-                    <FlatList
-                        data={this.state.drinks}
-                        keyExtractor={(item) => item._id}
-                        numColumns={2}
-                        renderItem={(item) => <TouchableOpacity
-                            onLongPress={async () => {
-                                await this.setState({ modalDrink: item.item });
-                                this.setModalVisible(true);
-                            }}
-                        >
-                            <DrinkCard
-                                title='I Drank This!'
-                                image={item.item.image_url}
-                                description={item.item.name}
-                                drinkData={item.item}
-                                onPressFunction={() => this.logDrink(item.item)}
-                            />
-                        </TouchableOpacity>}
-                    />
+                    <List>
+                        <FlatList
+                            data={this.state.drinks}
+                            keyExtractor={item => item._id}
+                            ListHeaderComponent={drinkListHeader}
+                            renderItem={(item) => (
+                                <TouchableOpacity
+                                    onLongPress={async () => {
+                                        await this.setState({ modalDrink: item.item });
+                                        this.setModalVisible(true);
+                                    }}
+                                >
+                                    <ListItem
+                                        roundAvatar
+                                        title={item.item.name}
+                                        rightIcon={{ name: 'add-circle', color: colors.accent }}
+                                        onPressRightIcon={() => this.logDrink(item.item)}
+                                        subtitle={`${item.item.volume_in_milliliters} mL • ${item.item.secondary_category} • ${item.item.alcohol_content / 100}%`}
+                                        avatar={{ uri: item.item.image_url }}
+                                    />
+                                </TouchableOpacity>
+                            )}
+                        />
+                    </List>
                 </ScrollView>
                 <DropdownAlert ref={ref => this.dropdown = ref}/>
             </View>
