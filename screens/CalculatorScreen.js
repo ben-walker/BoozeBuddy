@@ -16,6 +16,12 @@ import colors from '../constants/Colors';
 import style from '../constants/StyleSheet';
 import DrinkCard from '../components/DrinkCard.js';
 
+const beverageServingsML = {
+    Wine: 148,
+    Beer: 354,
+    Spirits: 44,
+};
+
 export default class CalculatorScreen extends React.Component {
     static navigationOptions = {
         title: 'Calculator',
@@ -118,7 +124,13 @@ export default class CalculatorScreen extends React.Component {
     }
 
     async logDrink(drink) {
-        await this.setState({ SD: this.state.SD + 1 });
+        // calculate number of standard drinks
+        const servingSize = beverageServingsML[drink.primary_category];
+        const ethanolDensity = 0.789;
+        const alcPercentage = drink.alcohol_content / 100;
+        const standardDrinks = (servingSize / 1000) * alcPercentage * ethanolDensity;
+
+        await this.setState({ SD: this.state.SD + standardDrinks });
         this.calculateBAC();
     }
 
@@ -209,7 +221,7 @@ export default class CalculatorScreen extends React.Component {
                             image={item.item.image_url}
                             description={item.item.name}
                             drinkData={item.item}
-                            onPressFunction={() => this.logDrink(item)}
+                            onPressFunction={() => this.logDrink(item.item)}
                         />}
                     />
 
@@ -229,7 +241,7 @@ export default class CalculatorScreen extends React.Component {
                                 image={item.item.image_url}
                                 description={item.item.name}
                                 drinkData={item.item}
-                                onPressFunction={() => this.logDrink(item)}
+                                onPressFunction={() => this.logDrink(item.item)}
                             />
                         </TouchableOpacity>}
                     />
