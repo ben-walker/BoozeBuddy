@@ -6,6 +6,7 @@ export default StyleSheet.create({
         flex: 1,
         backgroundColor: colors.background,
         paddingTop: 22,
+        borderColor: colors.background
     },
     contentContainer: {
         marginTop: 1,
