@@ -46,19 +46,22 @@ export default class CustomDrinkScreen extends React.Component {
         if (!await this.isValid()) return;
         const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/createDrink', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                name: "TEST",
-                volumeInMilliliters: 100,
-                alcoholContent : 50,
+                name: this.state.drinkName,
+                volumeInMilliliters: this.state.drinkVolume,
+                alcoholContent : this.state.drinkAlcoholContent,
             })
         });
 
         if (!rawResponse.ok) return alert("createDrink failed.");
         const response = await rawResponse.json();
+        console.log(response);
+        alert(`Successfully created ${this.state.drinkName}.`);
         this.props.navigation.navigate('App');
     }
 
