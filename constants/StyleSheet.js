@@ -26,7 +26,7 @@ export default StyleSheet.create({
         color: colors.defaultText,
     },
     smallText: {
-        fontSize: 10,
+        fontSize: 12,
         color: colors.defaultText,
     },
     button: {
