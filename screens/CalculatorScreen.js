@@ -158,6 +158,7 @@ export default class CalculatorScreen extends React.Component {
         const ethanolDensity = 0.789;
         const alcPercentage = drink.alcohol_content / 100;
         const standardDrinks = (servingSize / 1000) * alcPercentage * ethanolDensity;
+        console.log(drink);
 
         await this.setState({
             SD: this.state.SD + standardDrinks,
@@ -307,7 +308,7 @@ export default class CalculatorScreen extends React.Component {
                                         title={item.item.name}
                                         rightIcon={{ name: 'add-circle', color: colors.accent }}
                                         onPressRightIcon={() => this.logDrink(item.item)}
-                                        subtitle={`${item.item.volume_in_milliliters} mL • ${item.item.secondary_category} • ${item.item.alcohol_content / 100}%`}
+                                        subtitle={`${item.item.package_unit_volume_in_milliliters} mL • ${item.item.secondary_category} • ${item.item.alcohol_content / 100}%`}
                                         avatar={{ uri: item.item.image_url }}
                                     />
                                 </TouchableOpacity>
