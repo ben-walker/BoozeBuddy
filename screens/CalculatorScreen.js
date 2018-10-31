@@ -66,6 +66,13 @@ export default class CalculatorScreen extends React.Component {
         // get first page of drinks
         this.getFirstPageOfDrinks();
         this.getFavourites();
+
+        // start up interval for BAC recalculation over time
+        this.recalculating = setInterval(this.calculateBAC, 5000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.recalculating);
     }
 
     setBacConstants(userData) {
