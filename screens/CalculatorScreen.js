@@ -150,6 +150,9 @@ export default class CalculatorScreen extends React.Component {
         });
         if (!rawResponse.ok) return;
         const response = await rawResponse.json();
+        response.forEach((part, index, array) => {
+            array[index].favourite = true;
+        });
         await this.setState({ favourites: response });
     }
 
@@ -284,23 +287,9 @@ export default class CalculatorScreen extends React.Component {
                 </View>
 
                 <ScrollView style={style.container}>
-                    <Text style={style.titleText}>Favourites</Text>
-                    <FlatList
-                        data={this.state.favourites}
-                        keyExtractor={(item) => item._id}
-                        horizontal={true}
-                        renderItem={(item) => <FavouritesCard
-                            title='I Drank This!'
-                            image={item.item.image_url}
-                            description={item.item.name}
-                            drinkData={item.item}
-                            onPressFunction={() => this.logDrink(item.item)}
-                        />}
-                    />
-
                     <List>
                         <FlatList
-                            data={this.state.drinks}
+                            data={this.state.favourites.concat(this.state.drinks)}
                             keyExtractor={item => item._id}
                             ListHeaderComponent={drinkListHeader}
                             ListFooterComponent={this.renderFooter}
