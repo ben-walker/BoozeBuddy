@@ -292,6 +292,8 @@ export default class CalculatorScreen extends React.Component {
                         keyExtractor={item => item._id}
                         ListHeaderComponent={drinkListHeader}
                         ListFooterComponent={this.renderFooter}
+                        onEndReached={this.getPageOfDrinks}
+                        onEndReachedThreshold={0.1}
                         renderItem={(item) => (
                             <TouchableOpacity
                                 onLongPress={async () => {
