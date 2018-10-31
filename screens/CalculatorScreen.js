@@ -249,9 +249,11 @@ export default class CalculatorScreen extends React.Component {
                             title={this.state.modalDrink
                                 ? this.state.modalDrink.name
                                 : ''}
-                            image={{uri: this.state.modalDrink
+                            image={this.state.modalDrink
                                 ? this.state.modalDrink.image_url
-                                : ''}}
+                                    ? {uri: this.state.modalDrink.image_url}
+                                    : require('../assets/images/DrinkIcons/beer.png')
+                                : {uri: ''}}
                         >
                             <Button
                                 title='Add to Favourites'
@@ -308,7 +310,9 @@ export default class CalculatorScreen extends React.Component {
                                         rightIcon={{ name: 'add-circle', color: colors.accent }}
                                         onPressRightIcon={() => this.logDrink(item.item)}
                                         subtitle={`${item.item.package_unit_volume_in_milliliters} mL • ${item.item.secondary_category} • ${item.item.alcohol_content / 100}%`}
-                                        avatar={{ uri: item.item.image_url }}
+                                        avatar={item.item.image_url
+                                            ? {uri: item.item.image_url}
+                                            : require('../assets/images/DrinkIcons/beer.png')}
                                     />
                                 </TouchableOpacity>
                             )}
