@@ -23,6 +23,8 @@ const beverageServingsML = {
     Spirits: 44,
 };
 
+
+
 export default class CalculatorScreen extends React.Component {
     static navigationOptions = {
         title: 'Calculator',
@@ -30,6 +32,7 @@ export default class CalculatorScreen extends React.Component {
         headerStyle: { backgroundColor: colors.dark },
         headerLeft: null,
     };
+
 
     constructor(props) {
         super(props);
@@ -43,6 +46,7 @@ export default class CalculatorScreen extends React.Component {
             favourites: [],
             modalVisible: false,
             modalDrink: null,
+            numDrinks: 0
         };
         this.calculateBAC = this.calculateBAC.bind(this);
         this.setBacConstants = this.setBacConstants.bind(this);
@@ -51,6 +55,7 @@ export default class CalculatorScreen extends React.Component {
         this.addToFavourites = this.addToFavourites.bind(this);
         this.getFavourites = this.getFavourites.bind(this);
         this.logDrink = this.logDrink.bind(this);
+
     }
 
     async componentDidMount() {
@@ -142,6 +147,7 @@ export default class CalculatorScreen extends React.Component {
             'Hey, Listen!', // title of notif
             `That was ${parseFloat(standardDrinks.toFixed(2))} drinks; be safe and have fun!` // message
         );
+        this.state.numDrinks = this.state.numDrinks + parseFloat(standardDrinks.toFixed(2));
 
         // only start recalculating BAC once first drink logged
         if (!this.recalculating) this.recalculating = setInterval(this.calculateBAC, 5000);
@@ -221,7 +227,7 @@ export default class CalculatorScreen extends React.Component {
                 </View>
 
                 <View>
-                    <Text style={style.smallText}>Drink display :</Text>
+                    <Text style={style.smallText} >Drinks : {this.state.numDrinks}</Text>
                 </View>
                 <ScrollView style={style.container}>
                     <Text style={style.titleText}>Favourites</Text>
