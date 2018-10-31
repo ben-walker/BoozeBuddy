@@ -6,6 +6,7 @@ export default StyleSheet.create({
         flex: 1,
         backgroundColor: colors.background,
         paddingTop: 22,
+        borderColor: colors.background
     },
     contentContainer: {
         marginTop: 1,
@@ -15,7 +16,7 @@ export default StyleSheet.create({
         backgroundColor: colors.background,
     },
     secondaryContentContainer: {
-        marginTop: 10,
+
         marginBottom: 20,
         alignItems: 'center',
         backgroundColor: colors.secondary,

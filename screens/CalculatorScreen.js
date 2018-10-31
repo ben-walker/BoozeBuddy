@@ -306,39 +306,39 @@ export default class CalculatorScreen extends React.Component {
                     <Text style={style.smallText} >Drinks : {Number(this.state.numDrinks).toFixed(1)}</Text>
                 </View>
 
-                <ScrollView style={style.container}>
-                    <List>
-                        <FlatList
-                            data={this.state.favourites.concat(this.state.drinks)}
-                            keyExtractor={item => item._id}
-                            ListHeaderComponent={drinkListHeader}
-                            ListFooterComponent={this.renderFooter}
-                            renderItem={(item) => (
-                                <TouchableOpacity
-                                    onLongPress={async () => {
-                                        await this.setState({ modalDrink: item.item });
-                                        this.setModalVisible(true);
-                                    }}
-                                >
-                                    <ListItem
-                                        roundAvatar
-                                        title={item.item.name}
-                                        rightIcon={{ name: 'add-circle', color: colors.accent }}
-                                        leftIcon={item.item.favourite
-                                          ? { name: 'favorite', color: colors.red }
-                                          : null
-                                        }
-                                        onPressRightIcon={() => this.logDrink(item.item)}
-                                        subtitle={`${item.item.package_unit_volume_in_milliliters} mL • ${item.item.secondary_category} • ${item.item.alcohol_content / 100}%`}
-                                        avatar={item.item.image_url
-                                            ? {uri: item.item.image_url}
-                                            : require('../assets/images/DrinkIcons/beer.png')}
-                                    />
-                                </TouchableOpacity>
-                            )}
-                        />
-                    </List>
-                </ScrollView>
+                <List>
+                    <FlatList
+                        data={this.state.favourites.concat(this.state.drinks)}
+                        keyExtractor={item => item._id}
+                        ListHeaderComponent={drinkListHeader}
+                        ListFooterComponent={this.renderFooter}
+                        onEndReached={this.getPageOfDrinks}
+                        onEndReachedThreshold={0.1}
+                        renderItem={(item) => (
+                            <TouchableOpacity
+                                onLongPress={async () => {
+                                    await this.setState({ modalDrink: item.item });
+                                    this.setModalVisible(true);
+                                }}
+                            >
+                                <ListItem
+                                    roundAvatar
+                                    title={item.item.name}
+                                    rightIcon={{ name: 'add-circle', color: colors.accent }}
+                                    leftIcon={item.item.favourite
+                                      ? { name: 'favorite', color: colors.red }
+                                      : null
+                                    }
+                                    onPressRightIcon={() => this.logDrink(item.item)}
+                                    subtitle={`${item.item.package_unit_volume_in_milliliters} mL • ${item.item.secondary_category} • ${item.item.alcohol_content / 100}%`}
+                                    avatar={item.item.image_url
+                                        ? {uri: item.item.image_url}
+                                        : require('../assets/images/DrinkIcons/beer.png')}
+                                />
+                            </TouchableOpacity>
+                        )}
+                    />
+                </List>
                 <DropdownAlert ref={ref => this.dropdown = ref}/>
             </View>
         );
