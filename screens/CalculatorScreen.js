@@ -59,9 +59,10 @@ export default class CalculatorScreen extends React.Component {
         const userData = JSON.parse(userToken);
         this.setBacConstants(userData);
 
-        // store started drinking moment
+        // store started drinking moment, remove stopped drinking moment
         const drinkTimestamp = new moment();
         await AsyncStorage.setItem('startedDrinkingMoment', drinkTimestamp);
+        await AsyncStorage.removeItem('stoppedDrinkingMoment');
 
         // get first page of drinks
         this.getFirstPageOfDrinks();
@@ -136,11 +137,11 @@ export default class CalculatorScreen extends React.Component {
         const standardDrinks = (servingSize / 1000) * alcPercentage * ethanolDensity;
 
         await this.setState({ SD: this.state.SD + standardDrinks });
-        this.calculateBAC();
+        await this.calculateBAC();
         this.dropdown.alertWithType(
             'info', // notif type
             'Hey, Listen!', // title of notif
-            `That was ${parseFloat(standardDrinks.toFixed(2))} drinks; be safe and have fun!` // message
+            `That was ${parseFloat(standardDrinks.toFixed(2))} standard drinks; be safe and have fun!` // message
         );
 
         // only start recalculating BAC once first drink logged
@@ -160,6 +161,12 @@ export default class CalculatorScreen extends React.Component {
         } = this.state;
         const EBAC = ((0.806 * SD * 1.2) / (BW * Wt)) - (MR * drinkingTime);
         await this.setState({ BAC: EBAC });
+
+        // determine stopped drinking state
+        if (EBAC < 0.001) {
+            const stoppedDrinkingMoment = new moment();
+            await AsyncStorage.setItem('stoppedDrinkingMoment', stoppedDrinkingMoment);
+        }
     }
 
     async addToFavourites(drink) {
