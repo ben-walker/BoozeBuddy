@@ -235,11 +235,9 @@ export default class CalculatorScreen extends React.Component {
 
                 <View style={style.secondaryContentContainer}>
                     <Text style={style.titleText}>BAC: {parseFloat(this.state.BAC.toFixed(4))} g/dL</Text>
+                    <Text style={style.smallText} >Drinks : {Number(this.state.numDrinks).toFixed(1)}</Text>
                 </View>
 
-                <View>
-                    <Text style={style.smallText} >Drinks : {this.state.numDrinks}</Text>
-                </View>
                 <ScrollView style={style.container}>
                     <Text style={style.titleText}>Favourites</Text>
                     <FlatList
