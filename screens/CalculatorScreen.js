@@ -279,11 +279,11 @@ export default class CalculatorScreen extends React.Component {
                             featuredTitle={this.state.modalDrink
                                 ? this.state.modalDrink.name
                                 : ''}
-                            featuredSubtitle={this.state.modalDrink
+                            /* featuredSubtitle={this.state.modalDrink
                                 ? this.state.modalDrink.created_by
                                     ? this.state.modalDrink.created_by
                                     : ''
-                                : ''}
+                                : ''} */
                             image={this.state.modalDrink
                                 ? this.state.modalDrink.image_thumb_url
                                     ? {uri: this.state.modalDrink.image_thumb_url}
