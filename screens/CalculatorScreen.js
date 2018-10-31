@@ -263,7 +263,7 @@ export default class CalculatorScreen extends React.Component {
         return (
             <View style={style.container}>
             <Button
-                title='Fake!'
+                title='[DEMO] Simulate Stop Drinking'
                 onPress={() => this.fakeStoppedDrinking()}
             />
                 <Modal
