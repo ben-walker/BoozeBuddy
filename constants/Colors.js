@@ -8,6 +8,7 @@ export default {
     accent:"#2976EB",
     defaultText:"#F6F9FF",
     dark:"#2A2E30",
+    red:"#E31B23",
 
     tabIconDefault: '#616466',
     tabIconSelected: tintColor,

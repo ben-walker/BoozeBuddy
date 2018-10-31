@@ -114,7 +114,7 @@ export default class CalculatorScreen extends React.Component {
     async getPageOfDrinks() {
         this.setState({ drinkListLoading: true });
         let URL = 'https://dr-robotnik.herokuapp.com/api/pageOfDrinks';
-        const queryData = { page: this.state.drinkPage, perPage: 20, showUserCreated: 'y' };
+        const queryData = { page: this.state.drinkPage, perPage: 20 };
         URL += url.format({ query: queryData });
 
         const rawResponse = await fetch(URL, {
@@ -155,9 +155,7 @@ export default class CalculatorScreen extends React.Component {
 
     async logDrink(drink) {
         // calculate number of standard drinks
-        const servingSize = drink.primary_category
-            ? beverageServingsML[drink.primary_category]
-            : drink.package_unit_volume_in_milliliters;
+        const servingSize = beverageServingsML[drink.primary_category];
         const ethanolDensity = 0.789;
         const alcPercentage = drink.alcohol_content / 100;
         const standardDrinks = (servingSize / 1000) * alcPercentage * ethanolDensity;
@@ -196,6 +194,12 @@ export default class CalculatorScreen extends React.Component {
         if (EBAC < 0.001) {
             const stoppedDrinkingMoment = new moment();
             await AsyncStorage.setItem('stoppedDrinkingMoment', stoppedDrinkingMoment);
+
+            this.dropdown.alertWithType(
+                'info', // notif type
+                'It looks like you\'ve sobered up!', // title of notif
+                `That was ${parseFloat(standardDrinks.toFixed(2))} standard drinks; be safe and have fun!` // message
+            );
         }
     }
 
@@ -311,6 +315,10 @@ export default class CalculatorScreen extends React.Component {
                                         roundAvatar
                                         title={item.item.name}
                                         rightIcon={{ name: 'add-circle', color: colors.accent }}
+                                        leftIcon={item.item.favourite
+                                          ? { name: 'favorite', color: colors.red }
+                                          : null
+                                        }
                                         onPressRightIcon={() => this.logDrink(item.item)}
                                         subtitle={`${item.item.package_unit_volume_in_milliliters} mL • ${item.item.secondary_category} • ${item.item.alcohol_content / 100}%`}
                                         avatar={item.item.image_url
