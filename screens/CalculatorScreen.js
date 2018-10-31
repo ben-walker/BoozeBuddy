@@ -280,8 +280,8 @@ export default class CalculatorScreen extends React.Component {
                                 ? this.state.modalDrink.name
                                 : ''}
                             image={this.state.modalDrink
-                                ? this.state.modalDrink.image_url
-                                    ? {uri: this.state.modalDrink.image_url}
+                                ? this.state.modalDrink.image_thumb_url
+                                    ? {uri: this.state.modalDrink.image_thumb_url}
                                     : require('../assets/images/DrinkIcons/beer.png')
                                 : {uri: ''}}
                         >
@@ -331,8 +331,8 @@ export default class CalculatorScreen extends React.Component {
                                     }
                                     onPressRightIcon={() => this.logDrink(item.item)}
                                     subtitle={`${item.item.package_unit_volume_in_milliliters} mL • ${item.item.secondary_category} • ${item.item.alcohol_content / 100}%`}
-                                    avatar={item.item.image_url
-                                        ? {uri: item.item.image_url}
+                                    avatar={item.item.image_thumb_url
+                                        ? {uri: item.item.image_thumb_url}
                                         : require('../assets/images/DrinkIcons/beer.png')}
                                 />
                             </TouchableOpacity>
