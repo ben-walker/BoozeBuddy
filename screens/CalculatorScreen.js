@@ -66,9 +66,6 @@ export default class CalculatorScreen extends React.Component {
         // get first page of drinks
         this.getFirstPageOfDrinks();
         this.getFavourites();
-
-        // start up interval for BAC recalculation over time
-        this.recalculating = setInterval(this.calculateBAC, 5000);
     }
 
     componentWillUnmount() {
@@ -145,6 +142,9 @@ export default class CalculatorScreen extends React.Component {
             'Hey, Listen!', // title of notif
             `That was ${parseFloat(standardDrinks.toFixed(2))} drinks; be safe and have fun!` // message
         );
+
+        // only start recalculating BAC once first drink logged
+        if (!this.recalculating) this.recalculating = setInterval(this.calculateBAC, 5000);
     }
 
     async calculateBAC() {
