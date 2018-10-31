@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import url from 'url';
 import {
+    ActivityIndicator,
     ScrollView,
     Text,
     View,
@@ -42,6 +43,7 @@ export default class CalculatorScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            drinkListLoading: false,
             BAC: 0.0,
             SD: 0,
             BW: 0.0,
@@ -110,6 +112,7 @@ export default class CalculatorScreen extends React.Component {
     }
 
     async getFirstPageOfDrinks() {
+        this.setState({ drinkListLoading: true });
         let URL = 'https://dr-robotnik.herokuapp.com/api/pageOfDrinks';
         const queryData = { page: 1, perPage: 20 };
         URL += url.format({ query: queryData });
@@ -123,7 +126,10 @@ export default class CalculatorScreen extends React.Component {
         });
         if (!rawResponse.ok) return;
         const response = await rawResponse.json();
-        this.setState({ drinks: response });
+        this.setState({
+            drinks: response,
+            drinkListLoading: false,
+        });
     }
 
     async getFavourites() {
@@ -204,6 +210,21 @@ export default class CalculatorScreen extends React.Component {
         this.setState({modalVisible: visible});
     }
 
+    renderFooter = () => {
+        if (!this.state.drinkListLoading) return null;
+
+        return (
+            <View style={{
+                paddingVertical: 20,
+                borderTopWidth: 1,
+                borderColor: '#CED0CE',
+            }}
+            >
+                <ActivityIndicator animating size='large'/>
+            </View>
+        );
+    }
+
     render() {
 
         const drinkListHeader = <View style={style.container}>
@@ -267,6 +288,7 @@ export default class CalculatorScreen extends React.Component {
                             data={this.state.drinks}
                             keyExtractor={item => item._id}
                             ListHeaderComponent={drinkListHeader}
+                            ListFooterComponent={this.renderFooter}
                             renderItem={(item) => (
                                 <TouchableOpacity
                                     onLongPress={async () => {
