@@ -43,6 +43,7 @@ export default class CalculatorScreen extends React.Component {
         this.setModalVisible = this.setModalVisible.bind(this);
         this.addToFavourites = this.addToFavourites.bind(this);
         this.getFavourites = this.getFavourites.bind(this);
+        this.logDrink = this.logDrink.bind(this);
     }
 
     async componentDidMount() {
@@ -116,6 +117,11 @@ export default class CalculatorScreen extends React.Component {
         await this.setState({ favourites: response });
     }
 
+    async logDrink(drink) {
+        await this.setState({ SD: this.state.SD + 1 });
+        this.calculateBAC();
+    }
+
     async calculateBAC() {
         const startedDrinkingMoment = await AsyncStorage.getItem('startedDrinkingMoment');
         const currentMoment = new moment();
@@ -128,8 +134,7 @@ export default class CalculatorScreen extends React.Component {
             MR,
         } = this.state;
         const EBAC = ((0.806 * SD * 1.2) / (BW * Wt)) - (MR * drinkingTime);
-        this.setState({ BAC: EBAC });
-        return EBAC;
+        await this.setState({ BAC: EBAC });
     }
 
     async addToFavourites(drink) {
@@ -204,8 +209,9 @@ export default class CalculatorScreen extends React.Component {
                             image={item.item.image_url}
                             description={item.item.name}
                             drinkData={item.item}
+                            onPressFunction={() => this.logDrink(item)}
                         />}
-                    />                    
+                    />
 
                     <Text style={style.titleText}>Drink List</Text>
                     <FlatList
@@ -223,6 +229,7 @@ export default class CalculatorScreen extends React.Component {
                                 image={item.item.image_url}
                                 description={item.item.name}
                                 drinkData={item.item}
+                                onPressFunction={() => this.logDrink(item)}
                             />
                         </TouchableOpacity>}
                     />
