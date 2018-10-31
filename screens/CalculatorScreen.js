@@ -27,9 +27,8 @@ const beverageServingsML = {
     Wine: 148,
     Beer: 354,
     Spirits: 44,
+    Ciders: 354,
 };
-
-
 
 export default class CalculatorScreen extends React.Component {
     static navigationOptions = {
@@ -39,11 +38,11 @@ export default class CalculatorScreen extends React.Component {
         headerLeft: null,
     };
 
-
     constructor(props) {
         super(props);
         this.state = {
             drinkListLoading: false,
+            drinkPage: 1,
             BAC: 0.0,
             SD: 0,
             BW: 0.0,
@@ -58,12 +57,12 @@ export default class CalculatorScreen extends React.Component {
         };
         this.calculateBAC = this.calculateBAC.bind(this);
         this.setBacConstants = this.setBacConstants.bind(this);
-        this.getFirstPageOfDrinks = this.getFirstPageOfDrinks.bind(this);
+        this.getPageOfDrinks = this.getPageOfDrinks.bind(this);
         this.setModalVisible = this.setModalVisible.bind(this);
         this.addToFavourites = this.addToFavourites.bind(this);
         this.getFavourites = this.getFavourites.bind(this);
         this.logDrink = this.logDrink.bind(this);
-
+        this.convertJsonNulls = this.convertJsonNulls.bind(this);
     }
 
     async componentDidMount() {
@@ -78,7 +77,7 @@ export default class CalculatorScreen extends React.Component {
         await AsyncStorage.removeItem('stoppedDrinkingMoment');
 
         // get first page of drinks
-        this.getFirstPageOfDrinks();
+        this.getPageOfDrinks();
         this.getFavourites();
     }
 
@@ -111,12 +110,12 @@ export default class CalculatorScreen extends React.Component {
         });
     }
 
-    async getFirstPageOfDrinks() {
+    async getPageOfDrinks() {
         this.setState({ drinkListLoading: true });
         let URL = 'https://dr-robotnik.herokuapp.com/api/pageOfDrinks';
-        const queryData = { page: 1, perPage: 20 };
+        const queryData = { page: this.state.drinkPage, perPage: 20 };
         URL += url.format({ query: queryData });
-        
+
         const rawResponse = await fetch(URL, {
             method: 'GET',
             headers: {
@@ -124,12 +123,19 @@ export default class CalculatorScreen extends React.Component {
                 'Content-Type': 'application/json',
             },
         });
+        this.setState({ drinkListLoading: false });
         if (!rawResponse.ok) return;
-        const response = await rawResponse.json();
-        this.setState({
-            drinks: response,
-            drinkListLoading: false,
+        let response = await rawResponse.json();
+        response = this.convertJsonNulls(response);
+        await this.setState({
+            drinks: this.state.drinks.concat(response),
+            drinkPage: this.state.drinkPage + 1,
         });
+    }
+
+    convertJsonNulls(jsonArray) {
+        const stringified = JSON.stringify(jsonArray, (key, value) => value == null ? '' : value);
+        return JSON.parse(stringified);
     }
 
     async getFavourites() {
