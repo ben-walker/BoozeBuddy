@@ -113,7 +113,7 @@ export default class CalculatorScreen extends React.Component {
         });
         if (!rawResponse.ok) return;
         const response = await rawResponse.json();
-        this.setState({ favourites: response });
+        await this.setState({ favourites: response });
     }
 
     async calculateBAC() {
@@ -133,7 +133,6 @@ export default class CalculatorScreen extends React.Component {
     }
 
     async addToFavourites(drink) {
-
         const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/addFavourite', {
             method: 'POST',
             credentials: 'include',
@@ -145,6 +144,7 @@ export default class CalculatorScreen extends React.Component {
         });
 
         if (!rawResponse.ok) return await Alert.alert('Failed!', 'Add to Favourites failed.');
+        this.getFavourites();
         return await Alert.alert('Success!',`Added ${drink.name} to your Favourites!`);
     }
 
@@ -194,25 +194,20 @@ export default class CalculatorScreen extends React.Component {
                     <Text style={style.smallText}>Drink display :</Text>
                 </View>
                 <ScrollView style={style.container}>
-                    <Text style={style.smallText}>Favourites</Text>
-                    <ScrollView style={style.favouritesBar}
-                                horizontal={true}>
-                        
-                        <FlatList
-                            data={this.state.favourites}
-                            keyExtractor={(item) => item._id}
-                            horizontal={true}
-                            renderItem={(item) => <DrinkCard
-                                title='I Drank This!'
-                                image={item.item.image_url}
-                                description={item.item.name}
-                                drinkData={item.item}
-                            >
-                            </DrinkCard>}
-                        />
-                    </ScrollView>
+                    <Text style={style.titleText}>Favourites</Text>
+                    <FlatList
+                        data={this.state.favourites}
+                        keyExtractor={(item) => item._id}
+                        horizontal={true}
+                        renderItem={(item) => <DrinkCard
+                            title='I Drank This!'
+                            image={item.item.image_url}
+                            description={item.item.name}
+                            drinkData={item.item}
+                        />}
+                    />                    
 
-                    <Text style={style.smallText}>Drink List</Text>
+                    <Text style={style.titleText}>Drink List</Text>
                     <FlatList
                         data={this.state.drinks}
                         keyExtractor={(item) => item._id}
