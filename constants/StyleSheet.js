@@ -15,7 +15,7 @@ export default StyleSheet.create({
         backgroundColor: colors.background,
     },
     secondaryContentContainer: {
-        marginTop: 10,
+
         marginBottom: 20,
         alignItems: 'center',
         backgroundColor: colors.secondary,
