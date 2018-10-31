@@ -115,7 +115,7 @@ export default class CalculatorScreen extends React.Component {
     async getPageOfDrinks() {
         this.setState({ drinkListLoading: true });
         let URL = 'https://dr-robotnik.herokuapp.com/api/pageOfDrinks';
-        const queryData = { page: this.state.drinkPage, perPage: 20 };
+        const queryData = { page: this.state.drinkPage, perPage: 20, showUserCreated: 'y' };
         URL += url.format({ query: queryData });
 
         const rawResponse = await fetch(URL, {
@@ -276,8 +276,13 @@ export default class CalculatorScreen extends React.Component {
 
                     <View style={{ flex: 1 }}>
                         <Card
-                            title={this.state.modalDrink
+                            featuredTitle={this.state.modalDrink
                                 ? this.state.modalDrink.name
+                                : ''}
+                            featuredSubtitle={this.state.modalDrink
+                                ? this.state.modalDrink.created_by
+                                    ? this.state.modalDrink.created_by
+                                    : ''
                                 : ''}
                             image={this.state.modalDrink
                                 ? this.state.modalDrink.image_thumb_url
