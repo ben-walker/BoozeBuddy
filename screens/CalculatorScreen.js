@@ -41,6 +41,7 @@ export default class CalculatorScreen extends React.Component {
             Wt: 0.0,
             drinks: [],
             favourites: [],
+            loggedDrinks: [],
             modalVisible: false,
             modalDrink: null,
         };
@@ -136,7 +137,10 @@ export default class CalculatorScreen extends React.Component {
         const alcPercentage = drink.alcohol_content / 100;
         const standardDrinks = (servingSize / 1000) * alcPercentage * ethanolDensity;
 
-        await this.setState({ SD: this.state.SD + standardDrinks });
+        await this.setState({
+            SD: this.state.SD + standardDrinks,
+            loggedDrinks: this.state.loggedDrinks.push(drink),
+        });
         await this.calculateBAC();
         this.dropdown.alertWithType(
             'info', // notif type
