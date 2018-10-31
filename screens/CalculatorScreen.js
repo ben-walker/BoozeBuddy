@@ -158,7 +158,6 @@ export default class CalculatorScreen extends React.Component {
         const ethanolDensity = 0.789;
         const alcPercentage = drink.alcohol_content / 100;
         const standardDrinks = (servingSize / 1000) * alcPercentage * ethanolDensity;
-        console.log(drink);
 
         await this.setState({
             SD: this.state.SD + standardDrinks,
