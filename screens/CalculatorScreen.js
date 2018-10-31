@@ -22,6 +22,7 @@ import DropdownAlert from 'react-native-dropdownalert';
 import colors from '../constants/Colors';
 import style from '../constants/StyleSheet';
 import DrinkCard from '../components/DrinkCard.js';
+import FavouritesCard from "../components/FavouritesCard";
 
 const beverageServingsML = {
     Wine: 148,
@@ -280,7 +281,7 @@ export default class CalculatorScreen extends React.Component {
                         data={this.state.favourites}
                         keyExtractor={(item) => item._id}
                         horizontal={true}
-                        renderItem={(item) => <DrinkCard
+                        renderItem={(item) => <FavouritesCard
                             title='I Drank This!'
                             image={item.item.image_url}
                             description={item.item.name}
