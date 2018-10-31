@@ -192,7 +192,7 @@ export default class CalculatorScreen extends React.Component {
                 </Modal>
 
                 <View style={style.secondaryContentContainer}>
-                    <Text style={style.titleText}>BAC: </Text>
+                    <Text style={style.titleText}>BAC: {parseFloat(this.state.BAC.toFixed(4))}</Text>
                 </View>
 
                 <View>
