@@ -64,6 +64,7 @@ export default class CalculatorScreen extends React.Component {
         this.getFavourites = this.getFavourites.bind(this);
         this.logDrink = this.logDrink.bind(this);
         this.convertJsonNulls = this.convertJsonNulls.bind(this);
+        this.fakeStoppedDrinking = this.fakeStoppedDrinking.bind(this);
     }
 
     async componentDidMount() {
@@ -201,9 +202,21 @@ export default class CalculatorScreen extends React.Component {
             this.dropdown.alertWithType(
                 'info', // notif type
                 'It looks like you\'ve sobered up!', // title of notif
-                `That was ${parseFloat(standardDrinks.toFixed(2))} standard drinks; be safe and have fun!` // message
+                `You had ${parseFloat(this.state.numDrinks.toFixed(2))} standard drinks over ${parseFloat(drinkingTime.toFixed(2))} hour(s).` // message
             );
         }
+    }
+
+    async fakeStoppedDrinking() {
+        const startedDrinkingMoment = await AsyncStorage.getItem('startedDrinkingMoment');
+        const currentMoment = new moment();
+        const drinkingTime = moment.duration(currentMoment.diff(startedDrinkingMoment)).asHours();
+
+        this.dropdown.alertWithType(
+            'info', // notif type
+            'It looks like you\'ve sobered up!', // title of notif
+            `You had ${parseFloat(this.state.numDrinks.toFixed(2))} standard drinks over ${parseFloat(drinkingTime.toFixed(2))} hour(s).` // message
+        );
     }
 
     async addToFavourites(drink) {
@@ -249,11 +262,18 @@ export default class CalculatorScreen extends React.Component {
 
         return (
             <View style={style.container}>
+            <Button
+                title='Fake!'
+                onPress={() => this.fakeStoppedDrinking()}
+            />
                 <Modal
                     isVisible={this.state.modalVisible}
                     onSwipe={() => this.setModalVisible(false)}
                     swipeDirection='down'
                 >
+
+
+
                     <View style={{ flex: 1 }}>
                         <Card
                             title={this.state.modalDrink
