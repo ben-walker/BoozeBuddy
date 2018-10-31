@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { Card, Button } from 'react-native-elements';
 import Modal from 'react-native-modal';
+import DropdownAlert from 'react-native-dropdownalert';
 import colors from '../constants/Colors';
 import style from '../constants/StyleSheet';
 import DrinkCard from '../components/DrinkCard.js';
@@ -132,6 +133,11 @@ export default class CalculatorScreen extends React.Component {
 
         await this.setState({ SD: this.state.SD + standardDrinks });
         this.calculateBAC();
+        this.dropdown.alertWithType(
+            'info', // notif type
+            'Hey, Listen!', // title of notif
+            `That was ${parseFloat(standardDrinks.toFixed(2))} drinks; be safe and have fun!` // message
+        );
     }
 
     async calculateBAC() {
@@ -196,7 +202,7 @@ export default class CalculatorScreen extends React.Component {
                                 }}
                             />
                             <Button
-                                title='Exit'
+                                title='Dismiss'
                                 onPress={() => this.setModalVisible(false)}
                             />
                         </Card>
@@ -246,6 +252,7 @@ export default class CalculatorScreen extends React.Component {
                         </TouchableOpacity>}
                     />
                 </ScrollView>
+                <DropdownAlert ref={ref => this.dropdown = ref}/>
             </View>
         );
     }
