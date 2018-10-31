@@ -139,7 +139,7 @@ export default class CalculatorScreen extends React.Component {
 
         await this.setState({
             SD: this.state.SD + standardDrinks,
-            loggedDrinks: this.state.loggedDrinks.push(drink),
+            loggedDrinks: [...this.state.loggedDrinks, drink],
         });
         await this.calculateBAC();
         this.dropdown.alertWithType(
