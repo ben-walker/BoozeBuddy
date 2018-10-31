@@ -159,7 +159,10 @@ export default class CalculatorScreen extends React.Component {
 
     async logDrink(drink) {
         // calculate number of standard drinks
-        const servingSize = beverageServingsML[drink.primary_category];
+        const servingSize = drink.primary_category
+            ? beverageServingsML[drink.primary_category]
+            : drink.package_unit_volume_in_milliliters;
+
         const ethanolDensity = 0.789;
         const alcPercentage = drink.alcohol_content / 100;
         const standardDrinks = (servingSize / 1000) * alcPercentage * ethanolDensity;
