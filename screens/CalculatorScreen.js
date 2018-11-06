@@ -3,13 +3,11 @@ import moment from 'moment';
 import url from 'url';
 import {
     ActivityIndicator,
-    ScrollView,
     Text,
     View,
     AsyncStorage,
     FlatList,
     TouchableOpacity,
-    Alert,
 } from 'react-native';
 import {
     Card,
@@ -21,8 +19,6 @@ import Modal from 'react-native-modal';
 import DropdownAlert from 'react-native-dropdownalert';
 import colors from '../constants/Colors';
 import style from '../constants/StyleSheet';
-import DrinkCard from '../components/DrinkCard.js';
-import FavouritesCard from "../components/FavouritesCard";
 
 const beverageServingsML = {
     Wine: 148,
@@ -233,9 +229,18 @@ export default class CalculatorScreen extends React.Component {
             body: JSON.stringify({ lcboId: drink.lcbo_id })
         });
 
-        if (!rawResponse.ok) return await Alert.alert('Failed!', 'Add to Favourites failed.');
+        if (!rawResponse.ok) return this.dropdown.alertWithType(
+            'error', // notif type
+            'Error', // title of notif
+            `Sorry, we couldn't add that drink to your Favourites :(`, // message
+        );
+
         this.getFavourites();
-        return await Alert.alert('Success!',`Added ${drink.name} to your Favourites!`);
+        return this.dropdown.alertWithType(
+            'success', // notif type
+            'Added to Favourites', // title of notif
+            `Nice! We just added ${drink.name} to your Favourites!`, // message
+        )
     }
 
     setModalVisible(visible) {
@@ -273,10 +278,8 @@ export default class CalculatorScreen extends React.Component {
                     isVisible={this.state.modalVisible}
                     onSwipe={() => this.setModalVisible(false)}
                     swipeDirection='down'
+                    style={style.drinkModal}
                 >
-
-
-
                     <View style={{ flex: 1 }}>
                         <Card
                             featuredTitle={this.state.modalDrink

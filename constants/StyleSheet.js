@@ -61,4 +61,15 @@ export default StyleSheet.create({
         marginLeft: -10,
         resizeMode: 'contain',
     },
+    drinkModal: {
+        backgroundColor: 'white',
+        marginTop: 150,
+        marginHorizontal: 0,
+        marginBottom: 0,
+        borderBottomLeftRadius: 0,
+        borderBottomRightRadius: 0,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+        overflow: 'hidden',
+    },
 });
