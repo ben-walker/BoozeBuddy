@@ -15,6 +15,7 @@ import {
     ListItem,
     Tile,
     Text,
+    Icon,
 } from 'react-native-elements';
 import Modal from 'react-native-modal';
 import DropdownAlert from 'react-native-dropdownalert';
@@ -56,13 +57,15 @@ export default class CalculatorScreen extends React.Component {
         this.calculateBAC = this.calculateBAC.bind(this);
         this.setBacConstants = this.setBacConstants.bind(this);
         this.getPageOfDrinks = this.getPageOfDrinks.bind(this);
-        this.setModalVisible = this.setModalVisible.bind(this);
         this.addToFavourites = this.addToFavourites.bind(this);
         this.getFavourites = this.getFavourites.bind(this);
         this.logDrink = this.logDrink.bind(this);
         this.convertJsonNulls = this.convertJsonNulls.bind(this);
         this.fakeStoppedDrinking = this.fakeStoppedDrinking.bind(this);
     }
+
+    _toggleModal = () =>
+        this.setState({ modalVisible: !this.state.modalVisible });
 
     async componentDidMount() {
         // parse out user data
@@ -244,10 +247,6 @@ export default class CalculatorScreen extends React.Component {
         )
     }
 
-    setModalVisible(visible) {
-        this.setState({modalVisible: visible});
-    }
-
     renderFooter = () => {
         if (!this.state.drinkListLoading) return null;
 
@@ -277,36 +276,37 @@ export default class CalculatorScreen extends React.Component {
             />
                 <Modal
                     isVisible={this.state.modalVisible}
-                    onSwipe={() => this.setModalVisible(false)}
+                    onSwipe={this._toggleModal}
                     swipeDirection='down'
                     style={style.drinkModal}
                 >
-                    <View style={{ flex: 1 }}>
+                    <View style={{ flex: 1, alignItems: 'center' }}>
                         <Tile
                             imageSrc={this.state.modalDrink
                                 ? this.state.modalDrink.image_url
                                     ? { uri: this.state.modalDrink.image_url }
                                     : require('../assets/images/DrinkIcons/cocktail.png')
                                 : { uri: '' }}
-                            height={400}
-                            width={300}
+                            height={600}
+                            width={400}
                         />
                         <Button
                             title='Add to Favourites'
                             rounded
                             raised
-                            backgroundColor='blue'
+                            backgroundColor={colors.background}
                             onPress={() => {
                                 this.state.modalDrink
                                     ? this.addToFavourites(this.state.modalDrink)
                                     : null;
                             }}
                         />
-                        <Button
-                            title='Dismiss'
-                            rounded
+                        <Icon
+                            name='arrow-downward'
                             raised
-                            onPress={() => this.setModalVisible(false)}
+                            size={24}
+                            onPress={this._toggleModal}
+                            color='red'
                         />
                     </View>
                 </Modal>
@@ -328,7 +328,7 @@ export default class CalculatorScreen extends React.Component {
                             <TouchableOpacity
                                 onLongPress={async () => {
                                     await this.setState({ modalDrink: item.item });
-                                    this.setModalVisible(true);
+                                    this._toggleModal();
                                 }}
                             >
                                 <ListItem
