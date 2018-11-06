@@ -3,17 +3,18 @@ import moment from 'moment';
 import url from 'url';
 import {
     ActivityIndicator,
-    Text,
+    // Text,
     View,
     AsyncStorage,
     FlatList,
     TouchableOpacity,
 } from 'react-native';
 import {
-    Card,
     Button,
     List,
     ListItem,
+    Tile,
+    Text,
 } from 'react-native-elements';
 import Modal from 'react-native-modal';
 import DropdownAlert from 'react-native-dropdownalert';
@@ -281,34 +282,32 @@ export default class CalculatorScreen extends React.Component {
                     style={style.drinkModal}
                 >
                     <View style={{ flex: 1 }}>
-                        <Card
-                            featuredTitle={this.state.modalDrink
-                                ? this.state.modalDrink.name
-                                : ''}
-                            featuredSubtitle={this.state.modalDrink
-                                ? this.state.modalDrink.created_by
-                                    ? this.state.modalDrink.created_by
-                                    : null
-                                : null}
-                            image={this.state.modalDrink
-                                ? this.state.modalDrink.image_thumb_url
-                                    ? {uri: this.state.modalDrink.image_thumb_url}
-                                    : require('../assets/images/DrinkIcons/beer.png')
-                                : {uri: ''}}
-                        >
-                            <Button
-                                title='Add to Favourites'
-                                onPress={() => {
-                                    this.state.modalDrink
-                                        ? this.addToFavourites(this.state.modalDrink)
-                                        : null;
-                                }}
-                            />
-                            <Button
-                                title='Dismiss'
-                                onPress={() => this.setModalVisible(false)}
-                            />
-                        </Card>
+                        <Tile
+                            imageSrc={this.state.modalDrink
+                                ? this.state.modalDrink.image_url
+                                    ? { uri: this.state.modalDrink.image_url }
+                                    : require('../assets/images/DrinkIcons/cocktail.png')
+                                : { uri: '' }}
+                            height={400}
+                            width={300}
+                        />
+                        <Button
+                            title='Add to Favourites'
+                            rounded
+                            raised
+                            backgroundColor='blue'
+                            onPress={() => {
+                                this.state.modalDrink
+                                    ? this.addToFavourites(this.state.modalDrink)
+                                    : null;
+                            }}
+                        />
+                        <Button
+                            title='Dismiss'
+                            rounded
+                            raised
+                            onPress={() => this.setModalVisible(false)}
+                        />
                     </View>
                 </Modal>
 
