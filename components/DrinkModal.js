@@ -40,7 +40,7 @@ class DrinkModal extends Component {
       this.dropDown.alertWithType('success', 'Added to Favourites', `Nice! We just added ${drink.name} to your Favourites!`);
     }
 
-    _toggleModal = () => this.setState({ isVisible: !this.state.isVisible });
+    toggleModal = () => this.setState({ isVisible: !this.state.isVisible });
 
     render() {
       const addToFavouritesButton = (
@@ -64,7 +64,7 @@ class DrinkModal extends Component {
       return (
         <Modal
           isVisible={this.state.isVisible}
-          onSwipe={this._toggleModal}
+          onSwipe={this.toggleModal}
           swipeDirection="down"
           style={style.drinkModal}
         >
@@ -93,7 +93,7 @@ class DrinkModal extends Component {
               raised
               reverse
               size={24}
-              onPress={this._toggleModal}
+              onPress={this.toggleModal}
               color="grey"
             />
 
