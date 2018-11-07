@@ -45,6 +45,20 @@ class DrinkModal extends Component {
     _toggleModal = () => this.setState({ isVisible: !this.state.isVisible });
 
     render () {
+        const addToFavouritesButton = <Button
+            title='Add to Favourites'
+            rounded
+            raised
+            backgroundColor={colors.background}
+            onPress={this._addToFavourites}
+        />
+
+        const heartIcon = <Icon
+            name='favorite'
+            size={35}
+            color='red'
+        />
+
         return (
             <Modal
                 isVisible={this.state.isVisible}
@@ -67,13 +81,11 @@ class DrinkModal extends Component {
                         height={600}
                         width={400}
                     />
-                    <Button
-                        title='Add to Favourites'
-                        rounded
-                        raised
-                        backgroundColor={colors.background}
-                        onPress={this._addToFavourites}
-                    />
+
+                    {this.state.internalDrink
+                        ? this.state.internalDrink.favourite ? heartIcon : addToFavouritesButton
+                        : null}
+
                     <Icon
                         name='arrow-downward'
                         raised
@@ -82,6 +94,7 @@ class DrinkModal extends Component {
                         onPress={this._toggleModal}
                         color='grey'
                     />
+
                     <DropDownAlert
                         ref={ ref => this.dropDown = ref }
                     />
