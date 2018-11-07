@@ -45,10 +45,9 @@ export default class SignupScreen extends React.Component {
         weightKgError: '',
         agreedToEULA: false,
       };
-      this.signUp = this.signUp.bind(this);
     }
 
-    async signUp() {
+    signUp = async () => {
       const {
         agreedToEULA,
         username,

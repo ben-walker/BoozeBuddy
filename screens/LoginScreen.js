@@ -3,12 +3,13 @@ import {
   AsyncStorage,
   ScrollView,
 } from 'react-native';
-import { Button } from 'react-native-elements';
 import {
+  Button,
   FormLabel,
   FormInput,
   FormValidationMessage,
 } from 'react-native-elements';
+import DropdownAlert from 'react-native-dropdownalert';
 import validate from '../utilities/validateWrapper';
 import colors from '../constants/Colors';
 import style from '../constants/StyleSheet';
@@ -28,10 +29,14 @@ export default class LoginScreen extends React.Component {
         password: '',
         passwordError: '',
       };
-      this.logIn = this.logIn.bind(this);
     }
 
-    async logIn() {
+    logIn = async () => {
+      const {
+        identifier,
+        password,
+      } = this.state;
+      const { navigation } = this.props;
       if (!await this.isValid()) return;
       const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/logIn', {
         method: 'POST',
@@ -41,21 +46,28 @@ export default class LoginScreen extends React.Component {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          identifier: this.state.identifier,
-          password: this.state.password,
+          identifier,
+          password,
         }),
       });
 
-      if (!rawResponse.ok) return alert('Credentials not recognized.');
+      if (!rawResponse.ok) {
+        this.dropdown.alertWithType('error', 'Error', 'Login failed.');
+        return;
+      }
       const response = await rawResponse.json();
 
       await AsyncStorage.setItem('userToken', JSON.stringify(response.user));
-      this.props.navigation.navigate('App');
+      navigation.navigate('App');
     }
 
     async isValid() {
-      const identifierError = await validate('identifier', this.state.identifier);
-      const passwordError = await validate('loginPassword', this.state.password);
+      const {
+        identifier,
+        password,
+      } = this.state;
+      const identifierError = await validate('identifier', identifier);
+      const passwordError = await validate('loginPassword', password);
 
       this.setState({
         identifierError,
@@ -68,25 +80,31 @@ export default class LoginScreen extends React.Component {
     }
 
     render() {
+      const {
+        identifier,
+        identifierError,
+        password,
+        passwordError,
+      } = this.state;
       return (
         <ScrollView style={style.container}>
           <FormLabel>IDENTIFIER</FormLabel>
           <FormInput
             placeholder="Username or Email"
             placeholderTextColor="gray"
-            onChangeText={identifier => this.setState({ identifier })}
-            value={this.state.identifier}
+            onChangeText={identifierInput => this.setState({ identifier: identifierInput })}
+            value={identifier}
             textContentType="username"
             autoCapitalize="none"
             inputStyle={style.input}
             onBlur={async () => {
               this.setState({
-                identifierError: await validate('identifier', this.state.identifier),
+                identifierError: await validate('identifier', identifier),
               });
             }}
           />
           <FormValidationMessage labelStyle={style.errorMsg}>
-            {this.state.identifierError}
+            {identifierError}
           </FormValidationMessage>
 
           <FormLabel>PASSWORD</FormLabel>
@@ -94,19 +112,19 @@ export default class LoginScreen extends React.Component {
             placeholder="••••••••"
             placeholderTextColor="gray"
             secureTextEntry
-            onChangeText={password => this.setState({ password })}
-            value={this.state.password}
+            onChangeText={passwordInput => this.setState({ password: passwordInput })}
+            value={password}
             textContentType="password"
             autoCapitalize="none"
             inputStyle={style.input}
             onBlur={async () => {
               this.setState({
-                passwordError: await validate('loginPassword', this.state.password),
+                passwordError: await validate('loginPassword', password),
               });
             }}
           />
           <FormValidationMessage labelStyle={style.errorMsg}>
-            {this.state.passwordError}
+            {passwordError}
           </FormValidationMessage>
 
           <Button
@@ -116,6 +134,7 @@ export default class LoginScreen extends React.Component {
             title="Log In"
             backgroundColor={colors.accent}
           />
+          <DropdownAlert ref={(ref) => { this.dropdown = ref; }} />
         </ScrollView>
       );
     }
