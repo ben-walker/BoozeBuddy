@@ -5,8 +5,8 @@ import SignupScreen from '../screens/SignupScreen';
 import LegalScreen from '../screens/LegalScreen';
 
 export default createStackNavigator({
-    Splash: SplashScreen,
-    Signup: SignupScreen,
-    Legal: LegalScreen,
-    Login: LoginScreen,
+  Splash: SplashScreen,
+  Signup: SignupScreen,
+  Legal: LegalScreen,
+  Login: LoginScreen,
 }, { initialRouteName: 'Splash' });

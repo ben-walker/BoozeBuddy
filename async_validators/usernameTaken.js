@@ -10,8 +10,8 @@ const usernameTaken = (value) => {
     const rawResponse = await fetch(URL, {
       method: 'GET',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
     });
     if (!rawResponse.ok) return reject();

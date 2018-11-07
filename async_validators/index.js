@@ -4,4 +4,4 @@ import emailTaken from './emailTaken';
 export default {
   usernameTaken,
   emailTaken,
-}
+};

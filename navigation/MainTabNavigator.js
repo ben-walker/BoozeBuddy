@@ -31,13 +31,12 @@ HomeStack.navigationOptions = {
       }
     />
   ),
-    tabBarOptions: {
-        style: {
-            backgroundColor: colour.dark,
-        }
-    }
+  tabBarOptions: {
+    style: {
+      backgroundColor: colour.dark,
+    },
+  },
 };
-
 
 
 const SettingsStack = createStackNavigator({
@@ -52,11 +51,11 @@ SettingsStack.navigationOptions = {
       name={Platform.OS === 'ios' ? `ios-options${focused ? '' : '-outline'}` : 'md-options'}
     />
   ),
-    tabBarOptions: {
-        style: {
-            backgroundColor: colour.dark,
-        }
-    }
+  tabBarOptions: {
+    style: {
+      backgroundColor: colour.dark,
+    },
+  },
 };
 
 const LegalStack = createStackNavigator({
@@ -75,11 +74,11 @@ LegalStack.navigationOptions = {
       }
     />
   ),
-    tabBarOptions: {
-        style: {
-            backgroundColor: colour.dark,
-        }
-    }
+  tabBarOptions: {
+    style: {
+      backgroundColor: colour.dark,
+    },
+  },
 };
 
 export default createBottomTabNavigator({
