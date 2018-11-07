@@ -63,7 +63,7 @@ export default StyleSheet.create({
     },
     drinkModal: {
         backgroundColor: 'white',
-        marginTop: 150,
+        marginTop: 0,
         marginHorizontal: 0,
         marginBottom: 0,
         borderBottomLeftRadius: 0,
