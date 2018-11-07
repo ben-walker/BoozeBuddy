@@ -31,6 +31,7 @@
     "react-native-picker-select": "^5.0.0",
     "react-navigation": "^2.18.2",
     "react-scroll-horizontal": "^1.5.1",
+    "react-test-renderer": "^16.6.1",
     "url": "^0.11.0",
     "validate.js": "^0.12.0"
   },
