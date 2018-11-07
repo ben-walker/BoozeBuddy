@@ -11,5 +11,8 @@
             1,
             { "extensions": [ ".js", ".jsx" ] }
         ]
+    },
+    "globals": {
+        "__DEV__": false
     }
 }

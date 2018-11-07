@@ -1,37 +1,37 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Image,
   ScrollView,
   Text,
   View,
-  Alert,
 } from 'react-native';
 import { Button } from 'react-native-elements';
 import colors from '../constants/Colors';
 import style from '../constants/StyleSheet';
-import DrinkCard from '../components/DrinkCard.js';
-
+import * as appIcon from '../assets/images/DrinkIcons/cheers.png';
 
 export default class HomeScreen extends React.Component {
     static navigationOptions = { header: null };
 
     render() {
+      const { navigation } = this.props;
+
       return (
         <View style={style.container}>
-          <ScrollView style={style.container} contentContainerStyle={style.secondaryContentContainer}>
+          <ScrollView
+            style={style.container}
+            contentContainerStyle={style.secondaryContentContainer}
+          >
             <View style={style.secondaryContentContainer}>
               <Image
-                source={
-                                __DEV__
-                                  ? require('../assets/images/DrinkIcons/cheers.png')
-                                  : require('../assets/images/DrinkIcons/cheers.png')
-                            }
+                source={appIcon.default}
                 style={style.imageIcon}
               />
             </View>
 
             <Button
-              onPress={() => this.props.navigation.navigate('Calculator')}
+              onPress={() => navigation.navigate('Calculator')}
               style={style.button}
               rounded
               title="Start Drinking?"
@@ -39,7 +39,7 @@ export default class HomeScreen extends React.Component {
             />
             <Text />
             <Button
-              onPress={() => this.props.navigation.navigate('CustomDrinks')}
+              onPress={() => navigation.navigate('CustomDrinks')}
               style={style.button}
               rounded
               title="Add Custom Drink"
@@ -53,3 +53,7 @@ export default class HomeScreen extends React.Component {
       );
     }
 }
+
+HomeScreen.propTypes = {
+  navigation: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+};
