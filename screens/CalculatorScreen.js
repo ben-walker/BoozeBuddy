@@ -3,7 +3,6 @@ import moment from 'moment';
 import url from 'url';
 import {
     ActivityIndicator,
-    // Text,
     View,
     AsyncStorage,
     FlatList,
@@ -13,12 +12,10 @@ import {
     Button,
     List,
     ListItem,
-    Tile,
     Text,
-    Icon,
 } from 'react-native-elements';
-import Modal from 'react-native-modal';
 import DropdownAlert from 'react-native-dropdownalert';
+import DrinkModal from '../components/DrinkModal';
 import colors from '../constants/Colors';
 import style from '../constants/StyleSheet';
 
@@ -50,28 +47,16 @@ export default class CalculatorScreen extends React.Component {
             drinks: [],
             favourites: [],
             loggedDrinks: [],
-            modalVisible: false,
             modalDrink: null,
             numDrinks: 0
         };
-        this.calculateBAC = this.calculateBAC.bind(this);
-        this.setBacConstants = this.setBacConstants.bind(this);
-        this.getPageOfDrinks = this.getPageOfDrinks.bind(this);
-        this.addToFavourites = this.addToFavourites.bind(this);
-        this.getFavourites = this.getFavourites.bind(this);
-        this.logDrink = this.logDrink.bind(this);
-        this.convertJsonNulls = this.convertJsonNulls.bind(this);
-        this.fakeStoppedDrinking = this.fakeStoppedDrinking.bind(this);
     }
-
-    _toggleModal = () =>
-        this.setState({ modalVisible: !this.state.modalVisible });
 
     async componentDidMount() {
         // parse out user data
         const userToken = await AsyncStorage.getItem('userToken');
         const userData = JSON.parse(userToken);
-        this.setBacConstants(userData);
+        this._setBacConstants(userData);
 
         // store started drinking moment, remove stopped drinking moment
         const drinkTimestamp = new moment();
@@ -79,15 +64,15 @@ export default class CalculatorScreen extends React.Component {
         await AsyncStorage.removeItem('stoppedDrinkingMoment');
 
         // get first page of drinks
-        this.getPageOfDrinks();
-        this.getFavourites();
+        this._getPageOfDrinks();
+        this._getFavourites();
     }
 
     componentWillUnmount() {
         clearInterval(this.recalculating);
     }
 
-    setBacConstants(userData) {
+    _setBacConstants = (userData) => {
         let BW = 0.0;
         let MR = 0.0;
         const Wt = userData.weightKg;
@@ -112,7 +97,7 @@ export default class CalculatorScreen extends React.Component {
         });
     }
 
-    async getPageOfDrinks() {
+    _getPageOfDrinks = async () => {
         this.setState({ drinkListLoading: true });
         let URL = 'https://dr-robotnik.herokuapp.com/api/pageOfDrinks';
         const queryData = { page: this.state.drinkPage, perPage: 20, showUserCreated: 'y' };
@@ -128,19 +113,19 @@ export default class CalculatorScreen extends React.Component {
         this.setState({ drinkListLoading: false });
         if (!rawResponse.ok) return;
         let response = await rawResponse.json();
-        response = this.convertJsonNulls(response);
+        response = this._convertJsonNulls(response);
         await this.setState({
             drinks: this.state.drinks.concat(response),
             drinkPage: this.state.drinkPage + 1,
         });
     }
 
-    convertJsonNulls(jsonArray) {
+    _convertJsonNulls = (jsonArray) => {
         const stringified = JSON.stringify(jsonArray, (key, value) => value == null ? '' : value);
         return JSON.parse(stringified);
     }
 
-    async getFavourites() {
+    _getFavourites = async () => {
         const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/favourites', {
             method: 'GET',
             credentials: 'include',
@@ -157,7 +142,7 @@ export default class CalculatorScreen extends React.Component {
         await this.setState({ favourites: response });
     }
 
-    async logDrink(drink) {
+    _logDrink = async (drink) => {
         // calculate number of standard drinks
         const servingSize = drink.primary_category
             ? beverageServingsML[drink.primary_category]
@@ -171,7 +156,7 @@ export default class CalculatorScreen extends React.Component {
             SD: this.state.SD + standardDrinks,
             loggedDrinks: [...this.state.loggedDrinks, drink],
         });
-        await this.calculateBAC();
+        await this._calculateBAC();
         this.dropdown.alertWithType(
             'info', // notif type
             'Hey, Listen!', // title of notif
@@ -180,10 +165,10 @@ export default class CalculatorScreen extends React.Component {
         this.state.numDrinks = this.state.numDrinks + parseFloat(standardDrinks.toFixed(2));
 
         // only start recalculating BAC once first drink logged
-        if (!this.recalculating) this.recalculating = setInterval(this.calculateBAC, 5000);
+        if (!this.recalculating) this.recalculating = setInterval(this._calculateBAC, 5000);
     }
 
-    async calculateBAC() {
+    _calculateBAC = async () => {
         const startedDrinkingMoment = await AsyncStorage.getItem('startedDrinkingMoment');
         const currentMoment = new moment();
         const drinkingTime = moment.duration(currentMoment.diff(startedDrinkingMoment)).asHours();
@@ -210,7 +195,7 @@ export default class CalculatorScreen extends React.Component {
         }
     }
 
-    async fakeStoppedDrinking() {
+    _fakeStoppedDrinking = async () => {
         const startedDrinkingMoment = await AsyncStorage.getItem('startedDrinkingMoment');
         const currentMoment = new moment();
         const drinkingTime = moment.duration(currentMoment.diff(startedDrinkingMoment)).asHours();
@@ -222,32 +207,7 @@ export default class CalculatorScreen extends React.Component {
         );
     }
 
-    async addToFavourites(drink) {
-        const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/addFavourite', {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ lcboId: drink.lcbo_id })
-        });
-
-        if (!rawResponse.ok) return this.dropdown.alertWithType(
-            'error', // notif type
-            'Error', // title of notif
-            `Sorry, we couldn't add that drink to your Favourites :(`, // message
-        );
-
-        this.getFavourites();
-        return this.dropdown.alertWithType(
-            'success', // notif type
-            'Added to Favourites', // title of notif
-            `Nice! We just added ${drink.name} to your Favourites!`, // message
-        )
-    }
-
-    renderFooter = () => {
+    _renderFooter = () => {
         if (!this.state.drinkListLoading) return null;
 
         return (
@@ -272,44 +232,12 @@ export default class CalculatorScreen extends React.Component {
             <View style={style.container}>
             <Button
                 title='[DEMO] Simulate Stop Drinking'
-                onPress={() => this.fakeStoppedDrinking()}
+                onPress={this._fakeStoppedDrinking}
             />
-                <Modal
-                    isVisible={this.state.modalVisible}
-                    onSwipe={this._toggleModal}
-                    swipeDirection='down'
-                    style={style.drinkModal}
-                >
-                    <View style={{ flex: 1, alignItems: 'center' }}>
-                        <Tile
-                            imageSrc={this.state.modalDrink
-                                ? this.state.modalDrink.image_url
-                                    ? { uri: this.state.modalDrink.image_url }
-                                    : require('../assets/images/DrinkIcons/cocktail.png')
-                                : { uri: '' }}
-                            height={600}
-                            width={400}
-                        />
-                        <Button
-                            title='Add to Favourites'
-                            rounded
-                            raised
-                            backgroundColor={colors.background}
-                            onPress={() => {
-                                this.state.modalDrink
-                                    ? this.addToFavourites(this.state.modalDrink)
-                                    : null;
-                            }}
-                        />
-                        <Icon
-                            name='arrow-downward'
-                            raised
-                            size={24}
-                            onPress={this._toggleModal}
-                            color='red'
-                        />
-                    </View>
-                </Modal>
+                <DrinkModal
+                    ref='drinkModal'
+                    drinkData={this.state.modalDrink}
+                />
 
                 <View style={style.secondaryContentContainer}>
                     <Text style={style.titleText}>BAC: {parseFloat(this.state.BAC.toFixed(4))} g/dL</Text>
@@ -321,14 +249,14 @@ export default class CalculatorScreen extends React.Component {
                         data={this.state.favourites.concat(this.state.drinks)}
                         keyExtractor={item => item._id}
                         ListHeaderComponent={drinkListHeader}
-                        ListFooterComponent={this.renderFooter}
-                        onEndReached={this.getPageOfDrinks}
+                        ListFooterComponent={this._renderFooter}
+                        // onEndReached={this._getPageOfDrinks}
                         onEndReachedThreshold={0.1}
                         renderItem={(item) => (
                             <TouchableOpacity
                                 onLongPress={async () => {
                                     await this.setState({ modalDrink: item.item });
-                                    this._toggleModal();
+                                    this.refs.drinkModal._toggleModal();
                                 }}
                             >
                                 <ListItem
@@ -339,7 +267,7 @@ export default class CalculatorScreen extends React.Component {
                                       ? { name: 'favorite', color: colors.red }
                                       : null
                                     }
-                                    onPressRightIcon={() => this.logDrink(item.item)}
+                                    onPressRightIcon={() => this._logDrink(item.item)}
                                     subtitle={`${item.item.package_unit_volume_in_milliliters} mL • ${item.item.secondary_category} • ${item.item.alcohol_content / 100}%`}
                                     avatar={item.item.image_thumb_url
                                         ? {uri: item.item.image_thumb_url}
