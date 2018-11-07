@@ -289,7 +289,7 @@ Drinks :
               />
             </List>
           </View>
-          <DropdownAlert ref={ref => this.dropdown = ref} />
+          <DropdownAlert ref={(ref) => { this.dropdown = ref; }} />
         </View>
       );
     }

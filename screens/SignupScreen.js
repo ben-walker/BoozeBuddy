@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   InputAccessoryView,
   Keyboard,
@@ -16,12 +17,13 @@ import {
   CheckBox,
   Text,
 } from 'react-native-elements';
+import DropdownAlert from 'react-native-dropdownalert';
 import PickerSelect from 'react-native-picker-select';
 import validate from '../utilities/validateWrapper';
 import style from '../constants/StyleSheet';
 import colors from '../constants/Colors';
 
-export default class LoginScreen extends React.Component {
+export default class SignupScreen extends React.Component {
     static navigationOptions = {
       title: 'Booze Buddy Signup',
       headerTintColor: colors.defaultText,
@@ -47,10 +49,21 @@ export default class LoginScreen extends React.Component {
     }
 
     async signUp() {
-      if (!this.state.agreedToEULA) {
-        return alert('Please accept the Terms and Conditions before signing up.');
+      const {
+        agreedToEULA,
+        username,
+        email,
+        gender,
+        weightKg,
+        password,
+      } = this.state;
+      const { navigation } = this.props;
+
+      if (!agreedToEULA) {
+        this.dropdown.alertWithType('warn', 'Conditions May Apply', 'Please accept the Terms and Conditions.');
+        return null;
       }
-      if (!await this.isValid()) return;
+      if (!await this.isValid()) return null;
       const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/signUp', {
         method: 'POST',
         credentials: 'include',
@@ -59,26 +72,36 @@ export default class LoginScreen extends React.Component {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username: this.state.username,
-          email: this.state.email,
-          gender: this.state.gender,
-          weightKg: this.state.weightKg,
-          password: this.state.password,
+          username,
+          email,
+          gender,
+          weightKg,
+          password,
         }),
       });
 
-      if (!rawResponse.ok) return alert('Signup failed.');
+      if (!rawResponse.ok) {
+        this.dropdown.alertWithType('error', 'Error', 'Signup failed.');
+        return null;
+      }
       const response = await rawResponse.json();
       await AsyncStorage.setItem('userToken', JSON.stringify(response.user));
-      this.props.navigation.navigate('App');
+      return navigation.navigate('App');
     }
 
     async isValid() {
-      const usernameError = await validate('username', this.state.username);
-      const emailError = await validate('email', this.state.email);
-      const passwordError = await validate('password', this.state.password);
-      const weightKgError = await validate('weightKg', this.state.weightKg);
-      const genderError = await validate('gender', this.state.gender);
+      const {
+        username,
+        email,
+        password,
+        weightKg,
+        gender,
+      } = this.state;
+      const usernameError = await validate('username', username);
+      const emailError = await validate('email', email);
+      const passwordError = await validate('password', password);
+      const weightKgError = await validate('weightKg', weightKg);
+      const genderError = await validate('gender', gender);
 
       this.setState({
         usernameError,
@@ -94,6 +117,22 @@ export default class LoginScreen extends React.Component {
     }
 
     render() {
+      const {
+        agreedToEULA,
+        username,
+        usernameError,
+        email,
+        emailError,
+        password,
+        passwordError,
+        gender,
+        genderError,
+        weightKg,
+        weightKgError,
+      } = this.state;
+
+      const { navigation } = this.props;
+
       const iosAccessoryView = (
         <InputAccessoryView nativeID="accessoryView">
           <RawButton
@@ -108,41 +147,41 @@ export default class LoginScreen extends React.Component {
         <ScrollView style={style.container}>
           <FormLabel>USERNAME</FormLabel>
           <FormInput
-            onChangeText={username => this.setState({ username })}
-            value={this.state.username}
+            onChangeText={usernameInput => this.setState({ username: usernameInput })}
+            value={username}
             autoCapitalize="none"
             inputStyle={style.input}
             onBlur={async () => {
               this.setState({
-                usernameError: await validate('username', this.state.username),
+                usernameError: await validate('username', username),
               });
             }}
           />
           <FormValidationMessage labelStyle={style.errorMsg}>
-            {this.state.usernameError}
+            {usernameError}
           </FormValidationMessage>
 
           <FormLabel>EMAIL</FormLabel>
           <FormInput
-            onChangeText={email => this.setState({ email })}
-            value={this.state.email}
+            onChangeText={emailInput => this.setState({ email: emailInput })}
+            value={email}
             keyboardType="email-address"
             autoCapitalize="none"
             inputStyle={style.input}
             onBlur={async () => {
               this.setState({
-                emailError: await validate('email', this.state.email),
+                emailError: await validate('email', email),
               });
             }}
           />
           <FormValidationMessage labelStyle={style.errorMsg}>
-            {this.state.emailError}
+            {emailError}
           </FormValidationMessage>
 
           <FormLabel>PASSWORD</FormLabel>
           <FormInput
-            onChangeText={password => this.setState({ password })}
-            value={this.state.password}
+            onChangeText={passwordInput => this.setState({ password: passwordInput })}
+            value={password}
             secureTextEntry
             autoCapitalize="none"
             placeholder="••••••••"
@@ -150,12 +189,12 @@ export default class LoginScreen extends React.Component {
             inputStyle={style.input}
             onBlur={async () => {
               this.setState({
-                passwordError: await validate('password', this.state.password),
+                passwordError: await validate('password', password),
               });
             }}
           />
           <FormValidationMessage labelStyle={style.errorMsg}>
-            {this.state.passwordError}
+            {passwordError}
           </FormValidationMessage>
 
           <FormLabel>GENDER</FormLabel>
@@ -168,36 +207,36 @@ export default class LoginScreen extends React.Component {
             placeholder={{ label: 'Select your gender...', value: null }}
             onValueChange={async (value) => {
               await this.setState({ gender: value });
-              this.setState({ genderError: await validate('gender', this.state.gender) });
+              this.setState({ genderError: await validate('gender', gender) });
             }}
             hideDoneBar
           >
             <FormInput
               placeholder="Select your gender..."
               placeholderTextColor="gray"
-              value={this.state.gender}
+              value={gender}
               inputStyle={style.input}
             />
           </PickerSelect>
           <FormValidationMessage labelStyle={style.errorMsg}>
-            {this.state.genderError}
+            {genderError}
           </FormValidationMessage>
 
           <FormLabel>WEIGHT (KG)</FormLabel>
           <FormInput
-            onChangeText={weightKg => this.setState({ weightKg })}
-            value={this.state.weightKg}
+            onChangeText={weightKgInput => this.setState({ weightKg: weightKgInput })}
+            value={weightKg}
             keyboardType="decimal-pad"
             inputAccessoryViewID="accessoryView"
             inputStyle={style.input}
             onBlur={async () => {
               this.setState({
-                weightKgError: await validate('weightKg', this.state.weightKg),
+                weightKgError: await validate('weightKg', weightKg),
               });
             }}
           />
           <FormValidationMessage labelStyle={style.errorMsg}>
-            {this.state.weightKgError}
+            {weightKgError}
           </FormValidationMessage>
 
           {Platform.OS === 'ios' ? iosAccessoryView : null}
@@ -207,8 +246,8 @@ export default class LoginScreen extends React.Component {
               checkedColor="green"
               unCheckedColor="gray"
               containerStyle={style.eulaCheckbox}
-              checked={this.state.agreedToEULA}
-              onPress={() => this.setState({ agreedToEULA: !this.state.agreedToEULA })}
+              checked={agreedToEULA}
+              onPress={() => this.setState({ agreedToEULA: !agreedToEULA })}
             />
             <View style={{ flexDirection: 'column', justifyContent: 'space-around' }}>
               <Text style={style.defaultText}>I agree to the Terms and Conditions.</Text>
@@ -223,13 +262,18 @@ export default class LoginScreen extends React.Component {
             backgroundColor={colors.accent}
           />
           <Button
-            onPress={() => this.props.navigation.navigate('Legal')}
+            onPress={() => navigation.navigate('Legal')}
             style={style.button}
             rounded
             title="View Terms and Conditions"
             backgroundColor={colors.secondary}
           />
+          <DropdownAlert ref={(ref) => { this.dropdown = ref; }} />
         </ScrollView>
       );
     }
 }
+
+SignupScreen.propTypes = {
+  navigation: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+};
