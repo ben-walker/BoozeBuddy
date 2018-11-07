@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   View,
 } from 'react-native';
@@ -13,6 +14,7 @@ export default class SplashScreen extends React.Component {
     static navigationOptions = { header: null };
 
     render() {
+      const { navigation } = this.props;
       return (
         <View style={style.container}>
           <View style={{ flex: 1, flexDirection: 'column' }}>
@@ -26,7 +28,7 @@ export default class SplashScreen extends React.Component {
                   rounded
                   title="Sign Up"
                   backgroundColor={colors.actionButton}
-                  onPress={() => this.props.navigation.navigate('Signup')}
+                  onPress={() => navigation.navigate('Signup')}
                 />
               </View>
 
@@ -36,7 +38,7 @@ export default class SplashScreen extends React.Component {
                   rounded
                   title="Log In"
                   backgroundColor={colors.actionButton}
-                  onPress={() => this.props.navigation.navigate('Login')}
+                  onPress={() => navigation.navigate('Login')}
                 />
               </View>
             </View>
@@ -46,3 +48,7 @@ export default class SplashScreen extends React.Component {
       );
     }
 }
+
+SplashScreen.propTypes = {
+  navigation: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+};
