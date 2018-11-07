@@ -230,10 +230,11 @@ export default class CalculatorScreen extends React.Component {
 
         return (
             <View style={style.container}>
-            <Button
-                title='[DEMO] Simulate Stop Drinking'
-                onPress={this._fakeStoppedDrinking}
-            />
+                <Button
+                    title='[DEMO] Simulate Stop Drinking'
+                    onPress={this._fakeStoppedDrinking}
+                />
+
                 <DrinkModal
                     ref='drinkModal'
                     drinkData={this.state.modalDrink}
@@ -244,39 +245,41 @@ export default class CalculatorScreen extends React.Component {
                     <Text style={style.smallText} >Drinks : {Number(this.state.numDrinks).toFixed(1)}</Text>
                 </View>
 
-                <List>
-                    <FlatList
-                        data={this.state.favourites.concat(this.state.drinks)}
-                        keyExtractor={item => item._id}
-                        ListHeaderComponent={drinkListHeader}
-                        ListFooterComponent={this._renderFooter}
-                        // onEndReached={this._getPageOfDrinks}
-                        onEndReachedThreshold={0.1}
-                        renderItem={(item) => (
-                            <TouchableOpacity
-                                onLongPress={async () => {
-                                    await this.setState({ modalDrink: item.item });
-                                    this.refs.drinkModal._toggleModal();
-                                }}
-                            >
-                                <ListItem
-                                    roundAvatar
-                                    title={item.item.name}
-                                    rightIcon={{ name: 'add-circle', color: colors.accent }}
-                                    leftIcon={item.item.favourite
-                                      ? { name: 'favorite', color: colors.red }
-                                      : null
-                                    }
-                                    onPressRightIcon={() => this._logDrink(item.item)}
-                                    subtitle={`${item.item.package_unit_volume_in_milliliters} mL • ${item.item.secondary_category} • ${item.item.alcohol_content / 100}%`}
-                                    avatar={item.item.image_thumb_url
-                                        ? {uri: item.item.image_thumb_url}
-                                        : require('../assets/images/DrinkIcons/beer.png')}
-                                />
-                            </TouchableOpacity>
-                        )}
-                    />
-                </List>
+                <View style={{ flex: 1 }}>
+                    <List>
+                        <FlatList
+                            data={this.state.favourites.concat(this.state.drinks)}
+                            keyExtractor={item => item._id}
+                            ListHeaderComponent={drinkListHeader}
+                            ListFooterComponent={this._renderFooter}
+                            // onEndReached={this._getPageOfDrinks}
+                            onEndReachedThreshold={0.1}
+                            renderItem={(item) => (
+                                <TouchableOpacity
+                                    onLongPress={async () => {
+                                        await this.setState({ modalDrink: item.item });
+                                        this.refs.drinkModal._toggleModal();
+                                    }}
+                                >
+                                    <ListItem
+                                        roundAvatar
+                                        title={item.item.name}
+                                        rightIcon={{ name: 'add-circle', color: colors.accent }}
+                                        leftIcon={item.item.favourite
+                                        ? { name: 'favorite', color: colors.red }
+                                        : null
+                                        }
+                                        onPressRightIcon={() => this._logDrink(item.item)}
+                                        subtitle={`${item.item.package_unit_volume_in_milliliters} mL • ${item.item.secondary_category} • ${item.item.alcohol_content / 100}%`}
+                                        avatar={item.item.image_thumb_url
+                                            ? {uri: item.item.image_thumb_url}
+                                            : require('../assets/images/DrinkIcons/beer.png')}
+                                    />
+                                </TouchableOpacity>
+                            )}
+                        />
+                    </List>
+                </View>
                 <DropdownAlert ref={ref => this.dropdown = ref}/>
             </View>
         );
