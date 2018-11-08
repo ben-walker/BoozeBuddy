@@ -104,7 +104,7 @@ class DrinkModal extends Component {
             color="grey"
           />
 
-          <DropdownAlert ref={(ref) => { this.dropdown = ref; }} />
+          <DropdownAlert ref={(ref) => { this.dropDown = ref; }} />
         </View>
       </Modal>
     );
