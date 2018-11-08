@@ -3,21 +3,14 @@ import PropTypes from 'prop-types';
 import { Icon } from 'expo';
 import colors from '../constants/Colors';
 
-const TabBarIcon = (props) => {
-  const {
-    name,
-    focused,
-  } = props;
-
-  return (
-    <Icon.Ionicons
-      name={name}
-      size={26}
-      style={{ marginBottom: -3 }}
-      color={focused ? colors.tabIconSelected : colors.tabIconDefault}
-    />
-  );
-};
+const TabBarIcon = ({ name, focused }) => (
+  <Icon.Ionicons
+    name={name}
+    size={26}
+    style={{ marginBottom: -3 }}
+    color={focused ? colors.tabIconSelected : colors.tabIconDefault}
+  />
+);
 
 TabBarIcon.propTypes = {
   name: PropTypes.string.isRequired,
