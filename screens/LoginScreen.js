@@ -52,7 +52,7 @@ export default class LoginScreen extends React.Component {
       });
 
       if (!rawResponse.ok) {
-        this.dropdown.alertWithType('error', 'Error', 'Login failed.');
+        this.dropdown.alertWithType('error', 'Error', 'Credentials not recognized.');
         return;
       }
       const response = await rawResponse.json();
