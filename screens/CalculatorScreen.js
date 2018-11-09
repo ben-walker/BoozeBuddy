@@ -80,11 +80,7 @@ export default class CalculatorScreen extends React.Component {
   }
 
   getPageOfDrinks = async () => {
-    const {
-      drinkPage,
-      drinks,
-    } = this.state;
-
+    const { drinkPage } = this.state;
     this.setState({ drinkListLoading: true });
     let URL = 'https://dr-robotnik.herokuapp.com/api/pageOfDrinks';
     URL += url.format({
@@ -106,10 +102,10 @@ export default class CalculatorScreen extends React.Component {
     if (!rawResponse.ok) return;
     const response = await rawResponse.json()
       .then(jsonResponse => this.convertJsonNulls(jsonResponse));
-    await this.setState({
-      drinks: drinks.concat(response),
-      drinkPage: drinkPage + 1,
-    });
+    await this.setState(prev => ({
+      drinks: prev.drinks.concat(response),
+      drinkPage: prev.drinkPage + 1,
+    }));
   }
 
   convertJsonNulls = (jsonArray) => {
