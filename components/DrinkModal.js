@@ -15,10 +15,20 @@ import * as cocktailIcon from '../assets/images/DrinkIcons/cocktail.png';
 class DrinkModal extends Component {
   constructor(props) {
     super(props);
-    this.state = { isVisible: false };
+    this.state = {
+      isVisible: false,
+      favourite: props.favourite,
+      loading: false,
+    };
+  }
+
+  static getDerivedStateFromProps(props, current) {
+    if (current.favourite !== props.favourite) return { favourite: props.favourite };
+    return null;
   }
 
   addToFavourites = async () => {
+    this.setState({ loading: true });
     const {
       drinkData,
       getFavourites,
@@ -32,9 +42,15 @@ class DrinkModal extends Component {
       },
       body: JSON.stringify({ lcboId: drinkData.lcbo_id }),
     });
-
-    if (!rawResponse.ok) return this.dropDown.alertWithType('error', 'Error', 'Sorry, we couldn\'t add that drink to your Favourites :(');
-    getFavourites();
+    if (!rawResponse.ok) {
+      this.setState({ loading: false });
+      return this.dropDown.alertWithType('error', 'Error', 'Sorry, we couldn\'t add that drink to your Favourites :(');
+    }
+    await getFavourites();
+    this.setState({
+      favourite: true,
+      loading: false,
+    });
     return this.dropDown.alertWithType('success', 'Added to Favourites', `Nice! We just added ${drinkData.name} to your Favourites!`);
   }
 
@@ -51,12 +67,16 @@ class DrinkModal extends Component {
   toggleModal = () => this.setState(prevState => ({ isVisible: !prevState.isVisible }))
 
   render() {
-    const { isVisible } = this.state;
-    const { favourite } = this.props;
+    const {
+      isVisible,
+      favourite,
+      loading,
+    } = this.state;
 
     const addToFavouritesButton = (
       <Button
         title="Add to Favourites"
+        loading={loading}
         rounded
         raised
         backgroundColor={colors.background}
