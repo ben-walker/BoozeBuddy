@@ -81,15 +81,7 @@ export default class CalculatorScreen extends React.Component {
         BW = 0.58;
         MR = 0.015;
         break;
-      case 'Female':
-        BW = 0.49;
-        MR = 0.017;
-        break;
-      case 'Other':
-        BW = 0.49;
-        MR = 0.017;
-        break;
-      default:
+      case 'Female': case 'Other': default:
         BW = 0.49;
         MR = 0.017;
         break;
