@@ -17,6 +17,7 @@ import DrinkModal from '../components/DrinkModal';
 import DrinkListItem from '../components/DrinkListItem';
 import colors from '../constants/Colors';
 import style from '../constants/StyleSheet';
+import * as bacUtilities from '../utilities/bloodAlcoholCalculations';
 
 const beverageServingsML = {
   Wine: 148,
@@ -54,16 +55,9 @@ export default class CalculatorScreen extends React.Component {
 
   async componentDidMount() {
     // parse out user data
-    const userToken = await AsyncStorage.getItem('userToken');
-    const userData = JSON.parse(userToken);
+    const userData = await AsyncStorage.getItem('userToken').then(userToken => JSON.parse(userToken));
     this.setBacConstants(userData);
-
-    // store started drinking moment, remove stopped drinking moment
-    const drinkTimestamp = new Moment();
-    await AsyncStorage.setItem('startedDrinkingMoment', drinkTimestamp);
-    await AsyncStorage.removeItem('stoppedDrinkingMoment');
-
-    // get first page of drinks
+    this.initializeStartDrinkingState();
     this.getPageOfDrinks();
     this.getFavourites();
   }
@@ -72,25 +66,24 @@ export default class CalculatorScreen extends React.Component {
     clearInterval(this.recalculating);
   }
 
+  // calculate body water constant and metabolism constant (derived from gender)
   setBacConstants = (userData) => {
-    let BW = 0.0;
-    let MR = 0.0;
-    const Wt = userData.weightKg;
-    switch (userData.gender) {
-      case 'Male':
-        BW = 0.58;
-        MR = 0.015;
-        break;
-      case 'Female': case 'Other': default:
-        BW = 0.49;
-        MR = 0.017;
-        break;
-    }
+    const {
+      gender,
+      weightKg,
+    } = userData;
     this.setState({
-      BW,
-      MR,
-      Wt,
+      BW: bacUtilities.getBodyWaterConstant(gender),
+      MR: bacUtilities.getMetabolismConstant(gender),
+      Wt: weightKg,
     });
+  }
+
+  // store started drinking moment, remove stopped drinking moment
+  initializeStartDrinkingState = () => {
+    const drinkTimestamp = new Moment();
+    AsyncStorage.setItem('startedDrinkingMoment', drinkTimestamp);
+    AsyncStorage.removeItem('stoppedDrinkingMoment');
   }
 
   getPageOfDrinks = async () => {
@@ -101,8 +94,13 @@ export default class CalculatorScreen extends React.Component {
 
     this.setState({ drinkListLoading: true });
     let URL = 'https://dr-robotnik.herokuapp.com/api/pageOfDrinks';
-    const queryData = { page: drinkPage, perPage: 20, showUserCreated: 'y' };
-    URL += url.format({ query: queryData });
+    URL += url.format({
+      query: {
+        page: drinkPage,
+        perPage: 20,
+        showUserCreated: 'y',
+      },
+    });
 
     const rawResponse = await fetch(URL, {
       method: 'GET',
@@ -113,8 +111,8 @@ export default class CalculatorScreen extends React.Component {
     });
     this.setState({ drinkListLoading: false });
     if (!rawResponse.ok) return;
-    let response = await rawResponse.json();
-    response = this.convertJsonNulls(response);
+    const response = await rawResponse.json()
+      .then(jsonResponse => this.convertJsonNulls(jsonResponse));
     await this.setState({
       drinks: drinks.concat(response),
       drinkPage: drinkPage + 1,
