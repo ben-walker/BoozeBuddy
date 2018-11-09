@@ -142,50 +142,39 @@ export default class CalculatorScreen extends React.Component {
   }
 
   logDrink = async (drink) => {
-    const {
-      SD,
-      loggedDrinks,
-      numDrinks,
-    } = this.state;
+    const standardDrinks = bacUtilities.calculateStandardDrinks(
+      drink.primary_category,
+      drink.alcohol_content,
+      drink.package_unit_volume_in_milliliters,
+    );
 
-    // calculate number of standard drinks
-    const servingSize = drink.primary_category
-      ? beverageServingsML[drink.primary_category]
-      : drink.package_unit_volume_in_milliliters;
+    await this.setState(prev => ({
+      SD: prev.SD + standardDrinks,
+      loggedDrinks: [...prev.loggedDrinks, drink],
+      numDrinks: prev.numDrinks + standardDrinks,
+    }));
 
-    const ethanolDensity = 0.789;
-    const alcPercentage = drink.alcohol_content / 100;
-    const standardDrinks = (servingSize / 1000) * alcPercentage * ethanolDensity;
-
-    await this.setState({
-      SD: SD + standardDrinks,
-      loggedDrinks: [...loggedDrinks, drink],
-    });
     await this.calculateBAC();
     this.dropdown.alertWithType(
       'info', // notif type
       'Hey, Listen!', // title of notif
       `That was ${parseFloat(standardDrinks.toFixed(2))} standard drinks; be safe and have fun!`, // message
     );
-    this.state.numDrinks = numDrinks + parseFloat(standardDrinks.toFixed(2));
 
     // only start recalculating BAC once first drink logged
     if (!this.recalculating) this.recalculating = setInterval(this.calculateBAC, 5000);
   }
 
   calculateBAC = async () => {
-    const { numDrinks } = this.state;
     const startedDrinkingMoment = await AsyncStorage.getItem('startedDrinkingMoment');
-    const currentMoment = new Moment();
-    const drinkingTime = Moment.duration(currentMoment.diff(startedDrinkingMoment)).asHours();
-
     const {
       SD,
       BW,
       Wt,
       MR,
+      numDrinks,
     } = this.state;
-    const EBAC = ((0.806 * SD * 1.2) / (BW * Wt)) - (MR * drinkingTime);
+    const EBAC = bacUtilities.calculateBAC(SD, BW, Wt, MR, startedDrinkingMoment);
     await this.setState({ BAC: EBAC });
 
     // determine stopped drinking state
