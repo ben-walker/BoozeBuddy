@@ -12,6 +12,7 @@ import {
   List,
   Text,
 } from 'react-native-elements';
+import { includes } from 'lodash-es';
 import DropdownAlert from 'react-native-dropdownalert';
 import DrinkModal from '../components/DrinkModal';
 import DrinkListItem from '../components/DrinkListItem';
@@ -124,9 +125,6 @@ export default class CalculatorScreen extends React.Component {
     });
     if (!rawResponse.ok) return;
     const response = await rawResponse.json();
-    response.forEach((part, index) => {
-      response[index].favourite = true;
-    });
     await this.setState({ favourites: response });
   }
 
@@ -192,6 +190,11 @@ export default class CalculatorScreen extends React.Component {
     this.setState({ modalDrink: drink });
   }
 
+  isFavourite = (drink) => {
+    const { favourites } = this.state;
+    return includes(favourites, drink);
+  }
+
   renderFooter = () => {
     const { drinkListLoading } = this.state;
     if (!drinkListLoading) return null;
@@ -239,6 +242,7 @@ export default class CalculatorScreen extends React.Component {
         <DrinkModal
           ref={this.drinkModalRef}
           drinkData={modalDrink}
+          favourite={this.isFavourite(modalDrink)}
         />
 
         <View style={style.secondaryContentContainer}>
@@ -269,6 +273,7 @@ Drinks :
                   drinkModalRef={this.drinkModalRef}
                   updateModalDrink={this.updateModalDrink}
                   logDrink={this.logDrink}
+                  favourite={this.isFavourite(item.item)}
                 />
               )}
             />

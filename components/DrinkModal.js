@@ -44,15 +44,11 @@ class DrinkModal extends Component {
     return ({ uri: '' });
   }
 
-  isDrinkFavourite = () => {
-    const { drinkData } = this.props;
-    return drinkData ? !!drinkData.favourite : false;
-  }
-
   toggleModal = () => this.setState(prevState => ({ isVisible: !prevState.isVisible }))
 
   render() {
     const { isVisible } = this.state;
+    const { favourite } = this.props;
 
     const addToFavouritesButton = (
       <Button
@@ -93,7 +89,7 @@ class DrinkModal extends Component {
             width={400}
           />
 
-          {this.isDrinkFavourite() ? heartIcon : addToFavouritesButton}
+          {favourite ? heartIcon : addToFavouritesButton}
 
           <Icon
             name="arrow-downward"
@@ -113,10 +109,12 @@ class DrinkModal extends Component {
 
 DrinkModal.defaultProps = {
   drinkData: null,
+  favourite: false,
 };
 
 DrinkModal.propTypes = {
   drinkData: PropTypes.object, // eslint-disable-line react/forbid-prop-types
+  favourite: PropTypes.bool,
 };
 
 export default DrinkModal;

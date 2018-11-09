@@ -12,20 +12,18 @@ class DrinkListItem extends Component {
     return `${drinkData.package_unit_volume_in_milliliters} mL • ${drinkData.secondary_category} • ${percentage}%`;
   }
 
-  getFavouriteIcon = () => (this.isDrinkFavourite()
-    ? ({ name: 'favorite', color: colors.red })
-    : null);
+  getFavouriteIcon = () => {
+    const { favourite } = this.props;
+    return favourite
+      ? ({ name: 'favorite', color: colors.red })
+      : null;
+  }
 
   getAvatar = () => {
     const { drinkData } = this.props;
     return drinkData.image_thumb_url
       ? ({ url: drinkData.image_thumb_url })
       : beerIcon.default;
-  }
-
-  isDrinkFavourite = () => {
-    const { drinkData } = this.props;
-    return !!drinkData.favourite;
   }
 
   render() {
@@ -66,6 +64,7 @@ DrinkListItem.defaultProps = {
   drinkModalRef: null,
   updateModalDrink: null,
   logDrink: null,
+  favourite: false,
 };
 
 DrinkListItem.propTypes = {
@@ -73,6 +72,7 @@ DrinkListItem.propTypes = {
   drinkModalRef: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   updateModalDrink: PropTypes.func,
   logDrink: PropTypes.func,
+  favourite: PropTypes.bool,
 };
 
 export default DrinkListItem;
