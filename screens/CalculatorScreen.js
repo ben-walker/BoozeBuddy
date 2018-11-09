@@ -12,7 +12,11 @@ import {
   List,
   Text,
 } from 'react-native-elements';
-import { includes } from 'lodash-es';
+import {
+  includes,
+  differenceWith,
+  isEqual,
+} from 'lodash-es';
 import DropdownAlert from 'react-native-dropdownalert';
 import DrinkModal from '../components/DrinkModal';
 import DrinkListItem from '../components/DrinkListItem';
@@ -101,17 +105,11 @@ export default class CalculatorScreen extends React.Component {
     });
     this.setState({ drinkListLoading: false });
     if (!rawResponse.ok) return;
-    const response = await rawResponse.json()
-      .then(jsonResponse => this.convertJsonNulls(jsonResponse));
+    const response = await rawResponse.json();
     await this.setState(prev => ({
       drinks: prev.drinks.concat(response),
       drinkPage: prev.drinkPage + 1,
     }));
-  }
-
-  convertJsonNulls = (jsonArray) => {
-    const stringified = JSON.stringify(jsonArray, (key, value) => (value == null ? '' : value));
-    return JSON.parse(stringified);
   }
 
   getFavourites = async () => {
@@ -125,7 +123,10 @@ export default class CalculatorScreen extends React.Component {
     });
     if (!rawResponse.ok) return;
     const response = await rawResponse.json();
-    await this.setState({ favourites: response });
+    await this.setState(prev => ({
+      favourites: response,
+      drinks: differenceWith(prev.drinks, response, isEqual),
+    }));
   }
 
   logDrink = async (drink) => {
