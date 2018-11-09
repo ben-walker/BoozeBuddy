@@ -19,7 +19,10 @@ class DrinkModal extends Component {
   }
 
   addToFavourites = async () => {
-    const { drinkData } = this.props;
+    const {
+      drinkData,
+      getFavourites,
+    } = this.props;
     const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/addFavourite', {
       method: 'POST',
       credentials: 'include',
@@ -31,6 +34,7 @@ class DrinkModal extends Component {
     });
 
     if (!rawResponse.ok) return this.dropDown.alertWithType('error', 'Error', 'Sorry, we couldn\'t add that drink to your Favourites :(');
+    getFavourites();
     return this.dropDown.alertWithType('success', 'Added to Favourites', `Nice! We just added ${drinkData.name} to your Favourites!`);
   }
 
@@ -110,11 +114,13 @@ class DrinkModal extends Component {
 DrinkModal.defaultProps = {
   drinkData: null,
   favourite: false,
+  getFavourites: null,
 };
 
 DrinkModal.propTypes = {
   drinkData: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   favourite: PropTypes.bool,
+  getFavourites: PropTypes.func,
 };
 
 export default DrinkModal;

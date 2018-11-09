@@ -244,6 +244,7 @@ export default class CalculatorScreen extends React.Component {
           ref={this.drinkModalRef}
           drinkData={modalDrink}
           favourite={this.isFavourite(modalDrink)}
+          getFavourites={this.getFavourites}
         />
 
         <View style={style.secondaryContentContainer}>
