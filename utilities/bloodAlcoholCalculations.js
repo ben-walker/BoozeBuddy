@@ -1,5 +1,3 @@
-import Moment from 'moment';
-
 const DRINK_SERVINGS = {
   Wine: 148,
   Beer: 354,
@@ -47,12 +45,10 @@ const calculateBAC = (
   bodyWater,
   weight,
   metabolismConstant,
-  startedDrinkingMoment,
+  drinkingTime,
 ) => {
   const bodyWaterInBlood = 0.806;
   const swedishStandard = 1.2;
-  const currentMoment = new Moment();
-  const drinkingTime = Moment.duration(currentMoment.diff(startedDrinkingMoment)).asHours();
   return (
     (bodyWaterInBlood * standardDrinks * swedishStandard) / (bodyWater * weight)
   ) - (metabolismConstant * drinkingTime);

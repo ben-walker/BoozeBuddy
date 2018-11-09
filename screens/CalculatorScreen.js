@@ -19,13 +19,6 @@ import colors from '../constants/Colors';
 import style from '../constants/StyleSheet';
 import * as bacUtilities from '../utilities/bloodAlcoholCalculations';
 
-const beverageServingsML = {
-  Wine: 148,
-  Beer: 354,
-  Spirits: 44,
-  Ciders: 354,
-};
-
 export default class CalculatorScreen extends React.Component {
   static navigationOptions = {
     title: 'Calculator',
@@ -166,7 +159,7 @@ export default class CalculatorScreen extends React.Component {
   }
 
   calculateBAC = async () => {
-    const startedDrinkingMoment = await AsyncStorage.getItem('startedDrinkingMoment');
+    const drinkingTime = await this.getDrinkingTime();
     const {
       SD,
       BW,
@@ -174,14 +167,12 @@ export default class CalculatorScreen extends React.Component {
       MR,
       numDrinks,
     } = this.state;
-    const EBAC = bacUtilities.calculateBAC(SD, BW, Wt, MR, startedDrinkingMoment);
+    const EBAC = bacUtilities.calculateBAC(SD, BW, Wt, MR, drinkingTime);
     await this.setState({ BAC: EBAC });
 
     // determine stopped drinking state
     if (EBAC < 0.001) {
-      const stoppedDrinkingMoment = new Moment();
-      await AsyncStorage.setItem('stoppedDrinkingMoment', stoppedDrinkingMoment);
-
+      await AsyncStorage.setItem('stoppedDrinkingMoment', new Moment());
       this.dropdown.alertWithType(
         'info', // notif type
         'It looks like you\'ve sobered up!', // title of notif
@@ -192,9 +183,7 @@ export default class CalculatorScreen extends React.Component {
 
   fakeStoppedDrinking = async () => {
     const { numDrinks } = this.state;
-    const startedDrinkingMoment = await AsyncStorage.getItem('startedDrinkingMoment');
-    const currentMoment = new Moment();
-    const drinkingTime = Moment.duration(currentMoment.diff(startedDrinkingMoment)).asHours();
+    const drinkingTime = await this.getDrinkingTime();
 
     this.dropdown.alertWithType(
       'info', // notif type
@@ -221,6 +210,12 @@ export default class CalculatorScreen extends React.Component {
         <ActivityIndicator animating size="large" />
       </View>
     );
+  }
+
+  getDrinkingTime = async () => {
+    const startedDrinkingMoment = await AsyncStorage.getItem('startedDrinkingMoment');
+    const currentMoment = new Moment();
+    return Moment.duration(currentMoment.diff(startedDrinkingMoment)).asHours();
   }
 
   render() {
