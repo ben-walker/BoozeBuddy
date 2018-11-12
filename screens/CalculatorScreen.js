@@ -38,7 +38,7 @@ export default class CalculatorScreen extends React.Component {
       drinkListLoading: false,
       drinkPage: 1,
       BAC: 0.0,
-      SD: 0,
+      SD: 0.0,
       BW: 0.0,
       MR: 0.0,
       Wt: 0.0,
@@ -46,7 +46,6 @@ export default class CalculatorScreen extends React.Component {
       favourites: [],
       loggedDrinks: [],
       modalDrink: null,
-      numDrinks: 0,
     };
     this.drinkModalRef = React.createRef();
   }
@@ -139,7 +138,6 @@ export default class CalculatorScreen extends React.Component {
     await this.setState(prev => ({
       SD: prev.SD + standardDrinks,
       loggedDrinks: [...prev.loggedDrinks, drink],
-      numDrinks: prev.numDrinks + standardDrinks,
     }));
 
     await this.calculateBAC();
@@ -160,7 +158,6 @@ export default class CalculatorScreen extends React.Component {
       BW,
       Wt,
       MR,
-      numDrinks,
     } = this.state;
     const EBAC = bacUtilities.calculateBAC(SD, BW, Wt, MR, drinkingTime);
     await this.setState({ BAC: EBAC });
@@ -171,19 +168,19 @@ export default class CalculatorScreen extends React.Component {
       this.dropdown.alertWithType(
         'info', // notif type
         'It looks like you\'ve sobered up!', // title of notif
-        `You had ${parseFloat(numDrinks.toFixed(2))} standard drinks over ${parseFloat(drinkingTime.toFixed(2))} hour(s).`, // message
+        `You had ${parseFloat(SD.toFixed(2))} standard drinks over ${parseFloat(drinkingTime.toFixed(2))} hour(s).`, // message
       );
     }
   }
 
   fakeStoppedDrinking = async () => {
-    const { numDrinks } = this.state;
+    const { SD } = this.state;
     const drinkingTime = await this.getDrinkingTime();
 
     this.dropdown.alertWithType(
       'info', // notif type
       'It looks like you\'ve sobered up!', // title of notif
-      `You had ${parseFloat(numDrinks.toFixed(2))} standard drinks over ${parseFloat(drinkingTime.toFixed(2))} hour(s).`, // message
+      `You had ${parseFloat(SD.toFixed(2))} standard drinks over ${parseFloat(drinkingTime.toFixed(2))} hour(s).`, // message
     );
   }
 
@@ -222,7 +219,7 @@ export default class CalculatorScreen extends React.Component {
     const {
       modalDrink,
       BAC,
-      numDrinks,
+      SD,
       favourites,
       drinks,
     } = this.state;
@@ -256,7 +253,7 @@ g/dL
           </Text>
           <Text style={style.smallText}>
 Drinks :
-            {Number(numDrinks).toFixed(1)}
+            {Number(SD).toFixed(1)}
           </Text>
         </View>
 
@@ -267,8 +264,8 @@ Drinks :
               keyExtractor={item => item._id /* eslint-disable-line no-underscore-dangle */}
               ListHeaderComponent={drinkListHeader}
               ListFooterComponent={this.renderFooter}
-              // onEndReached={this.getPageOfDrinks}
-              // onEndReachedThreshold={0.1}
+              onEndReached={this.getPageOfDrinks}
+              onEndReachedThreshold={0.1}
               renderItem={item => (
                 <DrinkListItem
                   drinkData={item.item}
