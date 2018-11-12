@@ -247,12 +247,13 @@ export default class CalculatorScreen extends React.Component {
         <View style={style.secondaryContentContainer}>
           <Text style={style.titleText}>
 BAC:
-            {parseFloat(BAC.toFixed(4))}
             {' '}
+            {parseFloat(BAC.toFixed(4))}
 g/dL
           </Text>
           <Text style={style.smallText}>
-Drinks :
+Drinks:
+            {' '}
             {Number(SD).toFixed(1)}
           </Text>
         </View>
