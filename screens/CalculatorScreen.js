@@ -84,7 +84,12 @@ export default class CalculatorScreen extends React.Component {
   }
 
   getPageOfDrinks = async () => {
-    const { drinkPage } = this.state;
+    const {
+      drinkPage,
+      drinkListLoading,
+    } = this.state;
+    if (drinkListLoading) return;
+
     this.setState({ drinkListLoading: true });
     let URL = 'https://dr-robotnik.herokuapp.com/api/pageOfDrinks';
     URL += url.format({
@@ -262,11 +267,12 @@ Drinks:
           <List>
             <FlatList
               data={favourites.concat(drinks)}
+              extraData={this.state}
               keyExtractor={item => item._id /* eslint-disable-line no-underscore-dangle */}
               ListHeaderComponent={drinkListHeader}
               ListFooterComponent={this.renderFooter}
               onEndReached={this.getPageOfDrinks}
-              onEndReachedThreshold={0.1}
+              onEndReachedThreshold={0.05}
               renderItem={item => (
                 <DrinkListItem
                   drinkData={item.item}
