@@ -1,143 +1,143 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  View,
-  Alert,
-} from 'react-native';
-import {
-  Button,
-  Text,
-} from 'react-native-elements';
+import { View } from 'react-native';
+import { Text } from 'react-native-elements';
 import style from '../constants/StyleSheet';
 import colors from '../constants/Colors';
-import GameButton from '../components/GameButton'
+import GameButton from '../components/GameButton';
 
 export default class MemoryGameScreen extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            gameState: 'Memorize', // Memorize, Guess
-            timer: null,
-            timerCounter: 0,
-            playerGuessIndex: 0,
-            playerGuesses: [],
-            generatedArrayOfColours: [],
-        }
-        this.colourListForRandomization = ['red', 'orange', 'yellow', 'green', 'blue', 'purple'];
-        this.tick = this.tick.bind(this);
-        this.randomColour = this.randomColour.bind(this);
-        this.generateColouredButtonsForGuessing = this.generateColouredButtonsForGuessing.bind(this);
-        this.applyPlayerGuess = this.applyPlayerGuess.bind(this);
-    }
+  static navigationOptions = { header: null };
 
-    static navigationOptions = { header: null };
-
-    componentDidMount() {
-      let sequenceLength = 10;
-
-      let timer = setInterval(this.tick, 1000);
-      this.setState({timer});
-      this.setState({
-        generatedArrayOfColours: this.generateRandomSequenceOfColouredButtons(sequenceLength)
-      });
-
-      sequence = [];
-
-      for (let i = 0; i < sequenceLength; i++) {
-          sequence.push({id: i, colour: colors.secondary});
-      }
-
-      colourListArr = sequence.map(colourInfo => (
-        <GameButton customWidth={20} key={colourInfo.id} colour={colourInfo.colour} />
-      ));
-
-      this.state.playerGuesses = colourListArr;
-
-    }
-
-    componentWillUnmount() {
-      this.clearInterval(this.state.timer);
-    }
-
-    tick() {
-      this.setState({
-        timerCounter: this.state.timerCounter + 1
-      });
-      if (this.state.timerCounter >= 2) {
-        clearInterval(this.state.timer);
-        this.setState({
-          gameState: 'Guess'
-        });
-      }
-
-    }
-
-
-
-    randomColour() {
-        var colourToReturn = this.colourListForRandomization[Math.floor(Math.random() * this.colourListForRandomization.length)];
-        return colourToReturn;
+  constructor() {
+    super();
+    this.state = {
+      gameState: 'Memorize', // Memorize, Guess
+      timer: null,
+      timerCounter: 0,
+      playerGuessIndex: 0,
+      playerGuesses: [],
+      generatedArrayOfColours: [],
     };
+    this.colourListForRandomization = ['red', 'orange', 'yellow', 'green', 'blue', 'purple'];
+  }
 
-    generateRandomColourSequence(length) {
-        let sequence = []
+  componentDidMount() {
+    const sequenceLength = 10;
+    const timer = setInterval(this.tick, 1000);
 
-        for (let i = 0; i < length; i++) {
-            sequence.push({id: i, colour: this.randomColour()});
-        }
+    this.setState({
+      timer,
+      generatedArrayOfColours: this.generateRandomSequenceOfColouredButtons(sequenceLength),
+    });
 
-        return sequence;
+    const sequence = [];
+
+    for (let i = 0; i < sequenceLength; i += 1) {
+      sequence.push({ id: i, colour: colors.secondary });
     }
 
-    generateRandomSequenceOfColouredButtons(length) {
-      var initialArr = this.generateRandomColourSequence(length);
-      colourListArr = initialArr.map(colourInfo => (
-        <GameButton customWidth={20} key={colourInfo.id} colour={colourInfo.colour} />
-      ));
-      return colourListArr;
+    const colourListArr = sequence.map(colourInfo => (
+      <GameButton customWidth={20} key={colourInfo.id} colour={colourInfo.colour} />
+    ));
+
+    this.state.playerGuesses = colourListArr;
+  }
+
+  componentWillUnmount() {
+    const { timer } = this.state;
+    this.clearInterval(timer);
+  }
+
+  tick = async () => {
+    const {
+      timerCounter,
+      timer,
+    } = this.state;
+    await this.setState(prev => ({
+      timerCounter: prev.timerCounter + 1,
+    }));
+
+    if (timerCounter >= 2) {
+      clearInterval(timer);
+      this.setState({
+        gameState: 'Guess',
+      });
+    }
+  }
+
+  randomColour = () => this.colourListForRandomization[
+    Math.floor(Math.random() * this.colourListForRandomization.length)
+  ];
+
+  generateRandomColourSequence = (length) => {
+    const sequence = [];
+
+    for (let i = 0; i < length; i += 1) {
+      sequence.push({ id: i, colour: this.randomColour() });
     }
 
-    applyPlayerGuess(guess) {
-        console.log("thinekf");
+    return sequence;
+  }
+
+  generateRandomSequenceOfColouredButtons = (length) => {
+    const initialArr = this.generateRandomColourSequence(length);
+    const colourListArr = initialArr.map(colourInfo => (
+      <GameButton customWidth={20} key={colourInfo.id} colour={colourInfo.colour} />
+    ));
+    return colourListArr;
+  }
+
+  applyPlayerGuess = (guess) => {
+    console.log('thinekf');
+  }
+
+  generateColouredButtonsForGuessing = () => {
+    const sequence = [];
+
+    for (let i = 0; i < this.colourListForRandomization.length; i += 1) {
+      sequence.push({ id: i, colour: this.colourListForRandomization[i] });
     }
 
-    generateColouredButtonsForGuessing() {
-      let sequence = []
+    const colourListArr = sequence.map(colourInfo => (
+      <GameButton
+        customWidth={40}
+        key={colourInfo.id}
+        colour={colourInfo.colour}
+        onClick={this.applyPlayerGuess}
+      />
+    ));
+    return colourListArr;
+  }
 
-      for (let i = 0; i < this.colourListForRandomization.length; i++) {
-          sequence.push({id: i, colour: this.colourListForRandomization[i]});
-      }
+  render() {
+    const {
+      gameState,
+      timerCounter,
+      playerGuesses,
+      generatedArrayOfColours,
+    } = this.state;
+    return (
+      <View style={style.container}>
+        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
+          <View style={{ flex: 1}}></View>
 
-      colourListArr = sequence.map(colourInfo => (
-        <GameButton customWidth={40} key={colourInfo.id} colour={colourInfo.colour} onClick = {this.applyPlayerGuess} />
-      ));
-
-      return colourListArr;
-    }
-
-
-
-    render() {
-      const { navigation } = this.props;
-      return (
-        <View style={style.container}>
-          <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
-            <View style={{ flex: 1}}></View>
-
-            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
-                <Text> {this.state.gameState == 'Memorize' ? this.state.timerCounter : 'Time to Guess!'} </Text>
-            </View>
-            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
-              {this.state.gameState == 'Memorize' ? null : this.state.playerGuesses}
-            </View>
-            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
-              {this.state.gameState == 'Memorize' ? this.state.generatedArrayOfColours : this.generateColouredButtonsForGuessing()}
-            </View>
-            <View style={{ flex: 2}}></View>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+            <Text>
+              {gameState === 'Memorize' ? timerCounter : 'Time to Guess!'}
+            </Text>
           </View>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
+            {gameState === 'Memorize' ? null : playerGuesses}
+          </View>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
+            {gameState === 'Memorize' ? generatedArrayOfColours : this.generateColouredButtonsForGuessing()}
+          </View>
+          <View style={{ flex: 2}}></View>
         </View>
-      );
-    }
+      </View>
+    );
+  }
 }
 
 MemoryGameScreen.propTypes = {

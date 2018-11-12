@@ -1,36 +1,33 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
 import {
-  Button,
   Text,
 } from 'react-native-elements';
 import colors from '../constants/Colors';
 import style from '../constants/StyleSheet';
 
-class GameButton extends Component {
+const GameButton = (props) => {
+  const {
+    text,
+    colour,
+    onClick,
+    customWidth,
+    customHeight,
+  } = props;
 
-  render() {
-    const {
-      text,
-      colour,
-      onClick,
-      customWidth,
-      customHeight
-    } = this.props;
-
-    return (
-      <TouchableOpacity style={{width: this.props.customWidth, height: this.props.customHeight, backgroundColor: this.props.colour}}
-			   onPress={() => this.props.onClick}
-		  >
+  return (
+    <TouchableOpacity
+      style={{ width: customWidth, height: customHeight, backgroundColor: colour }}
+      onPress={onClick}
+    >
       <Text>{text}</Text>
-      </TouchableOpacity>
-    );
-  }
-}
+    </TouchableOpacity>
+  );
+};
 
 GameButton.defaultProps = {
-  text: "",
+  text: '',
   customWidth: 40,
   customHeight: 40,
   colour: colors.accent,
