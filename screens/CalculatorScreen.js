@@ -103,6 +103,7 @@ export default class CalculatorScreen extends React.Component {
 
     const rawResponse = await fetch(URL, {
       method: 'GET',
+      credentials: 'include',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -112,7 +113,7 @@ export default class CalculatorScreen extends React.Component {
     if (!rawResponse.ok) return;
     const response = await rawResponse.json();
     await this.setState(prev => ({
-      drinks: differenceWith(uniqBy(prev.drinks.concat(response), 'name'), prev.favourites, isEqual),
+      drinks: uniqBy(prev.drinks.concat(response), 'name'),
       drinkPage: prev.drinkPage + 1,
     }));
   }
