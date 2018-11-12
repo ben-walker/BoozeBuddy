@@ -37,6 +37,7 @@ export default class CalculatorScreen extends React.Component {
     super(props);
     this.state = {
       drinkListLoading: false,
+      startedDrinkingMoment: null,
       drinkPage: 1,
       BAC: 0.0,
       SD: 0.0,
@@ -80,7 +81,7 @@ export default class CalculatorScreen extends React.Component {
   // store started drinking moment, remove stopped drinking moment
   initializeStartDrinkingState = () => {
     const drinkTimestamp = new Moment();
-    AsyncStorage.setItem('startedDrinkingMoment', drinkTimestamp);
+    this.setState({ startedDrinkingMoment: drinkTimestamp });
     AsyncStorage.removeItem('stoppedDrinkingMoment');
   }
 
@@ -216,8 +217,8 @@ export default class CalculatorScreen extends React.Component {
     );
   }
 
-  getDrinkingTime = async () => {
-    const startedDrinkingMoment = await AsyncStorage.getItem('startedDrinkingMoment');
+  getDrinkingTime = () => {
+    const { startedDrinkingMoment } = this.state;
     const currentMoment = new Moment();
     return Moment.duration(currentMoment.diff(startedDrinkingMoment)).asHours();
   }
@@ -236,6 +237,8 @@ export default class CalculatorScreen extends React.Component {
         <Text style={style.titleText}>Drink List</Text>
       </View>
     );
+
+    const currentDrinkingTime = this.getDrinkingTime();
 
     return (
       <View style={style.container}>
@@ -259,9 +262,13 @@ BAC:
 g/dL
           </Text>
           <Text style={style.smallText}>
-Drinks:
+            {parseFloat(SD.toFixed(2))}
             {' '}
-            {Number(SD).toFixed(1)}
+            drinks over
+            {' '}
+            {parseFloat(currentDrinkingTime.toFixed(2))}
+            {' '}
+            hours
           </Text>
         </View>
 
