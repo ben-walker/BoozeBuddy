@@ -16,6 +16,7 @@ import {
   includes,
   differenceWith,
   isEqual,
+  uniqBy,
 } from 'lodash-es';
 import DropdownAlert from 'react-native-dropdownalert';
 import DrinkModal from '../components/DrinkModal';
@@ -111,7 +112,7 @@ export default class CalculatorScreen extends React.Component {
     if (!rawResponse.ok) return;
     const response = await rawResponse.json();
     await this.setState(prev => ({
-      drinks: prev.drinks.concat(response),
+      drinks: differenceWith(uniqBy(prev.drinks.concat(response), 'name'), prev.favourites, isEqual),
       drinkPage: prev.drinkPage + 1,
     }));
   }
