@@ -23,9 +23,14 @@ const DrinkListItem = (props) => {
     ? ({ name: 'favorite', color: colors.red })
     : null);
 
-  const getAvatar = () => (drinkData.image_thumb_url
-    ? ({ url: drinkData.image_thumb_url })
-    : beerIcon.default);
+  const getAvatar = () => {
+    if (drinkData) {
+      return drinkData.image_thumb_url
+        ? ({ uri: drinkData.image_thumb_url })
+        : beerIcon.default;
+    }
+    return ({ uri: '' });
+  };
 
   return (
     <TouchableOpacity
@@ -33,6 +38,7 @@ const DrinkListItem = (props) => {
         updateModalDrink(drinkData);
         drinkModalRef.current.toggleModal();
       }}
+      delayLongPress={100}
     >
       <ListItem
         roundAvatar
