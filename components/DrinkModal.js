@@ -78,7 +78,6 @@ class DrinkModal extends Component {
         title="Add to Favourites"
         loading={loading}
         rounded
-        raised
         backgroundColor={colors.background}
         onPress={this.addToFavourites}
       />

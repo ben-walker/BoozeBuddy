@@ -9,7 +9,9 @@ import {
   FormInput,
   FormValidationMessage,
 } from 'react-native-elements';
+import { Permissions } from 'expo';
 import DropdownAlert from 'react-native-dropdownalert';
+import CameraModal from '../components/CameraModal';
 import colors from '../constants/Colors';
 import style from '../constants/StyleSheet';
 import validate from '../utilities/validateWrapper';
@@ -31,7 +33,14 @@ export default class CustomDrinkScreen extends React.Component {
       drinkVolumeError: '',
       drinkAlcoholContent: '',
       drinkAlcoholContentError: '',
+      hasCameraPermission: null,
     };
+    this.cameraModalRef = React.createRef();
+  }
+
+  async componentDidMount() {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    this.setState({ hasCameraPermission: status === 'granted' });
   }
 
   createDrink = async () => {
@@ -100,6 +109,10 @@ export default class CustomDrinkScreen extends React.Component {
       <View style={style.container}>
         <ScrollView style={style.container} contentContainerStyle={style.secondaryContentContainer}>
 
+          <CameraModal
+            ref={this.cameraModalRef}
+          />
+
           <FormLabel>Drink Name</FormLabel>
           <FormInput
             onChangeText={drinkNameInput => this.setState({ drinkName: drinkNameInput })}
@@ -153,6 +166,13 @@ export default class CustomDrinkScreen extends React.Component {
           <FormValidationMessage labelStyle={style.errorMsg}>
             {drinkAlcoholContentError}
           </FormValidationMessage>
+
+          <Button
+            title="Add a Picture"
+            rounded
+            backgroundColor={colors.actionButton}
+            onPress={() => this.cameraModalRef.current.toggleModal()}
+          />
 
           <Button
             onPress={this.createDrink}
