@@ -17,7 +17,7 @@ class DrinkModal extends Component {
     super(props);
     this.state = {
       isVisible: false,
-      favourite: props.favourite,
+      favourite: false,
       loading: false,
     };
   }
@@ -132,13 +132,11 @@ class DrinkModal extends Component {
 
 DrinkModal.defaultProps = {
   drinkData: null,
-  favourite: false,
   getFavourites: null,
 };
 
 DrinkModal.propTypes = {
   drinkData: PropTypes.object, // eslint-disable-line react/forbid-prop-types
-  favourite: PropTypes.bool,
   getFavourites: PropTypes.func,
 };
 

@@ -38,7 +38,6 @@ const DrinkListItem = (props) => {
         updateModalDrink(drinkData);
         drinkModalRef.current.toggleModal();
       }}
-      delayLongPress={100}
     >
       <ListItem
         roundAvatar
