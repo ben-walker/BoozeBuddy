@@ -59,7 +59,7 @@ export default class LoginScreen extends React.Component {
 
       await AsyncStorage.setItem('userToken', JSON.stringify(response.user));
       navigation.navigate('App');
-    }
+    };
 
     async isValid() {
       const {

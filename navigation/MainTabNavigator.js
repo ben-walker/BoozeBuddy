@@ -48,6 +48,7 @@ HomeStack.navigationOptions = {
 
 const ProfileStack = createStackNavigator({
   Profile: ProfileScreen,
+    Legal: LegalScreen
 });
 
 const ProfileStackTabIcon = ({ focused }) => (
@@ -63,34 +64,6 @@ ProfileStackTabIcon.propTypes = {
 ProfileStack.navigationOptions = {
   tabBarLabel: 'Profile',
   tabBarIcon: ProfileStackTabIcon,
-  tabBarOptions: {
-    style: {
-      backgroundColor: colour.dark,
-    },
-  },
-};
-
-const LegalStack = createStackNavigator({
-  Legal: LegalScreen,
-});
-
-const LegalStackTabIcon = ({ focused }) => (
-  <TabBarIcon
-    focused={focused}
-    name={
-      Platform.OS === 'ios'
-        ? `ios-information-circle${focused ? '' : '-outline'}`
-        : 'md-information-circle'
-    }
-  />
-);
-LegalStackTabIcon.propTypes = {
-  focused: PropTypes.bool.isRequired,
-};
-
-LegalStack.navigationOptions = {
-  tabBarLabel: 'Legal',
-  tabBarIcon: LegalStackTabIcon,
   tabBarOptions: {
     style: {
       backgroundColor: colour.dark,
