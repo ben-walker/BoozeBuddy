@@ -79,6 +79,7 @@ class DrinkModal extends Component {
         loading={loading}
         rounded
         raised
+        containerViewStyle={{ borderRadius: 25 }}
         backgroundColor={colors.background}
         onPress={this.addToFavourites}
       />

@@ -124,6 +124,7 @@ export default class CustomDrinkScreen extends React.Component {
             title="Add a Picture"
             style={style.button}
             rounded
+            containerViewStyle={{ borderRadius: 25 }}
             raised
             backgroundColor={colors.actionButton}
             onPress={() => this.cameraModalRef.current.toggleModal()}
@@ -187,6 +188,7 @@ export default class CustomDrinkScreen extends React.Component {
         <Button
           onPress={this.createDrink}
           style={style.button}
+          containerViewStyle={{ borderRadius: 25 }}
           rounded
           raised
           title="Create"

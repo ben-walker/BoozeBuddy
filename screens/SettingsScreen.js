@@ -36,6 +36,7 @@ export default class SettingsScreen extends React.Component {
           <Button
             onPress={this.logOut}
             style={style.button}
+            containerViewStyle={{ borderRadius: 25 }}
             rounded
             raised
             title="Log Out"

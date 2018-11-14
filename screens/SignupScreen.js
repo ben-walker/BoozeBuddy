@@ -256,6 +256,7 @@ export default class SignupScreen extends React.Component {
           <Button
             onPress={this.signUp}
             style={style.button}
+            containerViewStyle={{ borderRadius: 25 }}
             rounded
             raised
             title="Sign Up"
@@ -264,6 +265,7 @@ export default class SignupScreen extends React.Component {
           <Button
             onPress={() => navigation.navigate('Legal')}
             style={style.button}
+            containerViewStyle={{ borderRadius: 25 }}
             rounded
             raised
             title="View Terms and Conditions"
