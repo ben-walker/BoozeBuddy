@@ -16,6 +16,7 @@ import {
   includes,
   differenceWith,
   isEqual,
+  uniqBy,
 } from 'lodash-es';
 import DropdownAlert from 'react-native-dropdownalert';
 import DrinkModal from '../components/DrinkModal';
@@ -36,6 +37,7 @@ export default class CalculatorScreen extends React.Component {
     super(props);
     this.state = {
       drinkListLoading: false,
+      startedDrinkingMoment: null,
       drinkPage: 1,
       BAC: 0.0,
       SD: 0.0,
@@ -79,12 +81,17 @@ export default class CalculatorScreen extends React.Component {
   // store started drinking moment, remove stopped drinking moment
   initializeStartDrinkingState = () => {
     const drinkTimestamp = new Moment();
-    AsyncStorage.setItem('startedDrinkingMoment', drinkTimestamp);
+    this.setState({ startedDrinkingMoment: drinkTimestamp });
     AsyncStorage.removeItem('stoppedDrinkingMoment');
   }
 
   getPageOfDrinks = async () => {
-    const { drinkPage } = this.state;
+    const {
+      drinkPage,
+      drinkListLoading,
+    } = this.state;
+    if (drinkListLoading) return;
+
     this.setState({ drinkListLoading: true });
     let URL = 'https://dr-robotnik.herokuapp.com/api/pageOfDrinks';
     URL += url.format({
@@ -97,6 +104,7 @@ export default class CalculatorScreen extends React.Component {
 
     const rawResponse = await fetch(URL, {
       method: 'GET',
+      credentials: 'include',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -106,7 +114,7 @@ export default class CalculatorScreen extends React.Component {
     if (!rawResponse.ok) return;
     const response = await rawResponse.json();
     await this.setState(prev => ({
-      drinks: prev.drinks.concat(response),
+      drinks: uniqBy(prev.drinks.concat(response), 'name'),
       drinkPage: prev.drinkPage + 1,
     }));
   }
@@ -209,8 +217,8 @@ export default class CalculatorScreen extends React.Component {
     );
   }
 
-  getDrinkingTime = async () => {
-    const startedDrinkingMoment = await AsyncStorage.getItem('startedDrinkingMoment');
+  getDrinkingTime = () => {
+    const { startedDrinkingMoment } = this.state;
     const currentMoment = new Moment();
     return Moment.duration(currentMoment.diff(startedDrinkingMoment)).asHours();
   }
@@ -230,6 +238,8 @@ export default class CalculatorScreen extends React.Component {
       </View>
     );
 
+    const currentDrinkingTime = this.getDrinkingTime();
+
     return (
       <View style={style.container}>
         <Button
@@ -247,13 +257,18 @@ export default class CalculatorScreen extends React.Component {
         <View style={style.secondaryContentContainer}>
           <Text style={style.titleText}>
 BAC:
-            {parseFloat(BAC.toFixed(4))}
             {' '}
+            {parseFloat(BAC.toFixed(4))}
 g/dL
           </Text>
           <Text style={style.smallText}>
-Drinks :
-            {Number(SD).toFixed(1)}
+            {parseFloat(SD.toFixed(2))}
+            {' '}
+            drinks over
+            {' '}
+            {parseFloat(currentDrinkingTime.toFixed(2))}
+            {' '}
+            hours
           </Text>
         </View>
 
@@ -261,11 +276,12 @@ Drinks :
           <List>
             <FlatList
               data={favourites.concat(drinks)}
+              extraData={this.state}
               keyExtractor={item => item._id /* eslint-disable-line no-underscore-dangle */}
               ListHeaderComponent={drinkListHeader}
               ListFooterComponent={this.renderFooter}
               onEndReached={this.getPageOfDrinks}
-              onEndReachedThreshold={0.1}
+              onEndReachedThreshold={0.05}
               renderItem={item => (
                 <DrinkListItem
                   drinkData={item.item}
