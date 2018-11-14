@@ -1,0 +1,3 @@
+export default `Although the majority of Canadians who drink alcohol do so in moderation, alcohol misuse affects too many Canadians. In fact, it is estimated that 4 to 5 million Canadians engage in high risk drinking, which is linked to motor vehicle accidents, Fetal Alcohol Spectrum Disorder and other health issues, family problems, crime and violence.
+
+Depending on how much you drink, alcohol can be linked to both chronic and acute alcohol-related harms. Chronic alcohol-related harms include cancer, liver cirrhosis and other diseases and illnesses. Acute alcohol-related harms include alcohol poisoning, physical and (or) verbal fights and accidents.`;

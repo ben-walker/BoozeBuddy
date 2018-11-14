@@ -10,6 +10,7 @@ import { Button } from 'react-native-elements';
 import colors from '../constants/Colors';
 import style from '../constants/StyleSheet';
 import * as appIcon from '../assets/images/DrinkIcons/cheers.png';
+import concerns from '../constants/HealthCanadaConcerns';
 
 export default class HomeScreen extends React.Component {
     static navigationOptions = { header: null };
@@ -47,6 +48,8 @@ export default class HomeScreen extends React.Component {
               title="Add Custom Drink"
               backgroundColor={colors.accent}
             />
+              <Text style={style.defaultText}>Health Canada Concerns about Alcohol Use</Text>
+              <Text style={style.smallText}>{concerns}</Text>
           </ScrollView>
         </View>
       );
