@@ -88,8 +88,12 @@ export default class MemoryGameScreen extends React.Component {
     return colourListArr;
   }
 
-  applyPlayerGuess = (guess) => {
-    console.log('thinekf');
+  applyPlayerGuess = async (guess) => {
+    // Somehow apply the colour change here.
+    console.log(this.state.playerGuesses[this.state.playerGuessIndex]);
+    await this.setState(prev => ({
+      playerGuessIndex: this.state.playerGuessIndex + 1,
+    }));
   }
 
   generateColouredButtonsForGuessing = () => {
@@ -104,7 +108,7 @@ export default class MemoryGameScreen extends React.Component {
         customWidth={40}
         key={colourInfo.id}
         colour={colourInfo.colour}
-        onClick={this.applyPlayerGuess}
+        onClick={() => this.applyPlayerGuess(colourInfo.colour)}
       />
     ));
     return colourListArr;
