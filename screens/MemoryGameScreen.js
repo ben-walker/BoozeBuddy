@@ -56,10 +56,10 @@ export default class MemoryGameScreen extends React.Component {
       timer,
     } = this.state;
     await this.setState(prev => ({
-      timerCounter: prev.timerCounter + 1,
+      timerCounter: prev.timerCounter - 1,
     }));
 
-    if (timerCounter >= this.state.memorizeTime) {
+    if (timerCounter <= 0) {
       clearInterval(timer);
       this.setState({
         gameState: 'Guess',
@@ -89,7 +89,7 @@ export default class MemoryGameScreen extends React.Component {
 
     this.setState({
       gameState: 'Memorize',
-      timerCounter: 0,
+      timerCounter: this.state.memorizeTime,
       playerGuessIndex: 0,
       numCorrectGuesses: 0,
     });
