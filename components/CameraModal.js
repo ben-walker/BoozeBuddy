@@ -17,18 +17,36 @@ class CameraModal extends Component {
     };
   }
 
-  toggleModal = () => this.setState(prevState => ({ isVisible: !prevState.isVisible }))
+  toggleModal = () => {
+    console.log('toggling modal');
+    this.setState(prevState => ({ isVisible: !prevState.isVisible }));
+  }
 
-  renderBottomBar = () => (
+  renderTakePhoto = () => (
     <View style={style.takePictureIcon}>
       <View style={{ flex: 1 }}>
         <TouchableOpacity
           onPress={null} // take pic
-          style={{ alignSelf: 'center' }}
         >
           <Icon
             name="brightness-1"
             size={70}
+            color="white"
+          />
+        </TouchableOpacity>
+      </View>
+    </View>
+  )
+
+  renderCancel = () => (
+    <View style={style.closeCameraIcon}>
+      <View style={{ flex: 1 }}>
+        <TouchableOpacity
+          onPress={this.toggleModal} // close camera
+        >
+          <Icon
+            name="close"
+            size={40}
             color="white"
           />
         </TouchableOpacity>
@@ -56,7 +74,8 @@ class CameraModal extends Component {
           }}
           type={cameraType}
         >
-          {this.renderBottomBar()}
+          {this.renderCancel()}
+          {this.renderTakePhoto()}
         </Camera>
       </Modal>
     );

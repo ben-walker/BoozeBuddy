@@ -87,4 +87,16 @@ export default StyleSheet.create({
     flex: 0.12,
     flexDirection: 'row',
   },
+  closeCameraIcon: {
+    position: 'absolute',
+    top: 50,
+    right: 160,
+    alignContent: 'center',
+    paddingBottom: 25,
+    backgroundColor: 'transparent',
+    alignSelf: 'flex-end',
+    justifyContent: 'space-between',
+    flex: 0.12,
+    flexDirection: 'row',
+  },
 });
