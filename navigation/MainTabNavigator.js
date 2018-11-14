@@ -146,10 +146,14 @@ GameStack.navigationOptions = {
   },
 };
 
-export default createBottomTabNavigator({
-  HomeStack,
+export default createBottomTabNavigator(
+    {
+    ProfileStack,
+    LegalStack,
+    HomeStack,
     HistoryStack,
-  LegalStack,
-  ProfileStack,
-  GameStack,
-});
+    GameStack,
+},
+    {
+      initialRouteName: 'HomeStack'
+    });
