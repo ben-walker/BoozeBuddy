@@ -10,6 +10,7 @@ import CustomDrinkScreen from '../screens/CustomDrinkScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import LegalScreen from '../screens/LegalScreen';
 import CalculatorScreen from '../screens/CalculatorScreen';
+import HistoryScreen from '../screens/HistoryScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -96,8 +97,33 @@ LegalStack.navigationOptions = {
   },
 };
 
+const HistoryStack = createStackNavigator({
+    History: HistoryScreen,
+});
+
+const HistoryStackTabIcon = ({ focused }) => (
+    <TabBarIcon
+        focused={focused}
+        name={Platform.OS === 'ios' ? `ios-clock${focused ? '' : '-outline'}` : 'md-clock'}
+    />
+);
+HistoryStackTabIcon.propTypes = {
+    focused: PropTypes.bool.isRequired,
+};
+
+HistoryStack.navigationOptions = {
+    tabBarLabel: 'History',
+    tabBarIcon: HistoryStackTabIcon,
+    tabBarOptions: {
+        style: {
+            backgroundColor: colour.dark,
+        },
+    },
+};
+
 export default createBottomTabNavigator({
   HomeStack,
+    HistoryStack,
   LegalStack,
   SettingsStack,
 });

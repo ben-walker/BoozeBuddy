@@ -27,7 +27,7 @@ export default class SettingsScreen extends React.Component {
     });
     await AsyncStorage.removeItem('userToken');
     navigation.navigate('Auth');
-  }
+  };
 
   render() {
     return (
