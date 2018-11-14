@@ -4,6 +4,7 @@ import {
   View,
 } from 'react-native';
 import {
+  Avatar,
   Button,
   FormLabel,
   FormInput,
@@ -106,7 +107,21 @@ export default class CustomDrinkScreen extends React.Component {
     } = this.state;
 
     return (
-      <View style={style.container}>
+      <View style={[style.container, { alignItems: 'center' }]}>
+        <FormLabel>Drink Preview</FormLabel>
+        <Avatar
+          large
+          rounded
+          source={null}
+          containerStyle={{ margin: 'auto' }}
+        />
+        <Button
+          title="Add a Picture"
+          rounded
+          backgroundColor={colors.actionButton}
+          onPress={() => this.cameraModalRef.current.toggleModal()}
+        />
+
         <ScrollView style={style.container} contentContainerStyle={style.secondaryContentContainer}>
 
           <CameraModal
@@ -166,13 +181,6 @@ export default class CustomDrinkScreen extends React.Component {
           <FormValidationMessage labelStyle={style.errorMsg}>
             {drinkAlcoholContentError}
           </FormValidationMessage>
-
-          <Button
-            title="Add a Picture"
-            rounded
-            backgroundColor={colors.actionButton}
-            onPress={() => this.cameraModalRef.current.toggleModal()}
-          />
 
           <Button
             onPress={this.createDrink}

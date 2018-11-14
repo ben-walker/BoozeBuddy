@@ -257,6 +257,7 @@ export default class SignupScreen extends React.Component {
             onPress={this.signUp}
             style={style.button}
             rounded
+            raised
             title="Sign Up"
             backgroundColor={colors.accent}
           />
@@ -264,6 +265,7 @@ export default class SignupScreen extends React.Component {
             onPress={() => navigation.navigate('Legal')}
             style={style.button}
             rounded
+            raised
             title="View Terms and Conditions"
             backgroundColor={colors.secondary}
           />
