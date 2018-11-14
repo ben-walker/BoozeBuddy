@@ -206,7 +206,7 @@ export default class SignupScreen extends React.Component {
             placeholder={{ label: 'Select your gender...', value: null }}
             onValueChange={async (value) => {
               await this.setState({ gender: value });
-              this.setState({ genderError: await validate('gender', gender) });
+              this.setState({ genderError: await validate('gender', value) });
             }}
             hideDoneBar
           >
