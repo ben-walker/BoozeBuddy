@@ -78,7 +78,7 @@ export default StyleSheet.create({
   },
   takePictureIcon: {
     position: 'absolute',
-    bottom: 80,
+    bottom: 40,
     alignContent: 'center',
     paddingBottom: 25,
     backgroundColor: 'transparent',

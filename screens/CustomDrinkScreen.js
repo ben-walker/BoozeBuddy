@@ -35,6 +35,7 @@ export default class CustomDrinkScreen extends React.Component {
       drinkAlcoholContent: '',
       drinkAlcoholContentError: '',
       hasCameraPermission: null,
+      customImage: null,
     };
     this.cameraModalRef = React.createRef();
   }
@@ -43,6 +44,8 @@ export default class CustomDrinkScreen extends React.Component {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({ hasCameraPermission: status === 'granted' });
   }
+
+  updateImage = image => this.setState({ customImage: image })
 
   createDrink = async () => {
     const {
@@ -104,12 +107,14 @@ export default class CustomDrinkScreen extends React.Component {
       drinkVolumeError,
       drinkAlcoholContent,
       drinkAlcoholContentError,
+      customImage,
     } = this.state;
 
     return (
       <ScrollView style={[style.container]}>
         <CameraModal
           ref={this.cameraModalRef}
+          onNewImage={this.updateImage}
         />
 
         <View style={{ alignItems: 'center' }}>
@@ -117,7 +122,9 @@ export default class CustomDrinkScreen extends React.Component {
           <Avatar
             large
             rounded
-            source={beerIcon}
+            source={customImage
+              ? { uri: `data:image/jpg;base64,${customImage.base64}` }
+              : beerIcon}
             containerStyle={{ margin: 'auto' }}
           />
           <Button
@@ -126,7 +133,12 @@ export default class CustomDrinkScreen extends React.Component {
             containerViewStyle={style.button}
             raised
             backgroundColor={colors.actionButton}
-            onPress={() => this.cameraModalRef.current.toggleModal()}
+            onPress={() => {
+              const { hasCameraPermission } = this.state;
+              return hasCameraPermission
+                ? this.cameraModalRef.current.toggleModal()
+                : alert('We don\'t have permission to access your camera.');
+            }}
           />
         </View>
 

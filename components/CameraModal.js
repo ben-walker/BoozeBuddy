@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Camera } from 'expo';
 import {
   View,
@@ -19,14 +20,23 @@ class CameraModal extends Component {
 
   toggleModal = () => this.setState(prevState => ({ isVisible: !prevState.isVisible }))
 
+  recordPicture = async () => {
+    const { onNewImage } = this.props;
+    if (this.camera) {
+      const photo = await this.camera.takePictureAsync({ base64: true });
+      onNewImage(photo);
+      this.toggleModal();
+    }
+  }
+
   renderTakePhoto = () => (
     <View style={style.takePictureIcon}>
       <View style={{ flex: 1 }}>
         <TouchableOpacity
-          onPress={null} // take pic
+          onPress={this.recordPicture} // take pic
         >
           <Icon
-            name="brightness-1"
+            name="radio-button-checked"
             size={70}
             color="white"
           />
@@ -65,6 +75,7 @@ class CameraModal extends Component {
         style={style.drinkModal}
       >
         <Camera
+          ref={(ref) => { this.camera = ref; }}
           style={{
             flex: 1,
             justifyContent: 'space-between',
@@ -78,5 +89,9 @@ class CameraModal extends Component {
     );
   }
 }
+
+CameraModal.propTypes = {
+  onNewImage: PropTypes.func.isRequired,
+};
 
 export default CameraModal;
