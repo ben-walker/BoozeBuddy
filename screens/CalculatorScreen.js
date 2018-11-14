@@ -143,12 +143,12 @@ export default class CalculatorScreen extends React.Component {
       drink.package_unit_volume_in_milliliters,
     );
 
-    await this.setState(prev => ({
+    this.setState(prev => ({
       SD: prev.SD + standardDrinks,
       loggedDrinks: [...prev.loggedDrinks, drink],
     }));
 
-    await this.calculateBAC();
+    this.calculateBAC();
     this.dropdown.alertWithType(
       'info', // notif type
       'Hey, Listen!', // title of notif
