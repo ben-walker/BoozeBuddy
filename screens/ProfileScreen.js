@@ -14,6 +14,12 @@ export default class ProfileScreen extends React.Component {
     headerTintColor: colors.defaultText,
     headerStyle: { backgroundColor: colors.dark },
   };
+    constructor(props) {
+        super(props);
+        this.state = {
+            userdata: ''
+        };
+    }
 
   logOut = async () => {
     const { navigation } = this.props;
@@ -29,38 +35,44 @@ export default class ProfileScreen extends React.Component {
     navigation.navigate('Auth');
   };
 
+    async componentDidMount() {
+        // parse out user data
+        const userData = await AsyncStorage.getItem('userToken').then(userToken => JSON.parse(userToken));
+        this.setState({userdata:userData});
+
+    }
 
   render() {
       const { navigation } = this.props;
       const list = [
           {
               title: 'Username',
-              subtitle: 'name here',
-              navigate: 'Home'
+              subtitle: this.state.userdata.username,
+              navigate: 'Profile'
 
           },
           {
               title: 'Email',
-              subtitle: 'email here',
-              navigate: 'Home'
+              subtitle: this.state.userdata.email,
+              navigate: 'Profile'
 
           },
           {
               title: 'Gender',
-              subtitle: 'gender here',
-              navigate: 'Home'
+              subtitle: this.state.userdata.gender,
+              navigate: 'Profile'
 
           },
           {
               title: 'Weight',
-              subtitle: 'weight here',
-              navigate: 'Home'
+              subtitle: this.state.userdata.weightKg,
+              navigate: 'Profile'
 
           },
           {
               title: 'Theme',
               subtitle: 'Dark',
-              navigate: 'Home'
+              navigate: 'Profile'
 
           },
           {
