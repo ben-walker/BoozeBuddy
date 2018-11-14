@@ -135,9 +135,9 @@ export default class MemoryGameScreen extends React.Component {
             {gameState === 'Memorize' ? null : playerGuesses}
           </View>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
-            {gameState === 'Memorize' ? generatedArrayOfColours : this.generateColouredButtonsForGuessing()}
+            {gameState === 'Memorize' ? generatedArrayOfColours : this.generateColouredButtonsForGuessing() }
           </View>
-          <View style={{ flex: 2}}></View>
+          <View style={{ flex: 2}}>
         </View>
       </View>
     );
