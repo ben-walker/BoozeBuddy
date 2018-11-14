@@ -149,7 +149,6 @@ GameStack.navigationOptions = {
 export default createBottomTabNavigator(
     {
     ProfileStack,
-    LegalStack,
     HomeStack,
     HistoryStack,
     GameStack,

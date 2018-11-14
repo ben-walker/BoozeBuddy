@@ -4,7 +4,7 @@ import {
   ScrollView,
   View,
 } from 'react-native';
-import { Button } from 'react-native-elements';
+import { Button,List, ListItem  } from 'react-native-elements';
 import colors from '../constants/Colors';
 import style from '../constants/StyleSheet';
 
@@ -29,10 +29,66 @@ export default class ProfileScreen extends React.Component {
     navigation.navigate('Auth');
   };
 
+
   render() {
+      const { navigation } = this.props;
+      const list = [
+          {
+              title: 'Username',
+              subtitle: 'name here',
+              navigate: 'Home'
+
+          },
+          {
+              title: 'Email',
+              subtitle: 'email here',
+              navigate: 'Home'
+
+          },
+          {
+              title: 'Gender',
+              subtitle: 'gender here',
+              navigate: 'Home'
+
+          },
+          {
+              title: 'Weight',
+              subtitle: 'weight here',
+              navigate: 'Home'
+
+          },
+          {
+              title: 'Theme',
+              subtitle: 'Dark',
+              navigate: 'Home'
+
+          },
+          {
+              title: 'Terms and Conditions',
+              subtitle: 'legal',
+              navigate: 'Legal'
+
+          },
+
+
+      ];
+
     return (
       <View style={style.container}>
         <ScrollView style={style.container}>
+            <List>
+                {
+                    list.map((item) => (
+                        <ListItem
+                            key={item.title}
+                            title={item.title}
+                            subtitle={item.subtitle}
+                            onPress={() => navigation.navigate(item.navigate)}
+
+                        />
+                    ))
+                }
+            </List>
           <Button
             onPress={this.logOut}
             containerViewStyle={style.button}
