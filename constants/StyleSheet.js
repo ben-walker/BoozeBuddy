@@ -76,4 +76,15 @@ export default StyleSheet.create({
     borderTopRightRadius: 10,
     overflow: 'hidden',
   },
+  takePictureIcon: {
+    position: 'absolute',
+    bottom: 80,
+    alignContent: 'center',
+    paddingBottom: 25,
+    backgroundColor: 'transparent',
+    alignSelf: 'flex-end',
+    justifyContent: 'space-between',
+    flex: 0.12,
+    flexDirection: 'row',
+  },
 });

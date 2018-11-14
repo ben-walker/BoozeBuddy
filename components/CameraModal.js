@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
 import { Camera } from 'expo';
+import {
+  View,
+  TouchableOpacity,
+} from 'react-native';
+import { Icon } from 'react-native-elements';
 import Modal from 'react-native-modal';
 import style from '../constants/StyleSheet';
 
@@ -13,6 +18,23 @@ class CameraModal extends Component {
   }
 
   toggleModal = () => this.setState(prevState => ({ isVisible: !prevState.isVisible }))
+
+  renderBottomBar = () => (
+    <View style={style.takePictureIcon}>
+      <View style={{ flex: 1 }}>
+        <TouchableOpacity
+          onPress={null} // take pic
+          style={{ alignSelf: 'center' }}
+        >
+          <Icon
+            name="brightness-1"
+            size={70}
+            color="white"
+          />
+        </TouchableOpacity>
+      </View>
+    </View>
+  )
 
   render() {
     const {
@@ -28,9 +50,14 @@ class CameraModal extends Component {
         style={style.drinkModal}
       >
         <Camera
-          style={{ flex: 1 }}
+          style={{
+            flex: 1,
+            justifyContent: 'space-between',
+          }}
           type={cameraType}
-        />
+        >
+          {this.renderBottomBar()}
+        </Camera>
       </Modal>
     );
   }
