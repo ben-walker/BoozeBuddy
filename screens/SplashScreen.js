@@ -23,8 +23,7 @@ export default class SplashScreen extends React.Component {
             </View>
             <View style={{ flex: 2, flexDirection: 'column', justifyContent: 'space-around' }}>
               <Button
-                style={style.button}
-                containerViewStyle={{ borderRadius: 25 }}
+                containerViewStyle={style.button}
                 rounded
                 raised
                 title="Sign Up"
@@ -34,7 +33,7 @@ export default class SplashScreen extends React.Component {
 
               <Button
                 style={style.button}
-                containerViewStyle={{ borderRadius: 25 }}
+                containerViewStyle={style.button}
                 rounded
                 raised
                 title="Log In"

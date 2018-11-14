@@ -35,7 +35,8 @@ export default StyleSheet.create({
     color: colors.defaultText,
   },
   button: {
-    padding: 15,
+    borderRadius: 25,
+    margin: 15,
   },
   input: {
     color: 'white',

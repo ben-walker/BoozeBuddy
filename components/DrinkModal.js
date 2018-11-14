@@ -79,7 +79,7 @@ class DrinkModal extends Component {
         loading={loading}
         rounded
         raised
-        containerViewStyle={{ borderRadius: 25 }}
+        containerViewStyle={style.button}
         backgroundColor={colors.background}
         onPress={this.addToFavourites}
       />
@@ -109,9 +109,10 @@ class DrinkModal extends Component {
           }}
         >
           <Tile
+            containerStyle={{ margin: 15 }}
             imageSrc={image}
-            height={600}
-            width={400}
+            height={500}
+            width={300}
           />
 
           {favourite ? heartIcon : addToFavouritesButton}

@@ -32,8 +32,7 @@ export default class HomeScreen extends React.Component {
 
             <Button
               onPress={() => navigation.navigate('Calculator')}
-              style={style.button}
-              containerViewStyle={{ borderRadius: 25 }}
+              containerViewStyle={style.button}
               rounded
               raised
               title="Start Drinking"
@@ -42,8 +41,7 @@ export default class HomeScreen extends React.Component {
 
             <Button
               onPress={() => navigation.navigate('CustomDrinks')}
-              style={style.button}
-              containerViewStyle={{ borderRadius: 25 }}
+              containerViewStyle={style.button}
               rounded
               raised
               title="Add Custom Drink"
