@@ -8,9 +8,9 @@ import { Button } from 'react-native-elements';
 import colors from '../constants/Colors';
 import style from '../constants/StyleSheet';
 
-export default class SettingsScreen extends React.Component {
+export default class ProfileScreen extends React.Component {
   static navigationOptions = {
-    title: 'Settings',
+    title: 'Profile',
     headerTintColor: colors.defaultText,
     headerStyle: { backgroundColor: colors.dark },
   };

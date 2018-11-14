@@ -7,7 +7,7 @@ import colour from '../constants/Colors';
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import CustomDrinkScreen from '../screens/CustomDrinkScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 import LegalScreen from '../screens/LegalScreen';
 import CalculatorScreen from '../screens/CalculatorScreen';
 import HistoryScreen from '../screens/HistoryScreen';
@@ -46,23 +46,23 @@ HomeStack.navigationOptions = {
   },
 };
 
-const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen,
+const ProfileStack = createStackNavigator({
+  Profile: ProfileScreen,
 });
 
-const SettingsStackTabIcon = ({ focused }) => (
+const ProfileStackTabIcon = ({ focused }) => (
   <TabBarIcon
     focused={focused}
-    name={Platform.OS === 'ios' ? `ios-options${focused ? '' : '-outline'}` : 'md-options'}
+    name={Platform.OS === 'ios' ? `ios-person${focused ? '' : '-outline'}` : 'md-person'}
   />
 );
-SettingsStackTabIcon.propTypes = {
+ProfileStackTabIcon.propTypes = {
   focused: PropTypes.bool.isRequired,
 };
 
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
-  tabBarIcon: SettingsStackTabIcon,
+ProfileStack.navigationOptions = {
+  tabBarLabel: 'Profile',
+  tabBarIcon: ProfileStackTabIcon,
   tabBarOptions: {
     style: {
       backgroundColor: colour.dark,
@@ -129,7 +129,7 @@ const GameStack = createStackNavigator({
 const GameStackTabIcon = ({ focused }) => (
   <TabBarIcon
     focused={focused}
-    name={'md-information-circle'}
+    name={Platform.OS === 'ios' ? `ios-game-controller-b${focused ? '' : '-outline'}` : 'md-game-controller-b'}
   />
 );
 GameStackTabIcon.propTypes = {
@@ -150,6 +150,6 @@ export default createBottomTabNavigator({
   HomeStack,
     HistoryStack,
   LegalStack,
-  SettingsStack,
+  ProfileStack,
   GameStack,
 });
