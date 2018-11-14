@@ -79,7 +79,6 @@ export default class MemoryGameScreen extends React.Component {
 
     return sequence;
   }
-<<<<<<< HEAD
 
   generateRandomSequenceOfColouredButtons = (length) => {
     const initialArr = this.generateRandomColourSequence(length);
@@ -104,38 +103,12 @@ export default class MemoryGameScreen extends React.Component {
       sequence.push({ id: i, colour: this.colourListForRandomization[i] });
     }
 
-=======
-
-  generateRandomSequenceOfColouredButtons = (length) => {
-    const initialArr = this.generateRandomColourSequence(length);
-    const colourListArr = initialArr.map(colourInfo => (
-      <GameButton customWidth={20} key={colourInfo.id} colour={colourInfo.colour} />
-    ));
-    return colourListArr;
-  }
-
-  applyPlayerGuess = (guess) => {
-    console.log('thinekf');
-  }
-
-  generateColouredButtonsForGuessing = () => {
-    const sequence = [];
-
-    for (let i = 0; i < this.colourListForRandomization.length; i += 1) {
-      sequence.push({ id: i, colour: this.colourListForRandomization[i] });
-    }
-
->>>>>>> 2de100609bd3ef1f4dc48d83fed55aa632a2299e
     const colourListArr = sequence.map(colourInfo => (
       <GameButton
         customWidth={40}
         key={colourInfo.id}
         colour={colourInfo.colour}
-<<<<<<< HEAD
         onClick={() => this.applyPlayerGuess(colourInfo.colour)}
-=======
-        onClick={this.applyPlayerGuess}
->>>>>>> 2de100609bd3ef1f4dc48d83fed55aa632a2299e
       />
     ));
     return colourListArr;
@@ -157,7 +130,6 @@ export default class MemoryGameScreen extends React.Component {
             <Text>
               {gameState === 'Memorize' ? timerCounter : 'Time to Guess!'}
             </Text>
-<<<<<<< HEAD
           </View>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
             {gameState === 'Memorize' ? null : playerGuesses}
@@ -166,16 +138,6 @@ export default class MemoryGameScreen extends React.Component {
             {gameState === 'Memorize' ? generatedArrayOfColours : this.generateColouredButtonsForGuessing() }
           </View>
           <View style={{ flex: 2}}>
-=======
-          </View>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
-            {gameState === 'Memorize' ? null : playerGuesses}
-          </View>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
-            {gameState === 'Memorize' ? generatedArrayOfColours : this.generateColouredButtonsForGuessing()}
-          </View>
-          <View style={{ flex: 2}}></View>
->>>>>>> 2de100609bd3ef1f4dc48d83fed55aa632a2299e
         </View>
       </View>
     );
