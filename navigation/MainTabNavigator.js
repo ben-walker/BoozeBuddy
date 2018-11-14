@@ -10,6 +10,7 @@ import CustomDrinkScreen from '../screens/CustomDrinkScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import LegalScreen from '../screens/LegalScreen';
 import CalculatorScreen from '../screens/CalculatorScreen';
+import MemoryGameScreen from '../screens/MemoryGameScreen'
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -96,8 +97,33 @@ LegalStack.navigationOptions = {
   },
 };
 
+const GameStack = createStackNavigator({
+  Memory: MemoryGameScreen,
+});
+
+const GameStackTabIcon = ({ focused }) => (
+  <TabBarIcon
+    focused={focused}
+    name={'md-information-circle'}
+  />
+);
+GameStackTabIcon.propTypes = {
+  focused: PropTypes.bool.isRequired,
+};
+
+GameStack.navigationOptions = {
+  tabBarLabel: 'Games',
+  tabBarIcon: GameStackTabIcon,
+  tabBarOptions: {
+    style: {
+      backgroundColor: colour.dark,
+    },
+  },
+};
+
 export default createBottomTabNavigator({
   HomeStack,
   LegalStack,
   SettingsStack,
+  GameStack,
 });
