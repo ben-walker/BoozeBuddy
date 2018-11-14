@@ -55,6 +55,7 @@ export default class MemoryGameScreen extends React.Component {
       timerCounter,
       timer,
     } = this.state;
+    
     await this.setState(prev => ({
       timerCounter: prev.timerCounter - 1,
     }));
