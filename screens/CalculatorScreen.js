@@ -76,14 +76,14 @@ export default class CalculatorScreen extends React.Component {
       MR: bacUtilities.getMetabolismConstant(gender),
       Wt: weightKg,
     });
-  }
+  };
 
   // store started drinking moment, remove stopped drinking moment
   initializeStartDrinkingState = () => {
     const drinkTimestamp = new Moment();
     this.setState({ startedDrinkingMoment: drinkTimestamp });
     AsyncStorage.removeItem('stoppedDrinkingMoment');
-  }
+  };
 
   getPageOfDrinks = async () => {
     const {
@@ -117,7 +117,7 @@ export default class CalculatorScreen extends React.Component {
       drinks: uniqBy(prev.drinks.concat(response), 'name'),
       drinkPage: prev.drinkPage + 1,
     }));
-  }
+  };
 
   getFavourites = async () => {
     const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/favourites', {
@@ -134,7 +134,7 @@ export default class CalculatorScreen extends React.Component {
       favourites: response,
       drinks: differenceWith(prev.drinks, response, isEqual),
     }));
-  }
+  };
 
   logDrink = async (drink) => {
     const standardDrinks = bacUtilities.calculateStandardDrinks(
@@ -157,7 +157,7 @@ export default class CalculatorScreen extends React.Component {
 
     // only start recalculating BAC once first drink logged
     if (!this.recalculating) this.recalculating = setInterval(this.calculateBAC, 5000);
-  }
+  };
 
   calculateBAC = async () => {
     const drinkingTime = await this.getDrinkingTime();
@@ -179,7 +179,7 @@ export default class CalculatorScreen extends React.Component {
         `You had ${parseFloat(SD.toFixed(2))} standard drinks over ${parseFloat(drinkingTime.toFixed(2))} hour(s).`, // message
       );
     }
-  }
+  };
 
   fakeStoppedDrinking = async () => {
     const { SD } = this.state;
@@ -190,16 +190,16 @@ export default class CalculatorScreen extends React.Component {
       'It looks like you\'ve sobered up!', // title of notif
       `You had ${parseFloat(SD.toFixed(2))} standard drinks over ${parseFloat(drinkingTime.toFixed(2))} hour(s).`, // message
     );
-  }
+  };
 
   updateModalDrink = (drink) => {
     this.setState({ modalDrink: drink });
-  }
+  };
 
   isFavourite = (drink) => {
     const { favourites } = this.state;
     return includes(favourites, drink);
-  }
+  };
 
   renderFooter = () => {
     const { drinkListLoading } = this.state;
