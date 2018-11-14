@@ -17,10 +17,7 @@ class CameraModal extends Component {
     };
   }
 
-  toggleModal = () => {
-    console.log('toggling modal');
-    this.setState(prevState => ({ isVisible: !prevState.isVisible }));
-  }
+  toggleModal = () => this.setState(prevState => ({ isVisible: !prevState.isVisible }))
 
   renderTakePhoto = () => (
     <View style={style.takePictureIcon}>
