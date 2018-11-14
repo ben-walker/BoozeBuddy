@@ -35,8 +35,9 @@ export default class SettingsScreen extends React.Component {
         <ScrollView style={style.container}>
           <Button
             onPress={this.logOut}
-            style={style.button}
+            containerViewStyle={style.button}
             rounded
+            raised
             title="Log Out"
             backgroundColor={colors.errorBackground}
           />

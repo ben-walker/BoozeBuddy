@@ -129,8 +129,9 @@ export default class LoginScreen extends React.Component {
 
           <Button
             onPress={this.logIn}
-            style={style.button}
+            containerViewStyle={style.button}
             rounded
+            raised
             title="Log In"
             backgroundColor={colors.accent}
           />

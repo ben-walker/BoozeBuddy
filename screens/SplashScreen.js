@@ -22,25 +22,24 @@ export default class SplashScreen extends React.Component {
               <Text style={style.titleText}> Booze Buddy </Text>
             </View>
             <View style={{ flex: 2, flexDirection: 'column', justifyContent: 'space-around' }}>
-              <View>
-                <Button
-                  style={style.button}
-                  rounded
-                  title="Sign Up"
-                  backgroundColor={colors.actionButton}
-                  onPress={() => navigation.navigate('Signup')}
-                />
-              </View>
+              <Button
+                containerViewStyle={style.button}
+                rounded
+                raised
+                title="Sign Up"
+                backgroundColor={colors.actionButton}
+                onPress={() => navigation.navigate('Signup')}
+              />
 
-              <View>
-                <Button
-                  style={style.button}
-                  rounded
-                  title="Log In"
-                  backgroundColor={colors.actionButton}
-                  onPress={() => navigation.navigate('Login')}
-                />
-              </View>
+              <Button
+                style={style.button}
+                containerViewStyle={style.button}
+                rounded
+                raised
+                title="Log In"
+                backgroundColor={colors.actionButton}
+                onPress={() => navigation.navigate('Login')}
+              />
             </View>
             <View style={{ flex: 1 }} />
           </View>

@@ -4,6 +4,7 @@ import {
   View,
 } from 'react-native';
 import {
+  Avatar,
   Button,
   FormLabel,
   FormInput,
@@ -15,7 +16,7 @@ import CameraModal from '../components/CameraModal';
 import colors from '../constants/Colors';
 import style from '../constants/StyleSheet';
 import validate from '../utilities/validateWrapper';
-
+import beerIcon from '../assets/images/DrinkIcons/beer.png';
 
 export default class CustomDrinkScreen extends React.Component {
   static navigationOptions = {
@@ -106,85 +107,93 @@ export default class CustomDrinkScreen extends React.Component {
     } = this.state;
 
     return (
-      <View style={style.container}>
-        <ScrollView style={style.container} contentContainerStyle={style.secondaryContentContainer}>
+      <ScrollView style={[style.container]}>
+        <CameraModal
+          ref={this.cameraModalRef}
+        />
 
-          <CameraModal
-            ref={this.cameraModalRef}
+        <View style={{ alignItems: 'center' }}>
+          <FormLabel>Drink Preview</FormLabel>
+          <Avatar
+            large
+            rounded
+            source={beerIcon}
+            containerStyle={{ margin: 'auto' }}
           />
-
-          <FormLabel>Drink Name</FormLabel>
-          <FormInput
-            onChangeText={drinkNameInput => this.setState({ drinkName: drinkNameInput })}
-            value={drinkName}
-            autoCapitalize="none"
-            inputStyle={style.input}
-            onBlur={async () => {
-              this.setState({
-                drinkNameError: await validate('drinkName', drinkName),
-              });
-            }}
-          />
-          <FormValidationMessage labelStyle={style.errorMsg}>
-            {drinkNameError}
-          </FormValidationMessage>
-
-          <FormLabel>Drink Volume (ml)</FormLabel>
-          <FormInput
-            onChangeText={drinkVolumeInput => this.setState({ drinkVolume: drinkVolumeInput })}
-            value={drinkVolume}
-            keyboardType="decimal-pad"
-            inputAccessoryViewID="accessoryView"
-            inputStyle={style.input}
-            onBlur={async () => {
-              this.setState({
-                drinkVolumeError: await validate('drinkVolume', drinkVolume),
-              });
-            }}
-          />
-          <FormValidationMessage labelStyle={style.errorMsg}>
-            {drinkVolumeError}
-          </FormValidationMessage>
-
-          <FormLabel>Alcohol Content (%)</FormLabel>
-          <FormInput
-            onChangeText={
-              drinkAlcoholContentInput => this.setState({
-                drinkAlcoholContent: drinkAlcoholContentInput,
-              })
-            }
-            value={drinkAlcoholContent}
-            keyboardType="decimal-pad"
-            inputAccessoryViewID="accessoryView"
-            inputStyle={style.input}
-            onBlur={async () => {
-              this.setState({
-                drinkAlcoholContentError: await validate('drinkAlcoholContent', drinkAlcoholContent),
-              });
-            }}
-          />
-          <FormValidationMessage labelStyle={style.errorMsg}>
-            {drinkAlcoholContentError}
-          </FormValidationMessage>
-
           <Button
             title="Add a Picture"
             rounded
+            containerViewStyle={style.button}
+            raised
             backgroundColor={colors.actionButton}
             onPress={() => this.cameraModalRef.current.toggleModal()}
           />
+        </View>
 
-          <Button
-            onPress={this.createDrink}
-            style={style.button}
-            rounded
-            title="Create"
-            backgroundColor={colors.accent}
-          />
+        <FormLabel>Drink Name</FormLabel>
+        <FormInput
+          onChangeText={drinkNameInput => this.setState({ drinkName: drinkNameInput })}
+          value={drinkName}
+          autoCapitalize="none"
+          inputStyle={style.input}
+          onBlur={async () => {
+            this.setState({
+              drinkNameError: await validate('drinkName', drinkName),
+            });
+          }}
+        />
+        <FormValidationMessage labelStyle={style.errorMsg}>
+          {drinkNameError}
+        </FormValidationMessage>
 
-        </ScrollView>
+        <FormLabel>Drink Volume (ml)</FormLabel>
+        <FormInput
+          onChangeText={drinkVolumeInput => this.setState({ drinkVolume: drinkVolumeInput })}
+          value={drinkVolume}
+          keyboardType="decimal-pad"
+          inputAccessoryViewID="accessoryView"
+          inputStyle={style.input}
+          onBlur={async () => {
+            this.setState({
+              drinkVolumeError: await validate('drinkVolume', drinkVolume),
+            });
+          }}
+        />
+        <FormValidationMessage labelStyle={style.errorMsg}>
+          {drinkVolumeError}
+        </FormValidationMessage>
+
+        <FormLabel>Alcohol Content (%)</FormLabel>
+        <FormInput
+          onChangeText={
+            drinkAlcoholContentInput => this.setState({
+              drinkAlcoholContent: drinkAlcoholContentInput,
+            })
+          }
+          value={drinkAlcoholContent}
+          keyboardType="decimal-pad"
+          inputAccessoryViewID="accessoryView"
+          inputStyle={style.input}
+          onBlur={async () => {
+            this.setState({
+              drinkAlcoholContentError: await validate('drinkAlcoholContent', drinkAlcoholContent),
+            });
+          }}
+        />
+        <FormValidationMessage labelStyle={style.errorMsg}>
+          {drinkAlcoholContentError}
+        </FormValidationMessage>
+
+        <Button
+          onPress={this.createDrink}
+          containerViewStyle={style.button}
+          rounded
+          raised
+          title="Create"
+          backgroundColor={colors.accent}
+        />
         <DropdownAlert ref={(ref) => { this.dropdown = ref; }} />
-      </View>
+      </ScrollView>
     );
   }
 }
