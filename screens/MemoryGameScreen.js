@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Alert } from 'react-native';
 import { Text } from 'react-native-elements';
 import style from '../constants/StyleSheet';
 import colors from '../constants/Colors';
@@ -11,10 +11,13 @@ export default class MemoryGameScreen extends React.Component {
   constructor() {
     super();
     this.state = {
+      sequenceLength: 5,
+      memorizeTime: 5,
       gameState: 'Memorize', // Memorize, Guess
       timer: null,
       timerCounter: 0,
       playerGuessIndex: 0,
+      numCorrectGuesses: 0,
       playerGuesses: [],
       generatedArrayOfColours: [],
     };
@@ -22,17 +25,16 @@ export default class MemoryGameScreen extends React.Component {
   }
 
   componentDidMount() {
-    const sequenceLength = 10;
-    const timer = setInterval(this.tick, 1000);
+    let timer = setInterval(this.tick, 1000);
 
     this.setState({
       timer,
-      generatedArrayOfColours: this.generateRandomSequenceOfColouredButtons(sequenceLength),
+      generatedArrayOfColours: this.generateRandomSequenceOfColouredButtons(this.state.sequenceLength),
     });
 
     const sequence = [];
 
-    for (let i = 0; i < sequenceLength; i += 1) {
+    for (let i = 0; i < this.state.sequenceLength; i += 1) {
       sequence.push({ id: i, colour: colors.secondary });
     }
 
@@ -57,12 +59,40 @@ export default class MemoryGameScreen extends React.Component {
       timerCounter: prev.timerCounter + 1,
     }));
 
-    if (timerCounter >= 2) {
+    if (timerCounter >= this.state.memorizeTime) {
       clearInterval(timer);
       this.setState({
         gameState: 'Guess',
       });
     }
+  }
+
+  resetGameState = () => {
+    timer = setInterval(this.tick, 1000);
+
+    this.setState({
+      timer,
+      generatedArrayOfColours: this.generateRandomSequenceOfColouredButtons(this.state.sequenceLength),
+    });
+
+    const sequence = [];
+
+    for (let i = 0; i < this.state.sequenceLength; i += 1) {
+      sequence.push({ id: i, colour: colors.secondary });
+    }
+
+    const colourListArr = sequence.map(colourInfo => (
+      <GameButton customWidth={20} key={colourInfo.id} colour={colourInfo.colour} />
+    ));
+
+    this.state.playerGuesses = colourListArr;
+
+    this.setState({
+      gameState: 'Memorize',
+      timerCounter: 0,
+      playerGuessIndex: 0,
+      numCorrectGuesses: 0,
+    });
   }
 
   randomColour = () => this.colourListForRandomization[
@@ -79,6 +109,24 @@ export default class MemoryGameScreen extends React.Component {
     return sequence;
   }
 
+  getColourFromGuessElement = (element) => {
+    return element["props"]["colour"];
+  }
+
+  checkGameOver = async () => {
+    if (this.state.playerGuessIndex >= this.state.sequenceLength - 1) {
+      for (let i = 0; i < this.state.sequenceLength; i += 1) {
+        if (this.getColourFromGuessElement(this.state.playerGuesses[i]) == (this.getColourFromGuessElement(this.state.generatedArrayOfColours[i]))) {
+          await this.setState(prev => ({
+            numCorrectGuesses: prev.numCorrectGuesses + 1,
+          }));
+        }
+      }
+      Alert.alert("You got " + ((this.state.numCorrectGuesses / this.state.sequenceLength).toFixed(2) * 100) + "% correct.");
+      this.resetGameState();
+    }
+  }
+
   generateRandomSequenceOfColouredButtons = (length) => {
     const initialArr = this.generateRandomColourSequence(length);
     const colourListArr = initialArr.map(colourInfo => (
@@ -89,8 +137,14 @@ export default class MemoryGameScreen extends React.Component {
 
   applyPlayerGuess = async (guess) => {
     const { playerGuesses, playerGuessIndex } = this.state;
-    // Somehow apply the colour change here.
-    console.log(playerGuesses[playerGuessIndex]);
+    let playerGuessesCopy = this.state.playerGuesses;
+    playerGuessesCopy[this.state.playerGuessIndex] = <GameButton customWidth={20} key={this.state.playerGuessIndex} colour={guess} />;
+    await this.setState(prev => ({
+      playerGuesses: playerGuessesCopy,
+    }));
+
+    this.checkGameOver();
+
     await this.setState(prev => ({
       playerGuessIndex: prev.playerGuessIndex + 1,
     }));
@@ -127,7 +181,7 @@ export default class MemoryGameScreen extends React.Component {
           <View style={{ flex: 1 }} />
 
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-            <Text>
+            <Text style={{fontSize: 40, fontWeight: 'bold'}}>
               {gameState === 'Memorize' ? timerCounter : 'Time to Guess!'}
             </Text>
           </View>
