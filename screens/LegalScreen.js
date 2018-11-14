@@ -13,7 +13,9 @@ export default class LegalScreen extends React.Component {
       title: 'Terms and Conditions',
       headerTintColor: colors.defaultText,
       headerStyle: { backgroundColor: colors.dark },
+
     };
+
 
     render() {
       return (
