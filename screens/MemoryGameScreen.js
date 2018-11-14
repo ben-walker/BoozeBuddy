@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import { Text } from 'react-native-elements';
 import style from '../constants/StyleSheet';
@@ -89,10 +88,11 @@ export default class MemoryGameScreen extends React.Component {
   }
 
   applyPlayerGuess = async (guess) => {
+    const { playerGuesses, playerGuessIndex } = this.state;
     // Somehow apply the colour change here.
-    console.log(this.state.playerGuesses[this.state.playerGuessIndex]);
+    console.log(playerGuesses[playerGuessIndex]);
     await this.setState(prev => ({
-      playerGuessIndex: this.state.playerGuessIndex + 1,
+      playerGuessIndex: prev.playerGuessIndex + 1,
     }));
   }
 
@@ -124,9 +124,9 @@ export default class MemoryGameScreen extends React.Component {
     return (
       <View style={style.container}>
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
-          <View style={{ flex: 1}}></View>
+          <View style={{ flex: 1 }} />
 
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
             <Text>
               {gameState === 'Memorize' ? timerCounter : 'Time to Guess!'}
             </Text>
@@ -137,13 +137,9 @@ export default class MemoryGameScreen extends React.Component {
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-around' }}>
             {gameState === 'Memorize' ? generatedArrayOfColours : this.generateColouredButtonsForGuessing() }
           </View>
-          <View style={{ flex: 2}}>
+          <View style={{ flex: 2 }} />
         </View>
       </View>
     );
   }
 }
-
-MemoryGameScreen.propTypes = {
-  navigation: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-};
