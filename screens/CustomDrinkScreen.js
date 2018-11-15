@@ -10,6 +10,7 @@ import {
   FormInput,
   FormValidationMessage,
 } from 'react-native-elements';
+import { extend } from 'lodash-es';
 import { Permissions } from 'expo';
 import DropdownAlert from 'react-native-dropdownalert';
 import CameraModal from '../components/CameraModal';
@@ -52,11 +53,12 @@ export default class CustomDrinkScreen extends React.Component {
       drinkName,
       drinkVolume,
       drinkAlcoholContent,
+      customImage,
     } = this.state;
     const { navigation } = this.props;
 
     if (!await this.isValid()) return;
-    const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/createDrink', {
+    let rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/createDrink', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -74,8 +76,38 @@ export default class CustomDrinkScreen extends React.Component {
       this.dropdown.alertWithType('error', 'Error', 'Drink creation failed.');
       return;
     }
+
+    if (customImage) {
+      rawResponse = await this.uploadDrinkImage(drinkName);
+      if (!rawResponse.ok) {
+        this.dropdown.alertWithType('error', 'Error', 'Drink image not uploaded.');
+        return;
+      }
+    }
     this.dropdown.alertWithType('success', 'Drink Created', `Successfully created ${drinkName}.`);
     navigation.navigate('App');
+  }
+
+  uploadDrinkImage = async (drinkName) => {
+    const { customImage } = this.state;
+    const fileURI = `data:image/jpg;base64,${customImage.base64}`;
+    const file = await fetch(fileURI).then(res => res.blob())
+      .then(intermediateBlob => extend(intermediateBlob, {
+        lastModifiedDate: new Date(),
+        name: drinkName,
+      }));
+
+    const formData = new FormData();
+    formData.append('drinkImage', file);
+
+    return fetch('https://dr-robotnik.herokuapp.com/api/uploadDrinkImage', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      body: formData,
+    });
   }
 
   async isValid() {
