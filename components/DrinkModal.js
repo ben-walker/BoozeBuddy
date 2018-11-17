@@ -10,7 +10,7 @@ import Modal from 'react-native-modal';
 import DropdownAlert from 'react-native-dropdownalert';
 import style from '../constants/StyleSheet';
 import colors from '../constants/Colors';
-import * as cocktailIcon from '../assets/images/DrinkIcons/cocktail.png';
+import * as beerIcon from '../assets/images/DrinkIcons/beer.png';
 
 class DrinkModal extends Component {
   constructor(props) {
@@ -56,12 +56,9 @@ class DrinkModal extends Component {
 
   getImageSrc = () => {
     const { drinkData } = this.props;
-    if (drinkData) {
-      return drinkData.image_url
-        ? ({ uri: drinkData.image_url })
-        : cocktailIcon.default;
-    }
-    return ({ uri: '' });
+    if (!drinkData) return ({ uri: '' });
+    if (drinkData.picture) return ({ uri: `https://dr-robotnik.herokuapp.com/api/customDrinkImage?drinkName=${drinkData.name}` });
+    return drinkData.image_url ? ({ uri: drinkData.image_url }) : beerIcon.default;
   }
 
   toggleModal = () => this.setState(prevState => ({ isVisible: !prevState.isVisible }))

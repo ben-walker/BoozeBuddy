@@ -24,12 +24,9 @@ const DrinkListItem = (props) => {
     : null);
 
   const getAvatar = () => {
-    if (drinkData) {
-      return drinkData.image_thumb_url
-        ? ({ uri: drinkData.image_thumb_url })
-        : beerIcon.default;
-    }
-    return ({ uri: '' });
+    if (!drinkData) return ({ uri: '' });
+    if (drinkData.picture) return ({ uri: `https://dr-robotnik.herokuapp.com/api/customDrinkImage?drinkName=${drinkData.name}` });
+    return drinkData.image_thumb_url ? ({ uri: drinkData.image_thumb_url }) : beerIcon.default;
   };
 
   return (
