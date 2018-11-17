@@ -10,7 +10,6 @@ import {
   FormInput,
   FormValidationMessage,
 } from 'react-native-elements';
-import { extend } from 'lodash-es';
 import { Permissions } from 'expo';
 import DropdownAlert from 'react-native-dropdownalert';
 import CameraModal from '../components/CameraModal';
@@ -90,22 +89,12 @@ export default class CustomDrinkScreen extends React.Component {
 
   uploadDrinkImage = async (drinkName) => {
     const { customImage } = this.state;
-    const fileURI = `data:image/jpg;base64,${customImage.base64}`;
-    const file = await fetch(fileURI).then(res => res.blob())
-      .then(intermediateBlob => extend(intermediateBlob, {
-        lastModifiedDate: new Date(),
-        name: drinkName,
-      }));
-
     const formData = new FormData();
-    formData.append('drinkImage', file);
+    formData.append('drinkImage', { uri: customImage.uri, type: 'image/jpeg', name: drinkName });
 
     return fetch('https://dr-robotnik.herokuapp.com/api/uploadDrinkImage', {
       method: 'POST',
       credentials: 'include',
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
       body: formData,
     });
   }
@@ -167,9 +156,7 @@ export default class CustomDrinkScreen extends React.Component {
             backgroundColor={colors.actionButton}
             onPress={() => {
               const { hasCameraPermission } = this.state;
-              return hasCameraPermission
-                ? this.cameraModalRef.current.toggleModal()
-                : alert('We don\'t have permission to access your camera.');
+              if (hasCameraPermission) this.cameraModalRef.current.toggleModal();
             }}
           />
         </View>

@@ -23,7 +23,6 @@ class CameraModal extends Component {
   recordPicture = async () => {
     const { onNewImage } = this.props;
     if (this.camera) {
-      this.camera.pausePreview();
       const photo = await this.camera.takePictureAsync({ base64: true });
       onNewImage(photo);
       this.toggleModal();
