@@ -52,11 +52,12 @@ export default class CustomDrinkScreen extends React.Component {
       drinkName,
       drinkVolume,
       drinkAlcoholContent,
+      customImage,
     } = this.state;
     const { navigation } = this.props;
 
     if (!await this.isValid()) return;
-    const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/createDrink', {
+    let rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/createDrink', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -74,8 +75,28 @@ export default class CustomDrinkScreen extends React.Component {
       this.dropdown.alertWithType('error', 'Error', 'Drink creation failed.');
       return;
     }
+
+    if (customImage) {
+      rawResponse = await this.uploadDrinkImage(drinkName);
+      if (!rawResponse.ok) {
+        this.dropdown.alertWithType('error', 'Error', 'Drink image not uploaded.');
+        return;
+      }
+    }
     this.dropdown.alertWithType('success', 'Drink Created', `Successfully created ${drinkName}.`);
     navigation.navigate('App');
+  }
+
+  uploadDrinkImage = async (drinkName) => {
+    const { customImage } = this.state;
+    const formData = new FormData();
+    formData.append('drinkImage', { uri: customImage.uri, type: 'image/jpeg', name: drinkName });
+
+    return fetch('https://dr-robotnik.herokuapp.com/api/uploadDrinkImage', {
+      method: 'POST',
+      credentials: 'include',
+      body: formData,
+    });
   }
 
   async isValid() {
@@ -135,9 +156,7 @@ export default class CustomDrinkScreen extends React.Component {
             backgroundColor={colors.actionButton}
             onPress={() => {
               const { hasCameraPermission } = this.state;
-              return hasCameraPermission
-                ? this.cameraModalRef.current.toggleModal()
-                : alert('We don\'t have permission to access your camera.');
+              if (hasCameraPermission) this.cameraModalRef.current.toggleModal();
             }}
           />
         </View>
