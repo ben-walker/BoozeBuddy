@@ -18,6 +18,7 @@ import {
   differenceWith,
   isEqual,
   uniqBy,
+  debounce,
 } from 'lodash-es';
 import DropdownAlert from 'react-native-dropdownalert';
 import DrinkModal from '../components/DrinkModal';
@@ -52,6 +53,7 @@ export default class CalculatorScreen extends React.Component {
       modalDrink: null,
     };
     this.drinkModalRef = React.createRef();
+    this.debounceSearch = debounce(this.searchDrinks, 500);
   }
 
   async componentDidMount() {
@@ -104,17 +106,11 @@ export default class CalculatorScreen extends React.Component {
       },
     });
 
-    const rawResponse = await fetch(URL, {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    });
+    const rawResponse = await fetch(URL, { method: 'GET', credentials: 'include' });
     this.setState({ drinkListLoading: false });
     if (!rawResponse.ok) return;
     const response = await rawResponse.json();
+
     await this.setState(prev => ({
       drinks: uniqBy(prev.drinks.concat(response), 'name'),
       drinkPage: prev.drinkPage + 1,
@@ -122,16 +118,11 @@ export default class CalculatorScreen extends React.Component {
   };
 
   getFavourites = async () => {
-    const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/favourites', {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    });
+    const URL = 'https://dr-robotnik.herokuapp.com/api/favourites';
+    const rawResponse = await fetch(URL, { method: 'GET', credentials: 'include' });
     if (!rawResponse.ok) return;
     const response = await rawResponse.json();
+
     await this.setState(prev => ({
       favourites: response,
       drinks: differenceWith(prev.drinks, response, isEqual),
@@ -203,8 +194,6 @@ export default class CalculatorScreen extends React.Component {
     return includes(favourites, drink);
   };
 
-  updateQuery = newQuery => this.setState({ query: newQuery })
-
   renderFooter = () => {
     const { drinkListLoading } = this.state;
     if (!drinkListLoading) return null;
@@ -230,11 +219,61 @@ export default class CalculatorScreen extends React.Component {
         lightTheme
         round
         clearIcon={{ name: 'close' }}
-        onChangeText={text => this.updateQuery(text)}
-        onClearText={() => this.updateQuery('')}
+        onChangeText={async (text) => {
+          await this.setState({
+            drinks: [],
+            drinkPage: 1,
+            query: text,
+            drinkListLoading: true,
+          });
+          this.debounceSearch();
+        }}
+        onClearText={async () => {
+          await this.setState({
+            drinks: [],
+            drinkPage: 1,
+            query: '',
+            drinkListLoading: false,
+          });
+          this.getPageOfDrinks();
+        }}
         value={query}
       />
     );
+  }
+
+  searchDrinks = async () => {
+    const {
+      drinkPage,
+      query,
+    } = this.state;
+    if (!query) return;
+
+    let URL = 'https://dr-robotnik.herokuapp.com/api/drinkSearch';
+    URL += url.format({
+      query: {
+        page: drinkPage,
+        perPage: 20,
+        drinkQuery: query,
+      },
+    });
+
+    const rawResponse = await fetch(URL, { method: 'GET', credentials: 'include' });
+    this.setState({ drinkListLoading: false });
+    if (!rawResponse.ok) return;
+    const response = await rawResponse.json();
+
+    if (drinkPage === 1) {
+      await this.setState({
+        drinkPage: 2,
+        drinks: uniqBy(response, 'name'),
+      });
+    } else {
+      await this.setState(prev => ({
+        drinkPage: prev.drinkPage + 1,
+        drinks: uniqBy(prev.drinks.concat(response), 'name'),
+      }));
+    }
   }
 
   getDrinkingTime = () => {
@@ -294,7 +333,10 @@ g/dL
               keyExtractor={item => item._id /* eslint-disable-line no-underscore-dangle */}
               ListHeaderComponent={this.renderHeader}
               ListFooterComponent={this.renderFooter}
-              onEndReached={this.getPageOfDrinks}
+              onEndReached={() => {
+                const { query } = this.state;
+                return query ? this.debounceSearch() : this.getPageOfDrinks();
+              }}
               onEndReachedThreshold={0.05}
               renderItem={item => (
                 <DrinkListItem
