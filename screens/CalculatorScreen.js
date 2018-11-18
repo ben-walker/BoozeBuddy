@@ -11,6 +11,7 @@ import {
   Button,
   List,
   Text,
+  SearchBar,
 } from 'react-native-elements';
 import {
   includes,
@@ -47,6 +48,7 @@ export default class CalculatorScreen extends React.Component {
       drinks: [],
       favourites: [],
       loggedDrinks: [],
+      query: '',
       modalDrink: null,
     };
     this.drinkModalRef = React.createRef();
@@ -201,6 +203,8 @@ export default class CalculatorScreen extends React.Component {
     return includes(favourites, drink);
   };
 
+  updateQuery = newQuery => this.setState({ query: newQuery })
+
   renderFooter = () => {
     const { drinkListLoading } = this.state;
     if (!drinkListLoading) return null;
@@ -214,6 +218,22 @@ export default class CalculatorScreen extends React.Component {
       >
         <ActivityIndicator animating size="large" />
       </View>
+    );
+  }
+
+  renderHeader = () => {
+    const { query } = this.state;
+
+    return (
+      <SearchBar
+        placeholder="Search for a drink..."
+        lightTheme
+        round
+        clearIcon={{ name: 'close' }}
+        onChangeText={text => this.updateQuery(text)}
+        onClearText={() => this.updateQuery('')}
+        value={query}
+      />
     );
   }
 
@@ -231,12 +251,6 @@ export default class CalculatorScreen extends React.Component {
       favourites,
       drinks,
     } = this.state;
-
-    const drinkListHeader = (
-      <View style={style.container}>
-        <Text style={style.titleText}>Drink List</Text>
-      </View>
-    );
 
     const currentDrinkingTime = this.getDrinkingTime();
 
@@ -278,7 +292,7 @@ g/dL
               data={favourites.concat(drinks)}
               extraData={this.state}
               keyExtractor={item => item._id /* eslint-disable-line no-underscore-dangle */}
-              ListHeaderComponent={drinkListHeader}
+              ListHeaderComponent={this.renderHeader}
               ListFooterComponent={this.renderFooter}
               onEndReached={this.getPageOfDrinks}
               onEndReachedThreshold={0.05}
