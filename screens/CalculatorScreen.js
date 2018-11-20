@@ -11,12 +11,14 @@ import {
   Button,
   List,
   Text,
+  SearchBar,
 } from 'react-native-elements';
 import {
   includes,
   differenceWith,
   isEqual,
   uniqBy,
+  debounce,
 } from 'lodash-es';
 import DropdownAlert from 'react-native-dropdownalert';
 import DrinkModal from '../components/DrinkModal';
@@ -47,9 +49,11 @@ export default class CalculatorScreen extends React.Component {
       drinks: [],
       favourites: [],
       loggedDrinks: [],
+      query: '',
       modalDrink: null,
     };
     this.drinkModalRef = React.createRef();
+    this.debounceSearch = debounce(this.searchDrinks, 500);
   }
 
   async componentDidMount() {
@@ -102,17 +106,11 @@ export default class CalculatorScreen extends React.Component {
       },
     });
 
-    const rawResponse = await fetch(URL, {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    });
+    const rawResponse = await fetch(URL, { method: 'GET', credentials: 'include' });
     this.setState({ drinkListLoading: false });
     if (!rawResponse.ok) return;
     const response = await rawResponse.json();
+
     await this.setState(prev => ({
       drinks: uniqBy(prev.drinks.concat(response), 'name'),
       drinkPage: prev.drinkPage + 1,
@@ -120,16 +118,11 @@ export default class CalculatorScreen extends React.Component {
   };
 
   getFavourites = async () => {
-    const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/favourites', {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    });
+    const URL = 'https://dr-robotnik.herokuapp.com/api/favourites';
+    const rawResponse = await fetch(URL, { method: 'GET', credentials: 'include' });
     if (!rawResponse.ok) return;
     const response = await rawResponse.json();
+
     await this.setState(prev => ({
       favourites: response,
       drinks: differenceWith(prev.drinks, response, isEqual),
@@ -217,6 +210,66 @@ export default class CalculatorScreen extends React.Component {
     );
   }
 
+  resetSearch = async (text, loading, action) => {
+    await this.setState({
+      drinks: [],
+      drinkPage: 1,
+      query: text,
+      drinkListLoading: loading,
+    });
+    action();
+  }
+
+  renderHeader = () => {
+    const { query } = this.state;
+
+    return (
+      <SearchBar
+        placeholder="Search for a drink..."
+        lightTheme
+        round
+        clearIcon={{ name: 'close' }}
+        onChangeText={text => this.resetSearch(text, true, this.debounceSearch)}
+        onClearText={text => this.resetSearch(text, false, this.getPageOfDrinks)}
+        value={query}
+      />
+    );
+  }
+
+  searchDrinks = async () => {
+    const {
+      drinkPage,
+      query,
+    } = this.state;
+    if (!query) return;
+
+    let URL = 'https://dr-robotnik.herokuapp.com/api/drinkSearch';
+    URL += url.format({
+      query: {
+        page: drinkPage,
+        perPage: 20,
+        drinkQuery: query,
+      },
+    });
+
+    const rawResponse = await fetch(URL, { method: 'GET', credentials: 'include' });
+    this.setState({ drinkListLoading: false });
+    if (!rawResponse.ok) return;
+    const response = await rawResponse.json();
+
+    if (drinkPage === 1) {
+      await this.setState({
+        drinkPage: 2,
+        drinks: uniqBy(response, 'name'),
+      });
+    } else {
+      await this.setState(prev => ({
+        drinkPage: prev.drinkPage + 1,
+        drinks: uniqBy(prev.drinks.concat(response), 'name'),
+      }));
+    }
+  }
+
   getDrinkingTime = () => {
     const { startedDrinkingMoment } = this.state;
     const currentMoment = new Moment();
@@ -231,12 +284,6 @@ export default class CalculatorScreen extends React.Component {
       favourites,
       drinks,
     } = this.state;
-
-    const drinkListHeader = (
-      <View style={style.container}>
-        <Text style={style.titleText}>Drink List</Text>
-      </View>
-    );
 
     const currentDrinkingTime = this.getDrinkingTime();
 
@@ -278,9 +325,12 @@ g/dL
               data={favourites.concat(drinks)}
               extraData={this.state}
               keyExtractor={item => item._id /* eslint-disable-line no-underscore-dangle */}
-              ListHeaderComponent={drinkListHeader}
+              ListHeaderComponent={this.renderHeader}
               ListFooterComponent={this.renderFooter}
-              onEndReached={this.getPageOfDrinks}
+              onEndReached={() => {
+                const { query } = this.state;
+                return query ? this.debounceSearch() : this.getPageOfDrinks();
+              }}
               onEndReachedThreshold={0.05}
               renderItem={item => (
                 <DrinkListItem
