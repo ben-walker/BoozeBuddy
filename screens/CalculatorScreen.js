@@ -210,6 +210,16 @@ export default class CalculatorScreen extends React.Component {
     );
   }
 
+  resetSearch = async (text, loading, action) => {
+    await this.setState({
+      drinks: [],
+      drinkPage: 1,
+      query: text,
+      drinkListLoading: loading,
+    });
+    action();
+  }
+
   renderHeader = () => {
     const { query } = this.state;
 
@@ -219,24 +229,8 @@ export default class CalculatorScreen extends React.Component {
         lightTheme
         round
         clearIcon={{ name: 'close' }}
-        onChangeText={async (text) => {
-          await this.setState({
-            drinks: [],
-            drinkPage: 1,
-            query: text,
-            drinkListLoading: true,
-          });
-          this.debounceSearch();
-        }}
-        onClearText={async () => {
-          await this.setState({
-            drinks: [],
-            drinkPage: 1,
-            query: '',
-            drinkListLoading: false,
-          });
-          this.getPageOfDrinks();
-        }}
+        onChangeText={text => this.resetSearch(text, true, this.debounceSearch)}
+        onClearText={text => this.resetSearch(text, false, this.getPageOfDrinks)}
         value={query}
       />
     );
