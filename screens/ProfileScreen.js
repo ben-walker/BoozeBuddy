@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   AsyncStorage,
   ScrollView,
@@ -22,6 +23,12 @@ export default class ProfileScreen extends React.Component {
     };
   }
 
+  async componentDidMount() {
+    // parse out user data
+    const userData = await AsyncStorage.getItem('userToken').then(userToken => JSON.parse(userToken));
+    this.setState({ userdata: userData });
+  }
+
   logOut = async () => {
     const { navigation } = this.props;
     await fetch('https://dr-robotnik.herokuapp.com/api/logOut', {
@@ -36,36 +43,31 @@ export default class ProfileScreen extends React.Component {
     navigation.navigate('Auth');
   };
 
-  async componentDidMount() {
-    // parse out user data
-    const userData = await AsyncStorage.getItem('userToken').then(userToken => JSON.parse(userToken));
-    this.setState({ userdata: userData });
-  }
-
   render() {
     const { navigation } = this.props;
+    const { userdata } = this.state;
     const list = [
       {
         title: 'Username',
-        subtitle: this.state.userdata.username,
+        subtitle: userdata.username,
         navigate: 'Profile',
 
       },
       {
         title: 'Email',
-        subtitle: this.state.userdata.email,
+        subtitle: userdata.email,
         navigate: 'Profile',
 
       },
       {
         title: 'Gender',
-        subtitle: this.state.userdata.gender,
+        subtitle: userdata.gender,
         navigate: 'Profile',
 
       },
       {
         title: 'Weight',
-        subtitle: this.state.userdata.weightKg,
+        subtitle: userdata.weightKg,
         navigate: 'Profile',
 
       },
@@ -113,3 +115,7 @@ export default class ProfileScreen extends React.Component {
     );
   }
 }
+
+ProfileScreen.propTypes = {
+  navigation: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+};
