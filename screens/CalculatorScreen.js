@@ -14,9 +14,6 @@ import {
   SearchBar,
 } from 'react-native-elements';
 import {
-  includes,
-  differenceWith,
-  isEqual,
   uniqBy,
   debounce,
 } from 'lodash-es';
@@ -47,7 +44,6 @@ export default class CalculatorScreen extends React.Component {
       MR: 0.0,
       Wt: 0.0,
       drinks: [],
-      favourites: [],
       loggedDrinks: [],
       query: '',
       modalDrink: null,
@@ -62,7 +58,6 @@ export default class CalculatorScreen extends React.Component {
     this.setBacConstants(userData);
     this.initializeStartDrinkingState();
     this.getPageOfDrinks();
-    this.getFavourites();
   }
 
   componentWillUnmount() {
@@ -117,17 +112,32 @@ export default class CalculatorScreen extends React.Component {
     }));
   };
 
-  getFavourites = async () => {
-    const URL = 'https://dr-robotnik.herokuapp.com/api/favourites';
+  searchDrinks = async () => {
+    const {
+      drinkPage,
+      query,
+    } = this.state;
+    if (!query) return;
+
+    let URL = 'https://dr-robotnik.herokuapp.com/api/drinkSearch';
+    URL += url.format({
+      query: {
+        page: drinkPage,
+        perPage: 20,
+        drinkQuery: query,
+      },
+    });
+
     const rawResponse = await fetch(URL, { method: 'GET', credentials: 'include' });
+    this.setState({ drinkListLoading: false });
     if (!rawResponse.ok) return;
     const response = await rawResponse.json();
 
     await this.setState(prev => ({
-      favourites: response,
-      drinks: differenceWith(prev.drinks, response, isEqual),
+      drinkPage: prev.drinkPage + 1,
+      drinks: uniqBy(prev.drinks.concat(response), 'name'),
     }));
-  };
+  }
 
   logDrink = async (drink) => {
     const standardDrinks = bacUtilities.calculateStandardDrinks(
@@ -185,13 +195,16 @@ export default class CalculatorScreen extends React.Component {
     );
   };
 
-  updateModalDrink = (drink) => {
-    this.setState({ modalDrink: drink });
-  };
+  updateModalDrink = drink => this.setState({ modalDrink: drink });
 
-  isFavourite = (drink) => {
-    const { favourites } = this.state;
-    return includes(favourites, drink);
+  isFavourite = drink => (drink ? !!drink.favourite : false);
+
+  setDrinkAsFavourite = (drink) => {
+    const { drinks } = this.state;
+    const drinksCopy = drinks;
+    const index = drinks.indexOf(drink);
+    drinksCopy[index].favourite = true;
+    this.setState({ drinks: drinksCopy });
   };
 
   renderFooter = () => {
@@ -236,40 +249,6 @@ export default class CalculatorScreen extends React.Component {
     );
   }
 
-  searchDrinks = async () => {
-    const {
-      drinkPage,
-      query,
-    } = this.state;
-    if (!query) return;
-
-    let URL = 'https://dr-robotnik.herokuapp.com/api/drinkSearch';
-    URL += url.format({
-      query: {
-        page: drinkPage,
-        perPage: 20,
-        drinkQuery: query,
-      },
-    });
-
-    const rawResponse = await fetch(URL, { method: 'GET', credentials: 'include' });
-    this.setState({ drinkListLoading: false });
-    if (!rawResponse.ok) return;
-    const response = await rawResponse.json();
-
-    if (drinkPage === 1) {
-      await this.setState({
-        drinkPage: 2,
-        drinks: uniqBy(response, 'name'),
-      });
-    } else {
-      await this.setState(prev => ({
-        drinkPage: prev.drinkPage + 1,
-        drinks: uniqBy(prev.drinks.concat(response), 'name'),
-      }));
-    }
-  }
-
   getDrinkingTime = () => {
     const { startedDrinkingMoment } = this.state;
     const currentMoment = new Moment();
@@ -281,7 +260,6 @@ export default class CalculatorScreen extends React.Component {
       modalDrink,
       BAC,
       SD,
-      favourites,
       drinks,
     } = this.state;
 
@@ -298,7 +276,7 @@ export default class CalculatorScreen extends React.Component {
           ref={this.drinkModalRef}
           drinkData={modalDrink}
           favourite={this.isFavourite(modalDrink)}
-          getFavourites={this.getFavourites}
+          onAddToFavourites={this.setDrinkAsFavourite}
         />
 
         <View style={style.secondaryContentContainer}>
@@ -322,7 +300,7 @@ g/dL
         <View style={{ flex: 1 }}>
           <List>
             <FlatList
-              data={favourites.concat(drinks)}
+              data={drinks}
               extraData={this.state}
               keyExtractor={item => item._id /* eslint-disable-line no-underscore-dangle */}
               ListHeaderComponent={this.renderHeader}
