@@ -11,7 +11,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import LegalScreen from '../screens/LegalScreen';
 import CalculatorScreen from '../screens/CalculatorScreen';
 import HistoryScreen from '../screens/HistoryScreen';
-import MemoryGameScreen from '../screens/MemoryGameScreen'
+import MemoryGameScreen from '../screens/MemoryGameScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -48,7 +48,7 @@ HomeStack.navigationOptions = {
 
 const ProfileStack = createStackNavigator({
   Profile: ProfileScreen,
-    Legal: LegalScreen
+  Legal: LegalScreen,
 });
 
 const ProfileStackTabIcon = ({ focused }) => (
@@ -72,27 +72,27 @@ ProfileStack.navigationOptions = {
 };
 
 const HistoryStack = createStackNavigator({
-    History: HistoryScreen,
+  History: HistoryScreen,
 });
 
 const HistoryStackTabIcon = ({ focused }) => (
-    <TabBarIcon
-        focused={focused}
-        name={Platform.OS === 'ios' ? `ios-clock${focused ? '' : '-outline'}` : 'md-clock'}
-    />
+  <TabBarIcon
+    focused={focused}
+    name={Platform.OS === 'ios' ? `ios-clock${focused ? '' : '-outline'}` : 'md-clock'}
+  />
 );
 HistoryStackTabIcon.propTypes = {
-    focused: PropTypes.bool.isRequired,
+  focused: PropTypes.bool.isRequired,
 };
 
 HistoryStack.navigationOptions = {
-    tabBarLabel: 'History',
-    tabBarIcon: HistoryStackTabIcon,
-    tabBarOptions: {
-        style: {
-            backgroundColor: colour.dark,
-        },
+  tabBarLabel: 'History',
+  tabBarIcon: HistoryStackTabIcon,
+  tabBarOptions: {
+    style: {
+      backgroundColor: colour.dark,
     },
+  },
 };
 
 const GameStack = createStackNavigator({
@@ -120,12 +120,13 @@ GameStack.navigationOptions = {
 };
 
 export default createBottomTabNavigator(
-    {
+  {
     ProfileStack,
     HomeStack,
     HistoryStack,
     GameStack,
-},
-    {
-      initialRouteName: 'HomeStack'
-    });
+  },
+  {
+    initialRouteName: 'HomeStack',
+  },
+);

@@ -48,8 +48,8 @@ export default class HomeScreen extends React.Component {
               title="Add Custom Drink"
               backgroundColor={colors.accent}
             />
-              <Text style={style.defaultText}>Health Canada Concerns about Alcohol Use</Text>
-              <Text style={style.smallText}>{concerns}</Text>
+            <Text style={style.defaultText}>Health Canada Concerns about Alcohol Use</Text>
+            <Text style={style.smallText}>{concerns}</Text>
           </ScrollView>
         </View>
       );

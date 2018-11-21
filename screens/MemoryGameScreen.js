@@ -25,7 +25,7 @@ export default class MemoryGameScreen extends React.Component {
   }
 
   componentDidMount() {
-    let timer = setInterval(this.tick, 1000);
+    const timer = setInterval(this.tick, 1000);
 
     this.setState({
       timer,
@@ -55,7 +55,7 @@ export default class MemoryGameScreen extends React.Component {
       timerCounter,
       timer,
     } = this.state;
-    
+
     await this.setState(prev => ({
       timerCounter: prev.timerCounter - 1,
     }));
@@ -110,9 +110,7 @@ export default class MemoryGameScreen extends React.Component {
     return sequence;
   }
 
-  getColourFromGuessElement = (element) => {
-    return element["props"]["colour"];
-  }
+  getColourFromGuessElement = element => element.props.colour
 
   checkGameOver = async () => {
     if (this.state.playerGuessIndex >= this.state.sequenceLength - 1) {
@@ -123,7 +121,7 @@ export default class MemoryGameScreen extends React.Component {
           }));
         }
       }
-      Alert.alert("You got " + ((this.state.numCorrectGuesses / this.state.sequenceLength).toFixed(2) * 100) + "% correct.");
+      Alert.alert(`You got ${(this.state.numCorrectGuesses / this.state.sequenceLength).toFixed(2) * 100}% correct.`);
       this.resetGameState();
     }
   }
@@ -138,7 +136,7 @@ export default class MemoryGameScreen extends React.Component {
 
   applyPlayerGuess = async (guess) => {
     const { playerGuesses, playerGuessIndex } = this.state;
-    let playerGuessesCopy = this.state.playerGuesses;
+    const playerGuessesCopy = this.state.playerGuesses;
     playerGuessesCopy[this.state.playerGuessIndex] = <GameButton customWidth={20} key={this.state.playerGuessIndex} colour={guess} />;
     await this.setState(prev => ({
       playerGuesses: playerGuessesCopy,
@@ -182,7 +180,7 @@ export default class MemoryGameScreen extends React.Component {
           <View style={{ flex: 1 }} />
 
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-            <Text style={{fontSize: 40, fontWeight: 'bold'}}>
+            <Text style={{ fontSize: 40, fontWeight: 'bold' }}>
               {gameState === 'Memorize' ? timerCounter : 'Time to Guess!'}
             </Text>
           </View>

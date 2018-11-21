@@ -18,9 +18,7 @@ export default class HistoryScreen extends React.Component {
   render() {
     return (
       <View style={style.container}>
-        <ScrollView style={style.container}>
-
-        </ScrollView>
+        <ScrollView style={style.container} />
       </View>
     );
   }
