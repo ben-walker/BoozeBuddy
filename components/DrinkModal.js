@@ -41,7 +41,8 @@ class DrinkModal extends Component {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ lcboId: drinkData.lcbo_id }),
+      // eslint-disable-next-line no-underscore-dangle
+      body: JSON.stringify({ id: drinkData._id }),
     });
     this.setState({ favourite: rawResponse.ok, loading: false });
     if (rawResponse.ok) onAddToFavourites(drinkData);
