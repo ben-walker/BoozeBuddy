@@ -84,6 +84,14 @@ export default class CalculatorScreen extends React.Component {
     AsyncStorage.removeItem('stoppedDrinkingMoment');
   };
 
+  updateDrinkState = async (newDrinks) => {
+    await this.setState(prev => ({
+      drinks: uniqBy(prev.drinks.concat(newDrinks), 'name'),
+      // eslint-disable-next-line no-underscore-dangle
+      lastSeenId: newDrinks.length > 0 ? newDrinks[newDrinks.length - 1]._id : prev.lastSeenId,
+    }));
+  }
+
   getPageOfDrinks = async () => {
     const {
       lastSeenId,
@@ -101,12 +109,7 @@ export default class CalculatorScreen extends React.Component {
     this.setState({ drinkListLoading: false });
     if (!rawResponse.ok) return;
     const response = await rawResponse.json();
-
-    await this.setState(prev => ({
-      drinks: uniqBy(prev.drinks.concat(response), 'name'),
-      // eslint-disable-next-line no-underscore-dangle
-      lastSeenId: response[response.length - 1]._id,
-    }));
+    await this.updateDrinkState(response);
   };
 
   searchDrinks = async () => {
@@ -125,12 +128,7 @@ export default class CalculatorScreen extends React.Component {
     this.setState({ drinkListLoading: false });
     if (!rawResponse.ok) return;
     const response = await rawResponse.json();
-
-    await this.setState(prev => ({
-      drinks: uniqBy(prev.drinks.concat(response), 'name'),
-      // eslint-disable-next-line no-underscore-dangle
-      lastSeenId: response[response.length - 1]._id,
-    }));
+    await this.updateDrinkState(response);
   }
 
   logDrink = async (drink) => {
