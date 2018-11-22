@@ -37,7 +37,7 @@ export default class CalculatorScreen extends React.Component {
     this.state = {
       drinkListLoading: false,
       startedDrinkingMoment: null,
-      drinkPage: 1,
+      lastSeenId: null,
       BAC: 0.0,
       SD: 0.0,
       BW: 0.0,
@@ -86,7 +86,7 @@ export default class CalculatorScreen extends React.Component {
 
   getPageOfDrinks = async () => {
     const {
-      drinkPage,
+      lastSeenId,
       drinkListLoading,
     } = this.state;
     if (drinkListLoading) return;
@@ -94,11 +94,7 @@ export default class CalculatorScreen extends React.Component {
     this.setState({ drinkListLoading: true });
     let URL = 'https://dr-robotnik.herokuapp.com/api/pageOfDrinks';
     URL += url.format({
-      query: {
-        page: drinkPage,
-        perPage: 20,
-        showUserCreated: 'y',
-      },
+      query: { lastSeenId, perPage: 20, showUserCreated: 'y' },
     });
 
     const rawResponse = await fetch(URL, { method: 'GET', credentials: 'include' });
@@ -108,24 +104,21 @@ export default class CalculatorScreen extends React.Component {
 
     await this.setState(prev => ({
       drinks: uniqBy(prev.drinks.concat(response), 'name'),
-      drinkPage: prev.drinkPage + 1,
+      // eslint-disable-next-line no-underscore-dangle
+      lastSeenId: response[response.length - 1]._id,
     }));
   };
 
   searchDrinks = async () => {
     const {
-      drinkPage,
+      lastSeenId,
       query,
     } = this.state;
     if (!query) return;
 
     let URL = 'https://dr-robotnik.herokuapp.com/api/drinkSearch';
     URL += url.format({
-      query: {
-        page: drinkPage,
-        perPage: 20,
-        drinkQuery: query,
-      },
+      query: { lastSeenId, perPage: 20, drinkQuery: query },
     });
 
     const rawResponse = await fetch(URL, { method: 'GET', credentials: 'include' });
@@ -134,8 +127,9 @@ export default class CalculatorScreen extends React.Component {
     const response = await rawResponse.json();
 
     await this.setState(prev => ({
-      drinkPage: prev.drinkPage + 1,
       drinks: uniqBy(prev.drinks.concat(response), 'name'),
+      // eslint-disable-next-line no-underscore-dangle
+      lastSeenId: response[response.length - 1]._id,
     }));
   }
 
@@ -226,7 +220,7 @@ export default class CalculatorScreen extends React.Component {
   resetSearch = async (text, loading, action) => {
     await this.setState({
       drinks: [],
-      drinkPage: 1,
+      lastSeenId: null,
       query: text,
       drinkListLoading: loading,
     });
