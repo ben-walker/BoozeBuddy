@@ -86,7 +86,7 @@ export default class CalculatorScreen extends React.Component {
 
   updateDrinkState = async (newDrinks) => {
     await this.setState(prev => ({
-      drinks: uniqBy(prev.drinks.concat(newDrinks), 'name'),
+      drinks: uniqBy(prev.drinks.concat(newDrinks), '_id'),
       // eslint-disable-next-line no-underscore-dangle
       lastSeenId: newDrinks.length > 0 ? newDrinks[newDrinks.length - 1]._id : prev.lastSeenId,
     }));
