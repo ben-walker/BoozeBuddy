@@ -83,8 +83,10 @@ class DrinkModal extends Component {
     const heartIcon = (
       <Icon
         name="favorite"
-        size={35}
+        size={24}
         color="red"
+        raised
+        reverse
       />
     );
 
@@ -108,9 +110,7 @@ class DrinkModal extends Component {
             width={300}
             rounded
             source={image}
-            containerStyle={{
-              marginTop: 50,
-            }}
+            containerStyle={{ marginTop: 50 }}
           />
 
           {favourite ? heartIcon : addToFavouritesButton}

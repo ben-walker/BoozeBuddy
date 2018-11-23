@@ -206,8 +206,7 @@ export default class CalculatorScreen extends React.Component {
     return (
       <View style={{
         paddingVertical: 20,
-        borderTopWidth: 1,
-        borderColor: '#CED0CE',
+        backgroundColor: colors.background,
       }}
       >
         <ActivityIndicator animating size="large" />
@@ -231,12 +230,12 @@ export default class CalculatorScreen extends React.Component {
     return (
       <SearchBar
         placeholder="Search for a drink..."
-        lightTheme
         round
         clearIcon={{ name: 'close' }}
         onChangeText={text => this.resetSearch(text, true, this.debounceSearch)}
         onClearText={text => this.resetSearch(text, false, this.getPageOfDrinks)}
         value={query}
+        containerStyle={{ backgroundColor: colors.background }}
       />
     );
   }
@@ -290,7 +289,7 @@ g/dL
         </View>
 
         <View style={{ flex: 1 }}>
-          <List>
+          <List containerStyle={{ backgroundColor: colors.background }}>
             <FlatList
               data={drinks}
               extraData={this.state}

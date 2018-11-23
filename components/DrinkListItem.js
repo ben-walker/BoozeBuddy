@@ -44,6 +44,8 @@ const DrinkListItem = (props) => {
         rightIcon={{ name: 'add', color: colors.accent }}
         onPressRightIcon={() => logDrink(drinkData)}
         leftIcon={getFavouriteIcon()}
+        containerStyle={{ backgroundColor: colors.background }}
+        titleStyle={{ color: 'white' }}
       />
     </TouchableOpacity>
   );
