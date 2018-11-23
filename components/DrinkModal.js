@@ -83,7 +83,7 @@ class DrinkModal extends Component {
     const heartIcon = (
       <Icon
         name="favorite"
-        size={24}
+        size={26}
         color="red"
         raised
         reverse
@@ -119,9 +119,13 @@ class DrinkModal extends Component {
             name="arrow-downward"
             raised
             reverse
-            size={24}
+            size={26}
             onPress={this.toggleModal}
             color="grey"
+            containerStyle={{
+              position: 'absolute',
+              bottom: 40,
+            }}
           />
 
           <DropdownAlert ref={(ref) => { this.dropDown = ref; }} />
