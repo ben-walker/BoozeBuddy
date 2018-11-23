@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import {
   Avatar,
-  Tile,
+  FormLabel,
   Button,
   Icon,
 } from 'react-native-elements';
@@ -54,9 +54,13 @@ class DrinkModal extends Component {
 
   getImageSrc = () => {
     const { drinkData } = this.props;
-    if (!drinkData) return ({ uri: '' });
     if (drinkData.picture) return ({ uri: `https://dr-robotnik.herokuapp.com/api/customDrinkImage?drinkName=${drinkData.name}` });
     return drinkData.image_url ? ({ uri: drinkData.image_url }) : beerIcon.default;
+  }
+
+  getCreator = () => {
+    const { drinkData } = this.props;
+    return drinkData.created_by ? `Created by ${drinkData.created_by}` : '';
   }
 
   toggleModal = () => this.setState(prevState => ({ isVisible: !prevState.isVisible }))
@@ -67,6 +71,9 @@ class DrinkModal extends Component {
       favourite,
       loading,
     } = this.state;
+
+    const { drinkData } = this.props;
+    if (!drinkData) return (<View />);
 
     const addToFavouritesButton = (
       <Button
@@ -112,6 +119,9 @@ class DrinkModal extends Component {
             source={image}
             containerStyle={{ marginTop: 50 }}
           />
+
+          <FormLabel>{drinkData.name}</FormLabel>
+          { drinkData.created_by ? <FormLabel>{this.getCreator()}</FormLabel> : null }
 
           {favourite ? heartIcon : addToFavouritesButton}
 
