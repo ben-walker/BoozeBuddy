@@ -17,16 +17,16 @@
   "dependencies": {
     "@expo/samples": "2.1.1",
     "await-to-js": "^2.1.0",
-    "expo": "^30.0.2",
+    "expo": "^31.0.4",
     "lodash-es": "^4.17.11",
     "moment": "^2.22.2",
     "prop-types": "^15.6.2",
-    "react": "^16.6.3",
+    "react": "16.5.0",
     "react-dom": "^16.6.3",
     "react-float-button": "^0.1.2",
     "react-horizontal-scrolling-menu": "^0.3.6",
     "react-mixin": "^2.0.2",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-30.0.0.tar.gz",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.1.tar.gz",
     "react-native-dropdownalert": "^3.7.0",
     "react-native-elements": "^0.19.1",
     "react-native-keyboard-aware-scroll-view": "^0.7.4",
@@ -41,11 +41,12 @@
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
+    "babel-preset-expo": "^5.0.0",
     "eslint": "^5.9.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-react": "^7.11.1",
-    "jest-expo": "30.0.0"
+    "jest-expo": "^31.0.0"
   }
 }

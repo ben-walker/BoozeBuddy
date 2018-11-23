@@ -26,9 +26,7 @@ const HomeStackTabIcon = ({ focused }) => (
   <TabBarIcon
     focused={focused}
     name={
-      Platform.OS === 'ios'
-        ? `ios-home${focused ? '' : '-outline'}`
-        : 'md-home'
+      Platform.OS === 'ios' ? 'ios-home' : 'md-home'
     }
   />
 );
@@ -54,7 +52,9 @@ const ProfileStack = createStackNavigator({
 const ProfileStackTabIcon = ({ focused }) => (
   <TabBarIcon
     focused={focused}
-    name={Platform.OS === 'ios' ? `ios-person${focused ? '' : '-outline'}` : 'md-person'}
+    name={
+      Platform.OS === 'ios' ? 'ios-person' : 'md-person'
+    }
   />
 );
 ProfileStackTabIcon.propTypes = {
@@ -78,7 +78,9 @@ const HistoryStack = createStackNavigator({
 const HistoryStackTabIcon = ({ focused }) => (
   <TabBarIcon
     focused={focused}
-    name={Platform.OS === 'ios' ? `ios-clock${focused ? '' : '-outline'}` : 'md-clock'}
+    name={
+      Platform.OS === 'ios' ? 'ios-clock' : 'md-clock'
+    }
   />
 );
 HistoryStackTabIcon.propTypes = {
@@ -102,7 +104,7 @@ const GameStack = createStackNavigator({
 const GameStackTabIcon = ({ focused }) => (
   <TabBarIcon
     focused={focused}
-    name={Platform.OS === 'ios' ? `ios-game-controller-b${focused ? '' : '-outline'}` : 'md-game-controller-b'}
+    name="logo-game-controller-a"
   />
 );
 GameStackTabIcon.propTypes = {
