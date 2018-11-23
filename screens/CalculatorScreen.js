@@ -45,6 +45,7 @@ export default class CalculatorScreen extends React.Component {
       Wt: 0.0,
       drinks: [],
       loggedDrinks: [],
+      chartData: [],
       query: '',
       modalDrink: null,
     };
@@ -143,7 +144,18 @@ export default class CalculatorScreen extends React.Component {
       loggedDrinks: [...prev.loggedDrinks, drink],
     }));
 
-    this.calculateBAC();
+    const EBAC = await this.calculateBAC();
+    this.setState(prev => ({
+      chartData: [
+        ...prev.chartData,
+        {
+          x: `${parseFloat(this.getDrinkingTime().toFixed(2))} H`,
+          y: parseFloat(EBAC.toFixed(4)),
+        },
+      ],
+    }));
+    this.persistBACOverTime();
+
     this.dropdown.alertWithType(
       'info', // notif type
       'Hey, Listen!', // title of notif
@@ -154,6 +166,11 @@ export default class CalculatorScreen extends React.Component {
     if (!this.recalculating) this.recalculating = setInterval(this.calculateBAC, 5000);
   };
 
+  persistBACOverTime = () => {
+    const { chartData } = this.state;
+    AsyncStorage.setItem('chartData', JSON.stringify(chartData));
+  }
+
   calculateBAC = async () => {
     const drinkingTime = await this.getDrinkingTime();
     const {
@@ -163,7 +180,7 @@ export default class CalculatorScreen extends React.Component {
       MR,
     } = this.state;
     const EBAC = bacUtilities.calculateBAC(SD, BW, Wt, MR, drinkingTime);
-    await this.setState({ BAC: EBAC });
+    this.setState({ BAC: EBAC });
 
     // determine stopped drinking state
     if (EBAC < 0.001) {
@@ -174,6 +191,7 @@ export default class CalculatorScreen extends React.Component {
         `You had ${parseFloat(SD.toFixed(2))} standard drinks over ${parseFloat(drinkingTime.toFixed(2))} hour(s).`, // message
       );
     }
+    return EBAC;
   };
 
   fakeStoppedDrinking = async () => {
