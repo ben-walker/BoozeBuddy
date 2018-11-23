@@ -66,7 +66,7 @@ export default StyleSheet.create({
     resizeMode: 'contain',
   },
   drinkModal: {
-    backgroundColor: 'white',
+    backgroundColor: colors.background,
     marginTop: 0,
     marginHorizontal: 0,
     marginBottom: 0,

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import {
+  Avatar,
   Tile,
   Button,
   Icon,
@@ -74,7 +75,7 @@ class DrinkModal extends Component {
         rounded
         raised
         containerViewStyle={style.button}
-        backgroundColor={colors.background}
+        backgroundColor={colors.actionButton}
         onPress={this.addToFavourites}
       />
     );
@@ -102,11 +103,14 @@ class DrinkModal extends Component {
             alignItems: 'center',
           }}
         >
-          <Tile
-            containerStyle={{ margin: 15 }}
-            imageSrc={image}
-            height={500}
+          <Avatar
+            height={300}
             width={300}
+            rounded
+            source={image}
+            containerStyle={{
+              marginTop: 50,
+            }}
           />
 
           {favourite ? heartIcon : addToFavouritesButton}
