@@ -6,10 +6,16 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  main: {
+    flex: 1,
+    borderColor: colors.background,
+    backgroundColor: colors.background,
+  },
   container: {
     flex: 1,
     backgroundColor: colors.background,
     paddingTop: 22,
+    paddingBottom: 0,
     borderColor: colors.background,
   },
   contentContainer: {

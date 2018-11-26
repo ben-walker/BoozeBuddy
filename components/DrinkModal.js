@@ -50,18 +50,18 @@ class DrinkModal extends Component {
     return rawResponse.ok
       ? this.dropDown.alertWithType('success', 'Added to Favourites', `Nice! We just added ${drinkData.name} to your Favourites!`)
       : this.dropDown.alertWithType('error', 'Error', 'Sorry, we couldn\'t add that drink to your Favourites :(');
-  }
+  };
 
   getImageSrc = () => {
     const { drinkData } = this.props;
     if (drinkData.picture) return ({ uri: `https://dr-robotnik.herokuapp.com/api/customDrinkImage?drinkName=${drinkData.name}` });
     return drinkData.image_url ? ({ uri: drinkData.image_url }) : beerIcon.default;
-  }
+  };
 
   getCreator = () => {
     const { drinkData } = this.props;
     return drinkData.created_by ? `Created by ${drinkData.created_by}` : '';
-  }
+  };
 
   toggleModal = () => this.setState(prevState => ({ isVisible: !prevState.isVisible }))
 

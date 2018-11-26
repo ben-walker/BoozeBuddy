@@ -25,12 +25,22 @@ import style from '../constants/StyleSheet';
 import * as bacUtilities from '../utilities/bloodAlcoholCalculations';
 
 export default class CalculatorScreen extends React.Component {
-  static navigationOptions = {
+  static navigationOptions = ({ navigation }) => ({
     title: 'Calculator',
     headerTintColor: colors.defaultText,
     headerStyle: { backgroundColor: colors.dark },
     headerLeft: null,
-  };
+    headerRight: (
+      <Button
+        onPress={() => navigation.navigate('CustomDrinks')}
+        title="Add Drink"
+        containerViewStyle={style.button}
+        rounded
+        raised
+        backgroundColor={colors.accent}
+      />
+    ),
+  });
 
   constructor(props) {
     super(props);
@@ -59,6 +69,8 @@ export default class CalculatorScreen extends React.Component {
     this.setBacConstants(userData);
     this.initializeStartDrinkingState();
     this.getPageOfDrinks();
+    AsyncStorage.removeItem('chartData');
+    AsyncStorage.removeItem('loggedDrinks');
   }
 
   componentWillUnmount() {
@@ -91,7 +103,7 @@ export default class CalculatorScreen extends React.Component {
       // eslint-disable-next-line no-underscore-dangle
       lastSeenId: newDrinks.length > 0 ? newDrinks[newDrinks.length - 1]._id : prev.lastSeenId,
     }));
-  }
+  };
 
   getPageOfDrinks = async () => {
     const {
@@ -130,7 +142,7 @@ export default class CalculatorScreen extends React.Component {
     if (!rawResponse.ok) return;
     const response = await rawResponse.json();
     await this.updateDrinkState(response);
-  }
+  };
 
   logDrink = async (drink) => {
     const standardDrinks = bacUtilities.calculateStandardDrinks(
@@ -154,7 +166,7 @@ export default class CalculatorScreen extends React.Component {
         },
       ],
     }));
-    this.persistBACOverTime();
+    this.persistHistoricData();
 
     this.dropdown.alertWithType(
       'info', // notif type
@@ -166,10 +178,27 @@ export default class CalculatorScreen extends React.Component {
     if (!this.recalculating) this.recalculating = setInterval(this.calculateBAC, 5000);
   };
 
-  persistBACOverTime = () => {
-    const { chartData } = this.state;
+  toggleFavourite = (drink) => {
+    const { drinks } = this.state;
+    const drinksCopy = drinks;
+    const index = drinks.indexOf(drink);
+
+    if (drinksCopy[index].favourite === true) {
+      drinksCopy[index].favourite = false;
+    } else {
+      drinksCopy[index].favourite = true;
+    }
+    this.setState({ drinks: drinksCopy });
+  };
+
+  persistHistoricData = () => {
+    const {
+      chartData,
+      loggedDrinks,
+    } = this.state;
     AsyncStorage.setItem('chartData', JSON.stringify(chartData));
-  }
+    AsyncStorage.setItem('loggedDrinks', JSON.stringify(loggedDrinks));
+  };
 
   calculateBAC = async () => {
     const drinkingTime = await this.getDrinkingTime();
@@ -209,14 +238,6 @@ export default class CalculatorScreen extends React.Component {
 
   isFavourite = drink => (drink ? !!drink.favourite : false);
 
-  setDrinkAsFavourite = (drink) => {
-    const { drinks } = this.state;
-    const drinksCopy = drinks;
-    const index = drinks.indexOf(drink);
-    drinksCopy[index].favourite = true;
-    this.setState({ drinks: drinksCopy });
-  };
-
   renderFooter = () => {
     const { drinkListLoading } = this.state;
     if (!drinkListLoading) return null;
@@ -230,7 +251,7 @@ export default class CalculatorScreen extends React.Component {
         <ActivityIndicator animating size="large" />
       </View>
     );
-  }
+  };
 
   resetSearch = async (text, loading, action) => {
     await this.setState({
@@ -240,7 +261,7 @@ export default class CalculatorScreen extends React.Component {
       drinkListLoading: loading,
     });
     action();
-  }
+  };
 
   renderHeader = () => {
     const { query } = this.state;
@@ -256,13 +277,13 @@ export default class CalculatorScreen extends React.Component {
         containerStyle={{ backgroundColor: colors.background }}
       />
     );
-  }
+  };
 
   getDrinkingTime = () => {
     const { startedDrinkingMoment } = this.state;
     const currentMoment = new Moment();
     return Moment.duration(currentMoment.diff(startedDrinkingMoment)).asHours();
-  }
+  };
 
   render() {
     const {
@@ -285,7 +306,7 @@ export default class CalculatorScreen extends React.Component {
           ref={this.drinkModalRef}
           drinkData={modalDrink}
           favourite={this.isFavourite(modalDrink)}
-          onAddToFavourites={this.setDrinkAsFavourite}
+          onAddToFavourites={this.toggleFavourite}
         />
 
         <View style={style.secondaryContentContainer}>
@@ -326,6 +347,7 @@ g/dL
                   updateModalDrink={this.updateModalDrink}
                   logDrink={this.logDrink}
                   favourite={this.isFavourite(item.item)}
+                  toggleFavourite={this.toggleFavourite}
                 />
               )}
             />

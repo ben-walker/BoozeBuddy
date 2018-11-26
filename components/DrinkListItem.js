@@ -5,6 +5,7 @@ import { ListItem } from 'react-native-elements';
 import colors from '../constants/Colors';
 import * as beerIcon from '../assets/images/DrinkIcons/beer.png';
 
+
 const DrinkListItem = (props) => {
   const {
     drinkData,
@@ -12,7 +13,38 @@ const DrinkListItem = (props) => {
     updateModalDrink,
     logDrink,
     favourite,
+    toggleFavourite,
   } = props;
+
+  const addToFavourites = async (drinkData) => {
+    let rawResponse;
+    if (drinkData.favourite) {
+      rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/removeFavourite', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        // eslint-disable-next-line no-underscore-dangle
+        body: JSON.stringify({ id: drinkData._id }),
+      });
+    } else {
+      rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/addFavourite', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        // eslint-disable-next-line no-underscore-dangle
+        body: JSON.stringify({ id: drinkData._id }),
+      });
+    }
+
+    if (rawResponse.ok) toggleFavourite(drinkData);
+  };
+
 
   const getSubtitle = () => {
     const percentage = drinkData.alcohol_content / 100;
@@ -21,7 +53,7 @@ const DrinkListItem = (props) => {
 
   const getFavouriteIcon = () => (favourite
     ? ({ name: 'favorite', color: colors.red })
-    : null);
+    : ({ name: 'favorite', color: colors.secondary }));
 
   const getAvatar = () => {
     if (!drinkData) return ({ uri: '' });
@@ -44,6 +76,7 @@ const DrinkListItem = (props) => {
         rightIcon={{ name: 'add', color: colors.accent }}
         onPressRightIcon={() => logDrink(drinkData)}
         leftIcon={getFavouriteIcon()}
+        leftIconOnPress={() => addToFavourites(drinkData)}
         containerStyle={{ backgroundColor: colors.background }}
         titleStyle={{ color: 'white' }}
       />
@@ -57,6 +90,7 @@ DrinkListItem.propTypes = {
   updateModalDrink: PropTypes.func.isRequired,
   logDrink: PropTypes.func.isRequired,
   favourite: PropTypes.bool.isRequired,
+  toggleFavourite: PropTypes.func.isRequired,
 };
 
 export default DrinkListItem;
