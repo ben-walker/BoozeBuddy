@@ -12,12 +12,13 @@ export default class MemoryGameScreen extends React.Component {
     super();
     this.state = {
       sequenceLength: 5,
-      memorizeTime: 5,
+      memorizeTime: 5, /* eslint-disable-line */ // False positive.
       gameState: 'Memorize', // Memorize, Guess
       timer: null,
       timerCounter: 0,
       playerGuessIndex: 0,
       numCorrectGuesses: 0,
+      gamePaused: false,
       playerGuesses: [],
       generatedArrayOfColours: [],
     };
@@ -25,16 +26,18 @@ export default class MemoryGameScreen extends React.Component {
   }
 
   componentDidMount() {
+    const { sequenceLength } = this.state;
+
     const timer = setInterval(this.tick, 1000);
 
-    this.setState({
+    this.setState(prev => ({
       timer,
-      generatedArrayOfColours: this.generateRandomSequenceOfColouredButtons(this.state.sequenceLength),
-    });
+      generatedArrayOfColours: this.generateRandomSequenceOfColouredButtons(prev.sequenceLength),
+    }));
 
     const sequence = [];
 
-    for (let i = 0; i < this.state.sequenceLength; i += 1) {
+    for (let i = 0; i < sequenceLength; i += 1) {
       sequence.push({ id: i, colour: colors.secondary });
     }
 
@@ -43,6 +46,8 @@ export default class MemoryGameScreen extends React.Component {
     ));
 
     this.state.playerGuesses = colourListArr;
+
+    this.resetGameState();
   }
 
   componentWillUnmount() {
@@ -50,35 +55,45 @@ export default class MemoryGameScreen extends React.Component {
     this.clearInterval(timer);
   }
 
-  tick = async () => {
+  tick = () => {
     const {
-      timerCounter,
       timer,
+      gamePaused,
+      gameState,
+      timerCounter,
     } = this.state;
 
-    await this.setState(prev => ({
-      timerCounter: prev.timerCounter - 1,
-    }));
+    if (!gamePaused) {
+      if (gameState === 'Memorize') {
+        this.setState(prev => ({
+          timerCounter: prev.timerCounter - 1,
+        }));
+      }
 
-    if (timerCounter <= 0) {
-      clearInterval(timer);
-      this.setState({
-        gameState: 'Guess',
-      });
+      if ((timerCounter <= 0) && (gameState === 'Memorize')) {
+        clearInterval(timer);
+        this.setState({
+          gameState: 'Guess',
+          playerGuessIndex: 0,
+        });
+      }
     }
   }
 
   resetGameState = () => {
-    timer = setInterval(this.tick, 1000);
-
-    this.setState({
+    const {
       timer,
-      generatedArrayOfColours: this.generateRandomSequenceOfColouredButtons(this.state.sequenceLength),
-    });
+      sequenceLength,
+    } = this.state;
+
+    this.setState(prev => ({
+      timer,
+      generatedArrayOfColours: this.generateRandomSequenceOfColouredButtons(prev.sequenceLength),
+    }));
 
     const sequence = [];
 
-    for (let i = 0; i < this.state.sequenceLength; i += 1) {
+    for (let i = 0; i < sequenceLength; i += 1) {
       sequence.push({ id: i, colour: colors.secondary });
     }
 
@@ -86,14 +101,16 @@ export default class MemoryGameScreen extends React.Component {
       <GameButton customWidth={20} key={colourInfo.id} colour={colourInfo.colour} />
     ));
 
-    this.state.playerGuesses = colourListArr;
-
     this.setState({
+      playerGuesses: colourListArr,
+    });
+
+    this.setState(prev => ({
       gameState: 'Memorize',
-      timerCounter: this.state.memorizeTime,
+      timerCounter: prev.memorizeTime,
       playerGuessIndex: 0,
       numCorrectGuesses: 0,
-    });
+    }));
   }
 
   randomColour = () => this.colourListForRandomization[
@@ -112,16 +129,43 @@ export default class MemoryGameScreen extends React.Component {
 
   getColourFromGuessElement = element => element.props.colour
 
-  checkGameOver = async () => {
-    if (this.state.playerGuessIndex >= this.state.sequenceLength - 1) {
-      for (let i = 0; i < this.state.sequenceLength; i += 1) {
-        if (this.getColourFromGuessElement(this.state.playerGuesses[i]) == (this.getColourFromGuessElement(this.state.generatedArrayOfColours[i]))) {
-          await this.setState(prev => ({
+  unpauseGame = () => {
+    this.state.gamePaused = false;
+  }
+
+  checkGameOver = () => {
+    const {
+      playerGuessIndex,
+      sequenceLength,
+      playerGuesses,
+      generatedArrayOfColours,
+    } = this.state;
+
+    let playerGuessColour = null;
+    let actualColour = null;
+
+    if (playerGuessIndex >= sequenceLength - 1) {
+      for (let i = 0; i < sequenceLength; i += 1) {
+        playerGuessColour = this.getColourFromGuessElement(playerGuesses[i]);
+        actualColour = this.getColourFromGuessElement(generatedArrayOfColours[i]);
+        if (playerGuessColour === actualColour) {
+          this.setState(prev => ({
             numCorrectGuesses: prev.numCorrectGuesses + 1,
           }));
         }
       }
-      Alert.alert(`You got ${(this.state.numCorrectGuesses / this.state.sequenceLength).toFixed(2) * 100}% correct.`);
+      this.state.gamePaused = true;
+
+      const { numCorrectGuesses } = this.state;
+
+      Alert.alert(
+        'Game Over',
+        `You got ${(numCorrectGuesses / sequenceLength).toFixed(2) * 100}% correct.`,
+        [
+          { text: 'OK', onPress: this.unpauseGame },
+        ],
+        { cancelable: false },
+      );
       this.resetGameState();
     }
   }
@@ -135,12 +179,17 @@ export default class MemoryGameScreen extends React.Component {
   }
 
   applyPlayerGuess = async (guess) => {
-    const { playerGuesses, playerGuessIndex } = this.state;
-    const playerGuessesCopy = this.state.playerGuesses;
-    playerGuessesCopy[this.state.playerGuessIndex] = <GameButton customWidth={20} key={this.state.playerGuessIndex} colour={guess} />;
-    await this.setState(prev => ({
+    const {
+      playerGuesses,
+      playerGuessIndex,
+    } = this.state;
+
+    const playerGuessesCopy = playerGuesses;
+    const newButton = <GameButton customWidth={20} key={playerGuessIndex} colour={guess} />;
+    playerGuessesCopy[playerGuessIndex] = newButton;
+    await this.setState({
       playerGuesses: playerGuessesCopy,
-    }));
+    });
 
     this.checkGameOver();
 
