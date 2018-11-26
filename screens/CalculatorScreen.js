@@ -166,10 +166,23 @@ export default class CalculatorScreen extends React.Component {
     if (!this.recalculating) this.recalculating = setInterval(this.calculateBAC, 5000);
   };
 
+  toggleFavourite = (drink) => {
+      const { drinks } = this.state;
+      const drinksCopy = drinks;
+      const index = drinks.indexOf(drink);
+
+      if(drinksCopy[index].favourite === true){
+          drinksCopy[index].favourite = false;
+      } else {
+          drinksCopy[index].favourite = true;
+      }
+      this.setState({ drinks: drinksCopy });
+  };
+
   persistBACOverTime = () => {
     const { chartData } = this.state;
     AsyncStorage.setItem('chartData', JSON.stringify(chartData));
-  }
+  };
 
   calculateBAC = async () => {
     const drinkingTime = await this.getDrinkingTime();
@@ -208,14 +221,6 @@ export default class CalculatorScreen extends React.Component {
   updateModalDrink = drink => this.setState({ modalDrink: drink });
 
   isFavourite = drink => (drink ? !!drink.favourite : false);
-
-  setDrinkAsFavourite = (drink) => {
-    const { drinks } = this.state;
-    const drinksCopy = drinks;
-    const index = drinks.indexOf(drink);
-    drinksCopy[index].favourite = true;
-    this.setState({ drinks: drinksCopy });
-  };
 
   renderFooter = () => {
     const { drinkListLoading } = this.state;
@@ -285,7 +290,7 @@ export default class CalculatorScreen extends React.Component {
           ref={this.drinkModalRef}
           drinkData={modalDrink}
           favourite={this.isFavourite(modalDrink)}
-          onAddToFavourites={this.setDrinkAsFavourite}
+          onAddToFavourites={this.toggleFavourite}
         />
 
         <View style={style.secondaryContentContainer}>
@@ -326,6 +331,7 @@ g/dL
                   updateModalDrink={this.updateModalDrink}
                   logDrink={this.logDrink}
                   favourite={this.isFavourite(item.item)}
+                  toggleFavourite={this.toggleFavourite}
                 />
               )}
             />

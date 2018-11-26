@@ -6,17 +6,18 @@ import colors from '../constants/Colors';
 import * as beerIcon from '../assets/images/DrinkIcons/beer.png';
 
 const DrinkListItem = (props) => {
-  const {
-    drinkData,
-    drinkModalRef,
-    updateModalDrink,
-    logDrink,
-    favourite,
-  } = props;
+    const {
+        drinkData,
+        drinkModalRef,
+        updateModalDrink,
+        logDrink,
+        favourite,
+        toggleFavourite
+    } = props;
 
-  const getSubtitle = () => {
-    const percentage = drinkData.alcohol_content / 100;
-    return `${drinkData.package_unit_volume_in_milliliters} mL • ${drinkData.secondary_category} • ${percentage}%`;
+    const getSubtitle = () => {
+        const percentage = drinkData.alcohol_content / 100;
+        return `${drinkData.package_unit_volume_in_milliliters} mL • ${drinkData.secondary_category} • ${percentage}%`;
     };
 
     const getFavouriteIcon = () => (favourite
@@ -30,14 +31,14 @@ const DrinkListItem = (props) => {
     };
 
     return (
-    <TouchableOpacity
-      onLongPress={() => {
-        updateModalDrink(drinkData);
-        drinkModalRef.current.toggleModal();
-      }}
-    >
-      <ListItem
-        roundAvatar
+        <TouchableOpacity
+            onLongPress={() => {
+                updateModalDrink(drinkData);
+                drinkModalRef.current.toggleModal();
+            }}
+        >
+            <ListItem
+                roundAvatar
                 avatar={getAvatar()}
                 title={drinkData.name}
                 subtitle={getSubtitle()}
@@ -53,11 +54,12 @@ const DrinkListItem = (props) => {
 };
 
 DrinkListItem.propTypes = {
-  drinkData: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  drinkModalRef: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
-  updateModalDrink: PropTypes.func.isRequired,
-  logDrink: PropTypes.func.isRequired,
-  favourite: PropTypes.bool.isRequired,
+    drinkData: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+    drinkModalRef: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+    updateModalDrink: PropTypes.func.isRequired,
+    logDrink: PropTypes.func.isRequired,
+    favourite: PropTypes.bool.isRequired,
+    toggleFavourite: PropTypes.func.isRequired
 };
 
 export default DrinkListItem;
