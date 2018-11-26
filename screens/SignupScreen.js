@@ -88,7 +88,7 @@ export default class SignupScreen extends React.Component {
       const response = await rawResponse.json();
       await AsyncStorage.setItem('userToken', JSON.stringify(response.user));
       return navigation.navigate('App');
-    }
+    };
 
     async isValid() {
       const {

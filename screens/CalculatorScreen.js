@@ -91,7 +91,7 @@ export default class CalculatorScreen extends React.Component {
       // eslint-disable-next-line no-underscore-dangle
       lastSeenId: newDrinks.length > 0 ? newDrinks[newDrinks.length - 1]._id : prev.lastSeenId,
     }));
-  }
+  };
 
   getPageOfDrinks = async () => {
     const {
@@ -130,7 +130,7 @@ export default class CalculatorScreen extends React.Component {
     if (!rawResponse.ok) return;
     const response = await rawResponse.json();
     await this.updateDrinkState(response);
-  }
+  };
 
   logDrink = async (drink) => {
     const standardDrinks = bacUtilities.calculateStandardDrinks(
@@ -230,7 +230,7 @@ export default class CalculatorScreen extends React.Component {
         <ActivityIndicator animating size="large" />
       </View>
     );
-  }
+  };
 
   resetSearch = async (text, loading, action) => {
     await this.setState({
@@ -240,7 +240,7 @@ export default class CalculatorScreen extends React.Component {
       drinkListLoading: loading,
     });
     action();
-  }
+  };
 
   renderHeader = () => {
     const { query } = this.state;
@@ -256,13 +256,13 @@ export default class CalculatorScreen extends React.Component {
         containerStyle={{ backgroundColor: colors.background }}
       />
     );
-  }
+  };
 
   getDrinkingTime = () => {
     const { startedDrinkingMoment } = this.state;
     const currentMoment = new Moment();
     return Moment.duration(currentMoment.diff(startedDrinkingMoment)).asHours();
-  }
+  };
 
   render() {
     const {

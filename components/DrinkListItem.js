@@ -17,19 +17,19 @@ const DrinkListItem = (props) => {
   const getSubtitle = () => {
     const percentage = drinkData.alcohol_content / 100;
     return `${drinkData.package_unit_volume_in_milliliters} mL • ${drinkData.secondary_category} • ${percentage}%`;
-  };
+    };
 
-  const getFavouriteIcon = () => (favourite
-    ? ({ name: 'favorite', color: colors.red })
-    : null);
+    const getFavouriteIcon = () => (favourite
+        ? ({name: 'favorite', color: colors.red})
+        : ({name: 'favorite', color: colors.secondary}));
 
-  const getAvatar = () => {
-    if (!drinkData) return ({ uri: '' });
-    if (drinkData.picture) return ({ uri: `https://dr-robotnik.herokuapp.com/api/customDrinkImage?drinkName=${drinkData.name}` });
-    return drinkData.image_thumb_url ? ({ uri: drinkData.image_thumb_url }) : beerIcon.default;
-  };
+    const getAvatar = () => {
+        if (!drinkData) return ({uri: ''});
+        if (drinkData.picture) return ({uri: `https://dr-robotnik.herokuapp.com/api/customDrinkImage?drinkName=${drinkData.name}`});
+        return drinkData.image_thumb_url ? ({uri: drinkData.image_thumb_url}) : beerIcon.default;
+    };
 
-  return (
+    return (
     <TouchableOpacity
       onLongPress={() => {
         updateModalDrink(drinkData);
@@ -38,17 +38,18 @@ const DrinkListItem = (props) => {
     >
       <ListItem
         roundAvatar
-        avatar={getAvatar()}
-        title={drinkData.name}
-        subtitle={getSubtitle()}
-        rightIcon={{ name: 'add', color: colors.accent }}
-        onPressRightIcon={() => logDrink(drinkData)}
-        leftIcon={getFavouriteIcon()}
-        containerStyle={{ backgroundColor: colors.background }}
-        titleStyle={{ color: 'white' }}
-      />
-    </TouchableOpacity>
-  );
+                avatar={getAvatar()}
+                title={drinkData.name}
+                subtitle={getSubtitle()}
+                rightIcon={{name: 'add', color: colors.accent}}
+                onPressRightIcon={() => logDrink(drinkData)}
+                leftIcon={getFavouriteIcon()}
+                leftIconOnPress={() => toggleFavourite(drinkData)}
+                containerStyle={{backgroundColor: colors.background}}
+                titleStyle={{color: 'white'}}
+            />
+        </TouchableOpacity>
+    );
 };
 
 DrinkListItem.propTypes = {
