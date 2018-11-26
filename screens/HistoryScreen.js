@@ -17,12 +17,19 @@ export default class HistoryScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { chartData: [] };
+    this.state = {
+      chartData: [],
+      loggedDrinks: [],
+    };
   }
 
   async componentDidMount() {
-    const dataFromStorage = await AsyncStorage.getItem('chartData');
-    this.setState({ chartData: JSON.parse(dataFromStorage) });
+    const chartData = await AsyncStorage.getItem('chartData');
+    const loggedDrinks = await AsyncStorage.getItem('loggedDrinks');
+    this.setState({
+      chartData: JSON.parse(chartData),
+      loggedDrinks,
+    });
   }
 
   render() {

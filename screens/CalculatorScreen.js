@@ -166,7 +166,7 @@ export default class CalculatorScreen extends React.Component {
         },
       ],
     }));
-    this.persistBACOverTime();
+    this.persistHistoricData();
 
     this.dropdown.alertWithType(
       'info', // notif type
@@ -191,9 +191,13 @@ export default class CalculatorScreen extends React.Component {
     this.setState({ drinks: drinksCopy });
   };
 
-  persistBACOverTime = () => {
-    const { chartData } = this.state;
+  persistHistoricData = () => {
+    const {
+      chartData,
+      loggedDrinks,
+    } = this.state;
     AsyncStorage.setItem('chartData', JSON.stringify(chartData));
+    AsyncStorage.setItem('loggedDrinks', JSON.stringify(loggedDrinks));
   };
 
   calculateBAC = async () => {
