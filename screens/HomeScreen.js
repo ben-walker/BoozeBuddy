@@ -39,15 +39,7 @@ export default class HomeScreen extends React.Component {
               title="Start Drinking"
               backgroundColor={colors.accent}
             />
-
-            <Button
-              onPress={() => navigation.navigate('CustomDrinks')}
-              containerViewStyle={style.button}
-              rounded
-              raised
-              title="Add Custom Drink"
-              backgroundColor={colors.accent}
-            />
+              
             <Text style={style.defaultText}>Health Canada Concerns about Alcohol Use</Text>
             <Text style={style.smallText}>{concerns}</Text>
           </ScrollView>
