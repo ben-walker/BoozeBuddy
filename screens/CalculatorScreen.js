@@ -59,6 +59,8 @@ export default class CalculatorScreen extends React.Component {
     this.setBacConstants(userData);
     this.initializeStartDrinkingState();
     this.getPageOfDrinks();
+    AsyncStorage.removeItem('chartData');
+    AsyncStorage.removeItem('loggedDrinks');
   }
 
   componentWillUnmount() {
