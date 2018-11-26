@@ -8,6 +8,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import CustomDrinkScreen from '../screens/CustomDrinkScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import EditScreen from '../screens/EditScreen';
 import LegalScreen from '../screens/LegalScreen';
 import CalculatorScreen from '../screens/CalculatorScreen';
 import HistoryScreen from '../screens/HistoryScreen';
@@ -47,6 +48,7 @@ HomeStack.navigationOptions = {
 const ProfileStack = createStackNavigator({
   Profile: ProfileScreen,
   Legal: LegalScreen,
+  Edit: EditScreen,
 });
 
 const ProfileStackTabIcon = ({ focused }) => (
