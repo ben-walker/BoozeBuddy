@@ -4,37 +4,37 @@ import colors from './Colors';
 export default StyleSheet.create({
     appContainer: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#fff'
     },
     main: {
         flex: 1,
         borderColor: colors.background,
-        backgroundColor: colors.background,
+        backgroundColor: colors.background
     },
     container: {
         flex: 1,
         backgroundColor: colors.background,
         paddingTop: 22,
         paddingBottom: 0,
-        borderColor: colors.background,
+        borderColor: colors.background
     },
     contentContainer: {
         marginTop: 1,
         marginBottom: 1,
         marginLeft: 10,
         marginRight: 10,
-        backgroundColor: colors.background,
+        backgroundColor: colors.background
     },
     secondaryContentContainer: {
 
         marginBottom: 20,
         alignItems: 'center',
-        backgroundColor: colors.secondary,
+        backgroundColor: colors.secondary
     },
     titleText: {
         fontSize: 30,
         fontWeight: 'bold',
-        color: colors.defaultText,
+        color: colors.defaultText
     },
     smallText: {
         fontSize: 12,

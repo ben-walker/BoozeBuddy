@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
 import { ListItem } from 'react-native-elements';
-import DropdownAlert from 'react-native-dropdownalert';
 import colors from '../constants/Colors';
 import * as beerIcon from '../assets/images/DrinkIcons/beer.png';
 
