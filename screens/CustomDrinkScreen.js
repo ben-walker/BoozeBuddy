@@ -139,7 +139,7 @@ export default class CustomDrinkScreen extends React.Component {
           keyboardVerticalOffset={Header.HEIGHT + 20}
           behavior="padding"
         >
-          <ScrollView style={[style.container]}>
+          <ScrollView style={[style.main]}>
             <CameraModal
               ref={this.cameraModalRef}
               onNewImage={this.updateImage}
