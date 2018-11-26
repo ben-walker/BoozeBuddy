@@ -39,7 +39,7 @@ export default class HomeScreen extends React.Component {
               title="Start Drinking"
               backgroundColor={colors.accent}
             />
-              
+
             <Text style={style.defaultText}>Health Canada Concerns about Alcohol Use</Text>
             <Text style={style.smallText}>{concerns}</Text>
           </ScrollView>

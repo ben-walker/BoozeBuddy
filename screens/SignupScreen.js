@@ -150,7 +150,7 @@ export default class SignupScreen extends React.Component {
           keyboardVerticalOffset={Header.HEIGHT + 20}
           behavior="padding"
         >
-          <ScrollView style={style.container}>
+          <ScrollView style={style.main}>
             <FormLabel>USERNAME</FormLabel>
             <FormInput
               onChangeText={usernameInput => this.setState({ username: usernameInput })}
