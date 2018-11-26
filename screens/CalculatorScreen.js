@@ -25,24 +25,22 @@ import style from '../constants/StyleSheet';
 import * as bacUtilities from '../utilities/bloodAlcoholCalculations';
 
 export default class CalculatorScreen extends React.Component {
-  static navigationOptions = ({ navigation }) => {
-    return{
-        title: 'Calculator',
-        headerTintColor: colors.defaultText,
-        headerStyle: { backgroundColor: colors.dark },
-        headerLeft: null,
-        headerRight: (
-            <Button
-                onPress={() => navigation.navigate('CustomDrinks')}
-                title= 'Add Drink'
-                containerViewStyle={style.button}
-                rounded
-                raised
-                backgroundColor={colors.accent}
-            />
-        ),
-    };
-  };
+  static navigationOptions = ({ navigation }) => ({
+    title: 'Calculator',
+    headerTintColor: colors.defaultText,
+    headerStyle: { backgroundColor: colors.dark },
+    headerLeft: null,
+    headerRight: (
+      <Button
+        onPress={() => navigation.navigate('CustomDrinks')}
+        title="Add Drink"
+        containerViewStyle={style.button}
+        rounded
+        raised
+        backgroundColor={colors.accent}
+      />
+    ),
+  });
 
   constructor(props) {
     super(props);
