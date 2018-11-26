@@ -5,6 +5,13 @@ import { ListItem } from 'react-native-elements';
 import colors from '../constants/Colors';
 import * as beerIcon from '../assets/images/DrinkIcons/beer.png';
 
+const DRINK_SERVINGS = {
+  Wine: 148,
+  Beer: 354,
+  Ciders: 354,
+  Spirits: 44,
+};
+
 const DrinkListItem = (props) => {
   const {
     drinkData,
@@ -47,7 +54,10 @@ const DrinkListItem = (props) => {
 
   const getSubtitle = () => {
     const percentage = drinkData.alcohol_content / 100;
-    return `${drinkData.package_unit_volume_in_milliliters} mL • ${drinkData.secondary_category} • ${percentage}%`;
+    const volume = !DRINK_SERVINGS[drinkData.primary_category]
+      ? drinkData.package_unit_volume_in_milliliters
+      : DRINK_SERVINGS[drinkData.primary_category];
+    return `${volume} mL • ${drinkData.secondary_category} • ${percentage}%`;
   };
 
   const getFavouriteIcon = () => (favourite
