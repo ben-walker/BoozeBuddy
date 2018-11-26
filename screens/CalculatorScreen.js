@@ -167,16 +167,16 @@ export default class CalculatorScreen extends React.Component {
   };
 
   toggleFavourite = (drink) => {
-      const { drinks } = this.state;
-      const drinksCopy = drinks;
-      const index = drinks.indexOf(drink);
+    const { drinks } = this.state;
+    const drinksCopy = drinks;
+    const index = drinks.indexOf(drink);
 
-      if(drinksCopy[index].favourite === true){
-          drinksCopy[index].favourite = false;
-      } else {
-          drinksCopy[index].favourite = true;
-      }
-      this.setState({ drinks: drinksCopy });
+    if (drinksCopy[index].favourite === true) {
+      drinksCopy[index].favourite = false;
+    } else {
+      drinksCopy[index].favourite = true;
+    }
+    this.setState({ drinks: drinksCopy });
   };
 
   persistBACOverTime = () => {
