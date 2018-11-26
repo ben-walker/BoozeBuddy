@@ -5,7 +5,6 @@ import { ListItem } from 'react-native-elements';
 import colors from '../constants/Colors';
 import * as beerIcon from '../assets/images/DrinkIcons/beer.png';
 
-
 const DrinkListItem = (props) => {
   const {
     drinkData,
@@ -16,7 +15,7 @@ const DrinkListItem = (props) => {
     toggleFavourite,
   } = props;
 
-  const addToFavourites = async (drinkData) => {
+  const addToFavourites = async () => {
     let rawResponse;
     if (drinkData.favourite) {
       rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/removeFavourite', {
@@ -76,7 +75,7 @@ const DrinkListItem = (props) => {
         rightIcon={{ name: 'add', color: colors.accent }}
         onPressRightIcon={() => logDrink(drinkData)}
         leftIcon={getFavouriteIcon()}
-        leftIconOnPress={() => addToFavourites(drinkData)}
+        leftIconOnPress={addToFavourites}
         containerStyle={{ backgroundColor: colors.background }}
         titleStyle={{ color: 'white' }}
       />
