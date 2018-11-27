@@ -4,8 +4,13 @@ import {
   AsyncStorage,
   ScrollView,
   View,
+  Button as TextButton,
 } from 'react-native';
-import { Button, List, ListItem } from 'react-native-elements';
+import {
+  Button,
+  List,
+  ListItem,
+} from 'react-native-elements';
 import colors from '../constants/Colors';
 import style from '../constants/StyleSheet';
 
@@ -15,13 +20,9 @@ export default class ProfileScreen extends React.Component {
       headerTintColor: colors.defaultText,
       headerStyle: { backgroundColor: colors.dark },
       headerRight: (
-        <Button
+        <TextButton
           onPress={() => navigation.navigate('Edit')}
-          title="Edit"
-          containerViewStyle={style.button}
-          rounded
-          raised
-          backgroundColor={colors.accent}
+          title="Update Profile"
         />
       ),
     });

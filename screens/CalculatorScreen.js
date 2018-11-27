@@ -6,6 +6,7 @@ import {
   View,
   AsyncStorage,
   FlatList,
+  Button as TextButton,
 } from 'react-native';
 import {
   Button,
@@ -31,13 +32,9 @@ export default class CalculatorScreen extends React.Component {
     headerStyle: { backgroundColor: colors.dark },
     headerLeft: null,
     headerRight: (
-      <Button
+      <TextButton
+        title="Create a Drink"
         onPress={() => navigation.navigate('CustomDrinks')}
-        title="Add Drink"
-        containerViewStyle={style.button}
-        rounded
-        raised
-        backgroundColor={colors.accent}
       />
     ),
   });

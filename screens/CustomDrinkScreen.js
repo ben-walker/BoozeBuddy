@@ -22,7 +22,7 @@ import beerIcon from '../assets/images/DrinkIcons/beer.png';
 
 export default class CustomDrinkScreen extends React.Component {
     static navigationOptions = {
-      title: 'Create a drink',
+      title: 'Create a Drink',
       headerTintColor: colors.defaultText,
       headerStyle: { backgroundColor: colors.dark },
     };
