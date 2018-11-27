@@ -7,6 +7,7 @@ import {
   Button,
   Icon,
 } from 'react-native-elements';
+import { forEach } from 'lodash-es';
 import Modal from 'react-native-modal';
 import DropdownAlert from 'react-native-dropdownalert';
 import style from '../constants/StyleSheet';
@@ -62,6 +63,21 @@ class DrinkModal extends Component {
     const { drinkData } = this.props;
     return drinkData.created_by ? `Created by ${drinkData.created_by}` : '';
   };
+
+  getRecipe = () => {
+    const { drinkData } = this.props;
+    const ingredientElements = [];
+    forEach(drinkData.recipe, (value, index) => {
+      ingredientElements.push((
+        <FormLabel key={index}>
+          {`${value.ingredientVolume}mL of `}
+          {value.ingredientAlcoholContent > 0 ? `${value.ingredientAlcoholContent}% ` : null}
+          {value.ingredientName}
+        </FormLabel>
+      ));
+    });
+    return ingredientElements.map(value => value);
+  }
 
   toggleModal = () => this.setState(prevState => ({ isVisible: !prevState.isVisible }))
 
@@ -122,6 +138,9 @@ class DrinkModal extends Component {
 
           <FormLabel>{drinkData.name}</FormLabel>
           { drinkData.created_by ? <FormLabel>{this.getCreator()}</FormLabel> : null }
+
+          { drinkData.created_by ? <FormLabel>Recipe:</FormLabel> : null }
+          { drinkData.created_by ? this.getRecipe() : null }
 
           {favourite ? heartIcon : addToFavouritesButton}
 
