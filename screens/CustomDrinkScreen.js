@@ -38,6 +38,7 @@ export default class CustomDrinkScreen extends React.Component {
         hasCameraPermission: null,
         customImage: null,
         ingredientInputs: [],
+        recipe: {},
       };
       this.cameraModalRef = React.createRef();
     }
@@ -54,6 +55,14 @@ export default class CustomDrinkScreen extends React.Component {
       }));
     }
 
+    updateRecipe = (key, parameter, value) => {
+      const { recipe } = this.state;
+      const recipeCopy = recipe;
+      if (!recipeCopy[key]) recipeCopy[key] = {};
+      recipeCopy[key][parameter] = value;
+      this.setState({ recipe: recipeCopy });
+    }
+
     getIngredientInput = key => (
       <Fragment key={key}>
         <FormLabel>
@@ -62,15 +71,19 @@ export default class CustomDrinkScreen extends React.Component {
           {' '}
           - Name
         </FormLabel>
-        <FormInput />
+        <FormInput
+          onBlur={e => this.updateRecipe(key, 'ingredientName', e.nativeEvent.text)}
+        />
 
         <FormLabel>
           Ingredient #
           {key + 1}
           {' '}
-          - Volume
+          - Volume (mL)
         </FormLabel>
-        <FormInput />
+        <FormInput
+          onBlur={e => this.updateRecipe(key, 'ingredientVolume', e.nativeEvent.text)}
+        />
 
         <FormLabel>
           Ingredient #
@@ -78,7 +91,9 @@ export default class CustomDrinkScreen extends React.Component {
           {' '}
           - Alcohol Content (%)
         </FormLabel>
-        <FormInput />
+        <FormInput
+          onBlur={e => this.updateRecipe(key, 'ingredientAlcoholContent', e.nativeEvent.text)}
+        />
       </Fragment>
     );
 
@@ -95,6 +110,7 @@ export default class CustomDrinkScreen extends React.Component {
         drinkVolume,
         drinkAlcoholContent,
         customImage,
+        recipe,
       } = this.state;
       const { navigation } = this.props;
 
