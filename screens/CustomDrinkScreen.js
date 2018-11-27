@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   KeyboardAvoidingView,
   ScrollView,
   View,
+  Button as TextButton,
 } from 'react-native';
 import {
   Avatar,
@@ -12,6 +13,7 @@ import {
   FormValidationMessage,
 } from 'react-native-elements';
 import { Permissions } from 'expo';
+import { forEach } from 'lodash-es';
 import DropdownAlert from 'react-native-dropdownalert';
 import { Header } from 'react-navigation';
 import CameraModal from '../components/CameraModal';
@@ -33,32 +35,142 @@ export default class CustomDrinkScreen extends React.Component {
         drinkName: '',
         drinkNameError: '',
         drinkVolume: '',
-        drinkVolumeError: '',
-        drinkAlcoholContent: '',
-        drinkAlcoholContentError: '',
         hasCameraPermission: null,
         customImage: null,
+        ingredientInputs: [],
+        recipe: {},
       };
       this.cameraModalRef = React.createRef();
     }
 
     async componentDidMount() {
+      this.addIngredientInput(0);
       const { status } = await Permissions.askAsync(Permissions.CAMERA);
       this.setState({ hasCameraPermission: status === 'granted' });
     }
 
+    addIngredientInput = (key) => {
+      this.setState(prev => ({
+        ingredientInputs: [...prev.ingredientInputs, this.getIngredientInput(key)],
+      }));
+    }
+
+    updateRecipe = (key, parameter, value) => {
+      const { recipe } = this.state;
+      const recipeCopy = recipe;
+      if (!recipeCopy[key]) recipeCopy[key] = {};
+      recipeCopy[key][parameter] = value;
+      this.setState({ recipe: recipeCopy });
+    }
+
+    getIngredientInput = key => (
+      <Fragment key={key}>
+        <FormLabel>
+          Ingredient #
+          {key + 1}
+          {' '}
+          - Name
+        </FormLabel>
+        <FormInput
+          onBlur={e => this.updateRecipe(key, 'ingredientName', e.nativeEvent.text)}
+        />
+
+        <FormLabel>
+          Ingredient #
+          {key + 1}
+          {' '}
+          - Volume (mL)
+        </FormLabel>
+        <FormInput
+          onBlur={e => this.updateRecipe(key, 'ingredientVolume', e.nativeEvent.text)}
+        />
+
+        <FormLabel>
+          Ingredient #
+          {key + 1}
+          {' '}
+          - Alcohol Content (%)
+        </FormLabel>
+        <FormInput
+          onBlur={e => this.updateRecipe(key, 'ingredientAlcoholContent', e.nativeEvent.text)}
+        />
+      </Fragment>
+    );
+
+    getIngredientInputs = () => {
+      const { ingredientInputs } = this.state;
+      return ingredientInputs.map(value => value);
+    }
+
     updateImage = image => this.setState({ customImage: image })
+
+    isRecipeValid = (recipe) => {
+      let isValid = true;
+      forEach(recipe, (value) => {
+        isValid = this.isIngredientValid(value) && isValid;
+      });
+      return isValid;
+    }
+
+    isIngredientValid = (ingredientObj) => {
+      const {
+        ingredientName,
+        ingredientVolume,
+        ingredientAlcoholContent,
+      } = ingredientObj;
+
+      if (!ingredientName) {
+        this.dropdown.alertWithType('error', 'Error', 'One of your ingredient names is blank!');
+        return false;
+      }
+      if (!ingredientVolume) {
+        this.dropdown.alertWithType('error', 'Error', 'One of your ingredient volumes is blank!');
+        return false;
+      }
+      if (!(ingredientVolume * 1 === parseInt(ingredientVolume, 10))) {
+        this.dropdown.alertWithType('error', 'Error', 'One of your ingredient volumes isn\'t a number!');
+        return false;
+      }
+      if (!ingredientAlcoholContent) {
+        this.dropdown.alertWithType('error', 'Error', 'One of your ingredient alcohol contents is blank!');
+        return false;
+      }
+      if (!(ingredientAlcoholContent * 1 === parseInt(ingredientAlcoholContent, 10))) {
+        this.dropdown.alertWithType('error', 'Error', 'One of your ingredient alcohol contents isn\'t a number!');
+        return false;
+      }
+
+      return true;
+    }
+
+    tabulateTotalVolume = (recipe) => {
+      let totalVolume = 0;
+      forEach(recipe, (value) => {
+        totalVolume += value.ingredientVolume * 1;
+      });
+      this.setState({ drinkVolume: totalVolume });
+      return totalVolume;
+    }
+
+    tabulateTotalPercentage = (recipe) => {
+      const { drinkVolume } = this.state;
+      let totalAlcoholContent = 0;
+      forEach(recipe, (value) => {
+        const abv = value.ingredientAlcoholContent / 100;
+        totalAlcoholContent += ((value.ingredientVolume * abv) / drinkVolume) * 100;
+      });
+      return parseFloat(totalAlcoholContent.toFixed(2));
+    }
 
     createDrink = async () => {
       const {
         drinkName,
-        drinkVolume,
-        drinkAlcoholContent,
         customImage,
+        recipe,
       } = this.state;
       const { navigation } = this.props;
 
-      if (!await this.isValid()) return;
+      if (!await this.isValid() || !this.isRecipeValid(recipe)) return;
       let rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/createDrink', {
         method: 'POST',
         credentials: 'include',
@@ -68,8 +180,9 @@ export default class CustomDrinkScreen extends React.Component {
         },
         body: JSON.stringify({
           name: drinkName,
-          volumeInMilliliters: drinkVolume,
-          alcoholContent: drinkAlcoholContent,
+          volumeInMilliliters: this.tabulateTotalVolume(recipe),
+          alcoholContent: this.tabulateTotalPercentage(recipe),
+          recipe,
         }),
       });
 
@@ -102,34 +215,16 @@ export default class CustomDrinkScreen extends React.Component {
     }
 
     async isValid() {
-      const {
-        drinkName,
-        drinkVolume,
-        drinkAlcoholContent,
-      } = this.state;
+      const { drinkName } = this.state;
       const drinkNameError = await validate('drinkName', drinkName);
-      const drinkVolumeError = await validate('drinkVolume', drinkVolume);
-      const drinkAlcoholContentError = await validate('drinkAlcoholContent', drinkAlcoholContent);
-
-      this.setState({
-        drinkNameError,
-        drinkVolumeError,
-        drinkAlcoholContentError,
-      });
-
-      return new Promise((resolve) => {
-        resolve(!drinkNameError && !drinkVolumeError && !drinkAlcoholContentError);
-      });
+      this.setState({ drinkNameError });
+      return new Promise(resolve => resolve(!drinkNameError));
     }
 
     render() {
       const {
         drinkName,
         drinkNameError,
-        drinkVolume,
-        drinkVolumeError,
-        drinkAlcoholContent,
-        drinkAlcoholContentError,
         customImage,
       } = this.state;
 
@@ -184,43 +279,14 @@ export default class CustomDrinkScreen extends React.Component {
               {drinkNameError}
             </FormValidationMessage>
 
-            <FormLabel>Drink Volume (ml)</FormLabel>
-            <FormInput
-              onChangeText={drinkVolumeInput => this.setState({ drinkVolume: drinkVolumeInput })}
-              value={drinkVolume}
-              keyboardType="decimal-pad"
-              inputAccessoryViewID="accessoryView"
-              inputStyle={style.input}
-              onBlur={async () => {
-                this.setState({
-                  drinkVolumeError: await validate('drinkVolume', drinkVolume),
-                });
+            {this.getIngredientInputs()}
+            <TextButton
+              title="Add an Ingredient"
+              onPress={() => {
+                const { ingredientInputs } = this.state;
+                this.addIngredientInput(ingredientInputs.length);
               }}
             />
-            <FormValidationMessage labelStyle={style.errorMsg}>
-              {drinkVolumeError}
-            </FormValidationMessage>
-
-            <FormLabel>Alcohol Content (%)</FormLabel>
-            <FormInput
-              onChangeText={
-                            drinkAlcoholContentInput => this.setState({
-                              drinkAlcoholContent: drinkAlcoholContentInput,
-                            })
-                        }
-              value={drinkAlcoholContent}
-              keyboardType="decimal-pad"
-              inputAccessoryViewID="accessoryView"
-              inputStyle={style.input}
-              onBlur={async () => {
-                this.setState({
-                  drinkAlcoholContentError: await validate('drinkAlcoholContent', drinkAlcoholContent),
-                });
-              }}
-            />
-            <FormValidationMessage labelStyle={style.errorMsg}>
-              {drinkAlcoholContentError}
-            </FormValidationMessage>
 
             <Button
               onPress={this.createDrink}
@@ -230,11 +296,11 @@ export default class CustomDrinkScreen extends React.Component {
               title="Create"
               backgroundColor={colors.accent}
             />
-            <DropdownAlert ref={(ref) => {
-              this.dropdown = ref;
-            }}
-            />
           </ScrollView>
+          <DropdownAlert ref={(ref) => {
+            this.dropdown = ref;
+          }}
+          />
         </KeyboardAvoidingView>
       );
     }
