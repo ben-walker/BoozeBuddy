@@ -83,22 +83,22 @@ export default class EditScreen extends React.Component {
                     ))
                 }
           </List>
-            <Button
-                onPress={this.save}
-                containerViewStyle={style.button}
-                rounded
-                raised
-                title="Save"
-                backgroundColor={colors.errorBackground}
-            />
-            <Button
-                onPress={() => navigation.navigate('Profile')}
-                containerViewStyle={style.button}
-                rounded
-                raised
-                title="Cancel"
-                backgroundColor={colors.accent}
-            />
+          <Button
+            onPress={this.save}
+            containerViewStyle={style.button}
+            rounded
+            raised
+            title="Save"
+            backgroundColor={colors.errorBackground}
+          />
+          <Button
+            onPress={() => navigation.navigate('Profile')}
+            containerViewStyle={style.button}
+            rounded
+            raised
+            title="Cancel"
+            backgroundColor={colors.accent}
+          />
         </ScrollView>
       </View>
     );
