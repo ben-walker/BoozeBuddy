@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {
   ScrollView,
   View,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {
@@ -121,44 +123,46 @@ class DrinkModal extends Component {
     return (
       <Modal
         isVisible={isVisible}
-        onSwipe={this.toggleModal}
-        swipeDirection="down"
         style={style.drinkModal}
       >
         <ScrollView style={style.main}>
-          <View
-            style={{
-              flex: 1,
-              alignItems: 'center',
-            }}
-          >
-            <Avatar
-              height={300}
-              width={300}
-              rounded
-              source={image}
-              containerStyle={{ marginTop: 50 }}
-            />
+          <TouchableOpacity>
+            <TouchableWithoutFeedback>
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                }}
+              >
+                <Avatar
+                  height={300}
+                  width={300}
+                  rounded
+                  source={image}
+                  containerStyle={{ marginTop: 50 }}
+                />
 
-            <FormLabel>{drinkData.name}</FormLabel>
-            { drinkData.created_by ? <FormLabel>{this.getCreator()}</FormLabel> : null }
+                <FormLabel>{drinkData.name}</FormLabel>
+                { drinkData.created_by ? <FormLabel>{this.getCreator()}</FormLabel> : null }
 
-            { drinkData.created_by ? <FormLabel>Recipe:</FormLabel> : null }
-            { drinkData.created_by ? this.getRecipe() : null }
+                { drinkData.created_by ? <FormLabel>Recipe:</FormLabel> : null }
+                { drinkData.created_by ? this.getRecipe() : null }
 
-            {favourite ? heartIcon : addToFavouritesButton}
+                {favourite ? heartIcon : addToFavouritesButton}
 
-            <Icon
-              name="arrow-downward"
-              raised
-              reverse
-              size={26}
-              onPress={this.toggleModal}
-              color="grey"
-            />
+                <Icon
+                  name="arrow-downward"
+                  raised
+                  reverse
+                  size={26}
+                  onPress={this.toggleModal}
+                  color="grey"
+                />
 
-            <DropdownAlert ref={(ref) => { this.dropDown = ref; }} />
-          </View>
+                <DropdownAlert ref={(ref) => { this.dropDown = ref; }} />
+              </View>
+            </TouchableWithoutFeedback>
+          </TouchableOpacity>
         </ScrollView>
       </Modal>
     );
