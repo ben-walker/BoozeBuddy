@@ -371,14 +371,6 @@ export default class CalculatorScreen extends React.Component {
 
     return (
       <View style={style.container}>
-        <Button
-          title="Simulate Stop Drinking"
-          onPress={this.fakeStoppedDrinking}
-          containerViewStyle={style.button}
-          rounded
-          raised
-          backgroundColor={colors.accent}
-        />
 
         <DrinkModal
           ref={this.drinkModalRef}
