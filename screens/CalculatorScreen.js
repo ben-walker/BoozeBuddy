@@ -34,7 +34,7 @@ export default class CalculatorScreen extends React.Component {
     headerLeft: null,
     headerRight: (
       <TextButton
-        title="Create a Drink"
+        title="New Drink"
         onPress={() => navigation.navigate('CustomDrinks')}
       />
     ),

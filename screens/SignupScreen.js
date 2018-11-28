@@ -245,7 +245,7 @@ export default class SignupScreen extends React.Component {
                 onPress={() => this.setState({ agreedToEULA: !agreedToEULA })}
               />
               <View style={{ flexDirection: 'column', justifyContent: 'space-around' }}>
-                <Text style={style.defaultText}>I agree to the Terms and Conditions.</Text>
+                <Text style={style.defaultText}>I Agree</Text>
               </View>
             </View>
 
