@@ -52,7 +52,11 @@ export default class EditScreen extends React.Component {
         body: JSON.stringify({ gender: this.state.gender, weightKg: this.state.weightKg*1 }),
       });
       if(rawResponse.ok){
-          navigation.navigate('Profile');
+
+          const response = await rawResponse.json();
+          await AsyncStorage.setItem('userToken', JSON.stringify(response));
+          this.props.navigation.state.params.onProfileDataChange(this.state);
+          this.props.navigation.goBack();
       } else {
           alert("There was an error updating your information");
       }
