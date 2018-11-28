@@ -66,7 +66,7 @@ export default class ProfileScreen extends React.Component {
     onProfileDataChange = (changed) => {
       this.setState(changed);
     };
-
+ 
     render() {
       const { navigation } = this.props;
       const { userdata } = this.state;
