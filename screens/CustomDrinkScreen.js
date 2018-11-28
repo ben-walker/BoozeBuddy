@@ -72,7 +72,7 @@ export default class CustomDrinkScreen extends React.Component {
           - Name
         </FormLabel>
         <FormInput
-          onBlur={e => this.updateRecipe(key, 'ingredientName', e.nativeEvent.text)}
+          onEndEditing={e => this.updateRecipe(key, 'ingredientName', e.nativeEvent.text)}
         />
 
         <FormLabel>
@@ -82,7 +82,7 @@ export default class CustomDrinkScreen extends React.Component {
           - Volume (mL)
         </FormLabel>
         <FormInput
-          onBlur={e => this.updateRecipe(key, 'ingredientVolume', e.nativeEvent.text)}
+          onEndEditing={e => this.updateRecipe(key, 'ingredientVolume', e.nativeEvent.text)}
         />
 
         <FormLabel>
@@ -92,7 +92,7 @@ export default class CustomDrinkScreen extends React.Component {
           - Alcohol Content (%)
         </FormLabel>
         <FormInput
-          onBlur={e => this.updateRecipe(key, 'ingredientAlcoholContent', e.nativeEvent.text)}
+          onEndEditing={e => this.updateRecipe(key, 'ingredientAlcoholContent', e.nativeEvent.text)}
         />
       </Fragment>
     );
