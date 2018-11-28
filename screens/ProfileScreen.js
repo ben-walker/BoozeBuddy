@@ -58,36 +58,42 @@ export default class ProfileScreen extends React.Component {
           title: 'Username',
           subtitle: userdata.username,
           navigate: 'Profile',
+            noChevron: true
 
         },
         {
           title: 'Email',
           subtitle: userdata.email,
           navigate: 'Profile',
+            noChevron: true
 
         },
         {
           title: 'Gender',
           subtitle: userdata.gender,
           navigate: 'Profile',
+            noChevron: true
 
         },
         {
           title: 'Weight',
           subtitle: userdata.weightKg,
           navigate: 'Profile',
+            noChevron: true
 
         },
         {
           title: 'Theme',
           subtitle: 'Dark',
           navigate: 'Profile',
+            noChevron: true
 
         },
         {
           title: 'Terms and Conditions',
-          subtitle: 'legal',
+          subtitle: '',
           navigate: 'Legal',
+            noChevron: false
 
         },
 
@@ -105,6 +111,7 @@ export default class ProfileScreen extends React.Component {
                                 title={item.title}
                                 subtitle={item.subtitle}
                                 onPress={() => navigation.navigate(item.navigate)}
+                                hideChevron={item.noChevron}
                               />
                             ))
                         }
