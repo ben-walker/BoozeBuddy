@@ -33,7 +33,6 @@ export default class ProfileScreen extends React.Component {
       super(props);
       this.state = {
         userdata: '',
-        theme: 'dark',
       };
     }
 
@@ -44,11 +43,11 @@ export default class ProfileScreen extends React.Component {
       });
     }
 
-    async componentDidUpdate() {
+    async componentDidUpdate(prevProps, prevState) {
       const userData = await AsyncStorage.getItem('userToken').then(userToken => JSON.parse(userToken));
-      const theme = await AsyncStorage.getItem('theme');
+      if (prevState.userdata === userData) return;
       // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ userdata: userData, theme });
+      this.setState({ userdata: userData });
     }
 
     logOut = async () => {
@@ -71,7 +70,7 @@ export default class ProfileScreen extends React.Component {
 
     render() {
       const { navigation } = this.props;
-      const { userdata, theme } = this.state;
+      const { userdata } = this.state;
       const list = [
         {
           title: 'Username',
@@ -120,8 +119,8 @@ export default class ProfileScreen extends React.Component {
       ];
 
       return (
-        <View style={[style.container, theme === 'dark' ? null : { backgroundColor: 'white' }]}>
-          <ScrollView style={[style.container, theme === 'dark' ? null : { backgroundColor: 'white' }]}>
+        <View style={style.container}>
+          <ScrollView style={style.container}>
             <List>
               {
                             list.map(item => (
