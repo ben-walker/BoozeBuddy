@@ -349,6 +349,7 @@ export default class CalculatorScreen extends React.Component {
         onClearText={text => this.resetSearch(text, false, this.getPageOfDrinks)}
         value={query}
         containerStyle={{ backgroundColor: colors.background }}
+        returnKeyType="done"
       />
     );
   };
