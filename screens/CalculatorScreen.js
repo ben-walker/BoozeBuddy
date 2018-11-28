@@ -239,7 +239,7 @@ export default class CalculatorScreen extends React.Component {
     //   'info', // notif type
     //   'Hey, Listen!', // title of notif
     //   `That was ${parseFloat(standardDrinks.toFixed(2))} NEWLINE
-    //standard drinks; be safe and have fun!`, // message
+    // standard drinks; be safe and have fun!`, // message
     // );
 
     this.handleDrunkFacts(EBAC);

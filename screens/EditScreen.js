@@ -23,23 +23,24 @@ export default class EditScreen extends React.Component {
       super(props);
       this.state = {
         userdata: '',
-          gender: '',
-          weightKg: ''
+        gender: '',
+        weightKg: '',
       };
     }
 
     async componentDidMount() {
       // parse out user data
       const userData = await AsyncStorage.getItem('userToken').then(userToken => JSON.parse(userToken));
-      this.setState({ userdata: userData});
+      this.setState({ userdata: userData });
       this.setState({
-          gender: userData.gender,
-          weightKg: userData.weightKg.toString()});
+        gender: userData.gender,
+        weightKg: userData.weightKg.toString(),
+      });
     }
 
     save = async () => {
       const { navigation } = this.props;
-        let rawResponse;
+      let rawResponse;
 
       rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/updateData', {
         method: 'POST',
@@ -49,16 +50,15 @@ export default class EditScreen extends React.Component {
           'Content-Type': 'application/json',
 
         },
-        body: JSON.stringify({ gender: this.state.gender, weightKg: this.state.weightKg*1 }),
+        body: JSON.stringify({ gender: this.state.gender, weightKg: this.state.weightKg * 1 }),
       });
-      if(rawResponse.ok){
-
-          const response = await rawResponse.json();
-          await AsyncStorage.setItem('userToken', JSON.stringify(response));
-          this.props.navigation.state.params.onProfileDataChange(this.state);
-          this.props.navigation.goBack();
+      if (rawResponse.ok) {
+        const response = await rawResponse.json();
+        await AsyncStorage.setItem('userToken', JSON.stringify(response));
+        this.props.navigation.state.params.onProfileDataChange(this.state);
+        this.props.navigation.goBack();
       } else {
-          alert("There was an error updating your information");
+        alert('There was an error updating your information');
       }
     };
 
@@ -70,7 +70,6 @@ export default class EditScreen extends React.Component {
         theme,
         weightKg,
       } = this.state;
-
 
 
       return (
