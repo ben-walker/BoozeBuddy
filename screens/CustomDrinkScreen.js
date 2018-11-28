@@ -39,6 +39,7 @@ export default class CustomDrinkScreen extends React.Component {
         customImage: null,
         ingredientInputs: [],
         recipe: {},
+        loading: false,
       };
       this.cameraModalRef = React.createRef();
     }
@@ -171,6 +172,8 @@ export default class CustomDrinkScreen extends React.Component {
       const { navigation } = this.props;
 
       if (!await this.isValid() || !this.isRecipeValid(recipe)) return;
+
+      this.setState({ loading: true });
       let rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/createDrink', {
         method: 'POST',
         credentials: 'include',
@@ -185,6 +188,7 @@ export default class CustomDrinkScreen extends React.Component {
           recipe,
         }),
       });
+      this.setState({ loading: false });
 
       if (!rawResponse.ok) {
         this.dropdown.alertWithType('error', 'Error', 'Drink creation failed.');
@@ -192,7 +196,9 @@ export default class CustomDrinkScreen extends React.Component {
       }
 
       if (customImage) {
+        this.setState({ loading: true });
         rawResponse = await this.uploadDrinkImage(drinkName);
+        this.setState({ loading: false });
         if (!rawResponse.ok) {
           this.dropdown.alertWithType('error', 'Error', 'Drink image not uploaded.');
           return;
@@ -226,6 +232,7 @@ export default class CustomDrinkScreen extends React.Component {
         drinkName,
         drinkNameError,
         customImage,
+        loading,
       } = this.state;
 
       return (
@@ -295,6 +302,7 @@ export default class CustomDrinkScreen extends React.Component {
               raised
               title="Create"
               backgroundColor={colors.accent}
+              loading={loading}
             />
           </ScrollView>
           <DropdownAlert ref={(ref) => {
