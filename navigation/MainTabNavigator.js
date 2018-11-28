@@ -18,6 +18,7 @@ const HomeStack = createStackNavigator({
   Home: HomeScreen,
   Calculator: CalculatorScreen,
   CustomDrinks: CustomDrinkScreen,
+  MemoryGame: MemoryGameScreen,
 },
 {
   initialRouteName: 'Home',

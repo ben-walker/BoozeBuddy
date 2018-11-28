@@ -52,7 +52,7 @@ export default class MemoryGameScreen extends React.Component {
 
   componentWillUnmount() {
     const { timer } = this.state;
-    this.clearInterval(timer);
+    clearInterval(timer);
   }
 
   tick = () => {
@@ -178,7 +178,7 @@ export default class MemoryGameScreen extends React.Component {
     return colourListArr;
   }
 
-  applyPlayerGuess = async (guess) => {
+  applyPlayerGuess = (guess) => {
     const {
       playerGuesses,
       playerGuessIndex,
@@ -187,13 +187,13 @@ export default class MemoryGameScreen extends React.Component {
     const playerGuessesCopy = playerGuesses;
     const newButton = <GameButton customWidth={20} key={playerGuessIndex} colour={guess} />;
     playerGuessesCopy[playerGuessIndex] = newButton;
-    await this.setState({
+    this.setState({
       playerGuesses: playerGuessesCopy,
     });
 
     this.checkGameOver();
 
-    await this.setState(prev => ({
+    this.setState(prev => ({
       playerGuessIndex: prev.playerGuessIndex + 1,
     }));
   }

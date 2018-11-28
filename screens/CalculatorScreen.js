@@ -1,6 +1,7 @@
 import React from 'react';
 import Moment from 'moment';
 import url from 'url';
+import PropTypes from 'prop-types';
 import {
   ActivityIndicator,
   View,
@@ -102,6 +103,75 @@ export default class CalculatorScreen extends React.Component {
     }));
   };
 
+  navigateToGame = () => {
+    const { navigation } = this.props;
+    navigation.navigate('MemoryGame');
+  }
+
+  handleDrunkFacts = async (EBAC) => {
+    if (EBAC >= 0.02 && EBAC < 0.05) {
+      this.dropdown.alertWithType(
+        'info', // notif type
+        'BAC Facts', // title of notif
+        'Your BAC is greater than 0.02%. You\'re likely a little more relaxed, and you might feel a little warm.', // message
+      );
+    } else if (EBAC >= 0.05 && EBAC < 0.08) {
+      this.gameDropdown.alertWithType(
+        'success', // notif type
+        'BAC Facts', // title of notif
+        'Your BAC is greater than 0.05%. Try playing this game to test your memory!', // message
+      );
+    } else if (EBAC >= 0.08 && EBAC < 0.1) {
+      this.dropdown.alertWithType(
+        'info', // notif type
+        'BAC Alerts', // title of notif
+        'Your BAC is greater than 0.08%. It is now illegal for you to drive, and your senses are dulled. Short term memory loss may start to kick in soon.', // message
+      );
+    } else if (EBAC >= 0.1 && EBAC < 0.15) {
+      this.dropdown.alertWithType(
+        'info', // notif type
+        'BAC Alerts', // title of notif
+        'Your BAC is greater than 0.1%. You\'re likely visibly intoxicated, and you\'re probably having trouble coordinating your arms and legs.', // message
+      );
+    } else if (EBAC >= 0.15 && EBAC < 0.2) {
+      this.dropdown.alertWithType(
+        'warn', // notif type
+        'BAC Alerts', // title of notif
+        'Your BAC is greater than 0.15%. Walking and talking are becoming difficult, and you may be in danger of vomiting.', // message
+      );
+    } else if (EBAC >= 0.2 && EBAC < 0.25) {
+      this.dropdown.alertWithType(
+        'warn', // notif type
+        'BAC Alerts', // title of notif
+        'Your BAC is greater than 0.2%. Your sense of pain has dulled and you\'re likely to vomit. Blackouts are known to occur at this BAC.', // message
+      );
+    } else if (EBAC >= 0.25 && EBAC < 0.3) {
+      this.dropdown.alertWithType(
+        'warn', // notif type
+        'BAC Alerts', // title of notif
+        'Your BAC is greater than 0.25%. It might be time to start sobering up, you\'re likely numb and are at risk of seriously hurting yourself.', // message
+      );
+    } else if (EBAC >= 0.3 && EBAC < 0.35) {
+      this.dropdown.alertWithType(
+        'error', // notif type
+        'BAC Alerts', // title of notif
+        'Your BAC is greater than 0.3%. Your brain is about to enter into a stupor, causing memory loss and rendering you mostly unresponsive.', // message
+      );
+    } else if (EBAC >= 0.35 && EBAC < 0.4) {
+      this.dropdown.alertWithType(
+        'error', // notif type
+        'BAC Facts', // title of notif
+        'Your BAC is greater than 0.35%. This level of intoxication is similar to surgical anesthesia, you could pass out and stop breathing at any time.', // message
+      );
+    } else if (EBAC >= 0.4) {
+      this.dropdown.alertWithType(
+        'error', // notif type
+        'BAC Facts', // title of notif
+        'Your BAC is greater than 0.4%. Your life is in danger, seek immediate medical attention.', // message
+      );
+    }
+  }
+
   getPageOfDrinks = async () => {
     const {
       lastSeenId,
@@ -165,11 +235,14 @@ export default class CalculatorScreen extends React.Component {
     }));
     this.persistHistoricData();
 
-    this.dropdown.alertWithType(
-      'info', // notif type
-      'Hey, Listen!', // title of notif
-      `That was ${parseFloat(standardDrinks.toFixed(2))} standard drinks; be safe and have fun!`, // message
-    );
+    // this.dropdown.alertWithType(
+    //   'info', // notif type
+    //   'Hey, Listen!', // title of notif
+    //   `That was ${parseFloat(standardDrinks.toFixed(2))} NEWLINE
+    //standard drinks; be safe and have fun!`, // message
+    // );
+
+    this.handleDrunkFacts(EBAC);
 
     // only start recalculating BAC once first drink logged
     if (!this.recalculating) this.recalculating = setInterval(this.calculateBAC, 5000);
@@ -351,7 +424,12 @@ g/dL
           </List>
         </View>
         <DropdownAlert ref={(ref) => { this.dropdown = ref; }} />
+        <DropdownAlert ref={(ref) => { this.gameDropdown = ref; }} onClose={this.navigateToGame} />
       </View>
     );
   }
 }
+
+CalculatorScreen.propTypes = {
+  navigation: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+};
