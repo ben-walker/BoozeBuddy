@@ -149,9 +149,8 @@ export default class MemoryGameScreen extends React.Component {
         playerGuessColour = this.getColourFromGuessElement(playerGuesses[i]);
         actualColour = this.getColourFromGuessElement(generatedArrayOfColours[i]);
         if (playerGuessColour === actualColour) {
-          this.setState(prev => ({
-            numCorrectGuesses: prev.numCorrectGuesses + 1,
-          }));
+          this.state.numCorrectGuesses = this.state.numCorrectGuesses + 1;
+          console.log("Correct!", this.state.numCorrectGuesses);
         }
       }
       this.state.gamePaused = true;
