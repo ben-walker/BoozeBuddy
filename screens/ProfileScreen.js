@@ -4,13 +4,9 @@ import {
   AsyncStorage,
   ScrollView,
   View,
-  Button as TextButton,
+    Button as TextButton,
 } from 'react-native';
-import {
-  Button,
-  List,
-  ListItem,
-} from 'react-native-elements';
+import { Button, List, ListItem } from 'react-native-elements';
 import colors from '../constants/Colors';
 import style from '../constants/StyleSheet';
 
