@@ -1,12 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  InputAccessoryView,
-  Keyboard,
   AsyncStorage,
   ScrollView,
-  Button as RawButton,
-  Platform,
   View,
   KeyboardAvoidingView,
 } from 'react-native';
@@ -18,7 +14,6 @@ import {
   CheckBox,
   Text,
 } from 'react-native-elements';
-import { Header } from 'react-navigation';
 import DropdownAlert from 'react-native-dropdownalert';
 import PickerSelect from 'react-native-picker-select';
 import validate from '../utilities/validateWrapper';
@@ -46,6 +41,7 @@ export default class SignupScreen extends React.Component {
         weightKg: '',
         weightKgError: '',
         agreedToEULA: false,
+        loading: false,
       };
     }
 
@@ -65,6 +61,8 @@ export default class SignupScreen extends React.Component {
         return null;
       }
       if (!await this.isValid()) return null;
+
+      this.setState({ loading: true });
       const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/signUp', {
         method: 'POST',
         credentials: 'include',
@@ -81,6 +79,7 @@ export default class SignupScreen extends React.Component {
         }),
       });
 
+      this.setState({ loading: false });
       if (!rawResponse.ok) {
         this.dropdown.alertWithType('error', 'Error', 'Signup failed.');
         return null;
@@ -130,25 +129,16 @@ export default class SignupScreen extends React.Component {
         genderError,
         weightKg,
         weightKgError,
+        loading,
       } = this.state;
 
       const { navigation } = this.props;
 
-      const iosAccessoryView = (
-        <InputAccessoryView nativeID="accessoryView">
-          <RawButton
-            title="Done"
-            color="white"
-            onPress={Keyboard.dismiss}
-          />
-        </InputAccessoryView>
-      );
-
       return (
         <KeyboardAvoidingView
           style={style.container}
-          keyboardVerticalOffset={Header.HEIGHT + 20}
           behavior="padding"
+          enabled
         >
           <ScrollView style={style.main}>
             <FormLabel>USERNAME</FormLabel>
@@ -233,7 +223,7 @@ export default class SignupScreen extends React.Component {
               onChangeText={weightKgInput => this.setState({ weightKg: weightKgInput })}
               value={weightKg}
               keyboardType="decimal-pad"
-              inputAccessoryViewID="accessoryView"
+              returnKeyType="done"
               inputStyle={style.input}
               onBlur={async () => {
                 this.setState({
@@ -245,7 +235,6 @@ export default class SignupScreen extends React.Component {
               {weightKgError}
             </FormValidationMessage>
 
-            {Platform.OS === 'ios' ? iosAccessoryView : null}
             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
               <CheckBox
                 center
@@ -267,6 +256,7 @@ export default class SignupScreen extends React.Component {
               raised
               title="Sign Up"
               backgroundColor={colors.accent}
+              loading={loading}
             />
             <Button
               onPress={() => navigation.navigate('Legal')}
@@ -276,11 +266,11 @@ export default class SignupScreen extends React.Component {
               title="View Terms and Conditions"
               backgroundColor={colors.secondary}
             />
-            <DropdownAlert ref={(ref) => {
-              this.dropdown = ref;
-            }}
-            />
           </ScrollView>
+          <DropdownAlert ref={(ref) => {
+            this.dropdown = ref;
+          }}
+          />
         </KeyboardAvoidingView>
       );
     }

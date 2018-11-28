@@ -28,6 +28,7 @@ export default class LoginScreen extends React.Component {
         identifierError: '',
         password: '',
         passwordError: '',
+        loading: false,
       };
     }
 
@@ -38,6 +39,8 @@ export default class LoginScreen extends React.Component {
       } = this.state;
       const { navigation } = this.props;
       if (!await this.isValid()) return;
+
+      this.setState({ loading: true });
       const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/logIn', {
         method: 'POST',
         credentials: 'include',
@@ -51,6 +54,7 @@ export default class LoginScreen extends React.Component {
         }),
       });
 
+      this.setState({ loading: false });
       if (!rawResponse.ok) {
         this.dropdown.alertWithType('error', 'Error', 'Credentials not recognized.');
         return;
@@ -85,9 +89,10 @@ export default class LoginScreen extends React.Component {
         identifierError,
         password,
         passwordError,
+        loading,
       } = this.state;
       return (
-        <ScrollView style={style.container}>
+        <ScrollView style={style.main}>
           <FormLabel>IDENTIFIER</FormLabel>
           <FormInput
             placeholder="Username or Email"
@@ -134,6 +139,7 @@ export default class LoginScreen extends React.Component {
             raised
             title="Log In"
             backgroundColor={colors.accent}
+            loading={loading}
           />
           <DropdownAlert ref={(ref) => { this.dropdown = ref; }} />
         </ScrollView>
