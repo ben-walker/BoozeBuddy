@@ -36,14 +36,17 @@ export default class ProfileScreen extends React.Component {
       };
     }
 
-    async componentDidMount() {
-      // parse out user data
-      const userData = await AsyncStorage.getItem('userToken').then(userToken => JSON.parse(userToken));
-      this.setState({ userdata: userData });
-
-      this.props.navigation.setParams({
+    componentDidMount() {
+      const { navigation } = this.props;
+      navigation.setParams({
         onProfileDataChange: this.onProfileDataChange,
       });
+    }
+
+    async componentDidUpdate() {
+      const userData = await AsyncStorage.getItem('userToken').then(userToken => JSON.parse(userToken));
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ userdata: userData });
     }
 
     logOut = async () => {
