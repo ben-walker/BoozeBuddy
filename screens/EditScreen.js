@@ -25,6 +25,7 @@ export default class EditScreen extends React.Component {
         userdata: '',
         gender: '',
         weightKg: '',
+        loading: false,
       };
     }
 
@@ -39,27 +40,29 @@ export default class EditScreen extends React.Component {
     }
 
     save = async () => {
+      const {
+        gender,
+        weightKg,
+      } = this.state;
       const { navigation } = this.props;
-      let rawResponse;
 
-      rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/updateData', {
+      this.setState({ loading: true });
+      const rawResponse = await fetch('https://dr-robotnik.herokuapp.com/api/updateData', {
         method: 'POST',
         credentials: 'include',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-
         },
-        body: JSON.stringify({ gender: this.state.gender, weightKg: this.state.weightKg * 1 }),
+        body: JSON.stringify({ gender, weightKg: weightKg * 1 }),
       });
-      if (rawResponse.ok) {
-        const response = await rawResponse.json();
-        await AsyncStorage.setItem('userToken', JSON.stringify(response));
-        this.props.navigation.state.params.onProfileDataChange(this.state);
-        this.props.navigation.goBack();
-      } else {
-        alert('There was an error updating your information');
-      }
+      this.setState({ loading: false });
+
+      if (!rawResponse.ok) return alert('There was an error updating your information');
+      const response = await rawResponse.json();
+      await AsyncStorage.setItem('userToken', JSON.stringify(response));
+      navigation.state.params.onProfileDataChange(this.state);
+      return navigation.goBack();
     };
 
     render() {
@@ -69,8 +72,8 @@ export default class EditScreen extends React.Component {
         gender,
         theme,
         weightKg,
+        loading,
       } = this.state;
-
 
       return (
         <View style={style.container}>
@@ -105,7 +108,6 @@ export default class EditScreen extends React.Component {
               keyboardType="decimal-pad"
               inputAccessoryViewID="accessoryView"
               inputStyle={style.input}
-
             />
 
             <FormLabel>Theme</FormLabel>
@@ -132,6 +134,7 @@ export default class EditScreen extends React.Component {
               raised
               title="Save"
               backgroundColor={colors.errorBackground}
+              loading={loading}
             />
             <Button
               onPress={() => navigation.navigate('Profile')}
