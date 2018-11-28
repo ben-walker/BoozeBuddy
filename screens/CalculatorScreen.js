@@ -56,6 +56,7 @@ export default class CalculatorScreen extends React.Component {
       chartData: [],
       query: '',
       modalDrink: null,
+      drinkingTime: 0,
     };
     this.drinkModalRef = React.createRef();
     this.debounceSearch = debounce(this.searchDrinks, 500);
@@ -279,7 +280,10 @@ export default class CalculatorScreen extends React.Component {
       MR,
     } = this.state;
     const EBAC = bacUtilities.calculateBAC(SD, BW, Wt, MR, drinkingTime);
-    this.setState({ BAC: EBAC });
+    this.setState({
+      BAC: EBAC,
+      drinkingTime,
+    });
 
     // determine stopped drinking state
     if (EBAC < 0.001) {
@@ -361,9 +365,8 @@ export default class CalculatorScreen extends React.Component {
       BAC,
       SD,
       drinks,
+      drinkingTime,
     } = this.state;
-
-    const currentDrinkingTime = this.getDrinkingTime();
 
     return (
       <View style={style.container}>
@@ -395,7 +398,7 @@ g/dL
             {' '}
             drinks over
             {' '}
-            {parseFloat(currentDrinkingTime.toFixed(2))}
+            {parseFloat(drinkingTime.toFixed(2))}
             {' '}
             hours
           </Text>
