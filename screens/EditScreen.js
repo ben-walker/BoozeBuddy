@@ -65,12 +65,20 @@ export default class EditScreen extends React.Component {
       return navigation.goBack();
     };
 
+    toggleTheme = async () => {
+      const currentTheme = await AsyncStorage.getItem('theme');
+      let newTheme = null;
+      if (!currentTheme) newTheme = 'dark';
+      else if (currentTheme === 'dark') newTheme = 'light';
+      else if (currentTheme === 'light') newTheme = 'dark';
+      AsyncStorage.setItem('theme', newTheme);
+    }
+
     render() {
       const { navigation } = this.props;
       const {
         userdata,
         gender,
-        theme,
         weightKg,
         loading,
       } = this.state;
@@ -110,22 +118,13 @@ export default class EditScreen extends React.Component {
               inputStyle={style.input}
             />
 
-            <FormLabel>Theme</FormLabel>
-            <PickerSelect
-              items={[
-                { label: 'Dark', value: 'Dark' },
-                { label: 'Light', value: 'Light' },
-              ]}
-              onValueChange={async (value) => {
-                await this.setState({ theme: value });
-              }}
-              hideDoneBar
-            >
-              <FormInput
-                value={theme}
-                inputStyle={style.input}
-              />
-            </PickerSelect>
+            <Button
+              onPress={this.toggleTheme}
+              containerViewStyle={style.button}
+              rounded
+              raised
+              title="Toggle Theme"
+            />
 
             <Button
               onPress={this.save}
