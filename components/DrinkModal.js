@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import {
+  ScrollView,
+  View,
+} from 'react-native';
 import PropTypes from 'prop-types';
 import {
   Avatar,
@@ -122,43 +125,41 @@ class DrinkModal extends Component {
         swipeDirection="down"
         style={style.drinkModal}
       >
-        <View
-          style={{
-            flex: 1,
-            alignItems: 'center',
-          }}
-        >
-          <Avatar
-            height={300}
-            width={300}
-            rounded
-            source={image}
-            containerStyle={{ marginTop: 50 }}
-          />
-
-          <FormLabel>{drinkData.name}</FormLabel>
-          { drinkData.created_by ? <FormLabel>{this.getCreator()}</FormLabel> : null }
-
-          { drinkData.created_by ? <FormLabel>Recipe:</FormLabel> : null }
-          { drinkData.created_by ? this.getRecipe() : null }
-
-          {favourite ? heartIcon : addToFavouritesButton}
-
-          <Icon
-            name="arrow-downward"
-            raised
-            reverse
-            size={26}
-            onPress={this.toggleModal}
-            color="grey"
-            containerStyle={{
-              position: 'absolute',
-              bottom: 40,
+        <ScrollView style={style.main}>
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
             }}
-          />
+          >
+            <Avatar
+              height={300}
+              width={300}
+              rounded
+              source={image}
+              containerStyle={{ marginTop: 50 }}
+            />
 
-          <DropdownAlert ref={(ref) => { this.dropDown = ref; }} />
-        </View>
+            <FormLabel>{drinkData.name}</FormLabel>
+            { drinkData.created_by ? <FormLabel>{this.getCreator()}</FormLabel> : null }
+
+            { drinkData.created_by ? <FormLabel>Recipe:</FormLabel> : null }
+            { drinkData.created_by ? this.getRecipe() : null }
+
+            {favourite ? heartIcon : addToFavouritesButton}
+
+            <Icon
+              name="arrow-downward"
+              raised
+              reverse
+              size={26}
+              onPress={this.toggleModal}
+              color="grey"
+            />
+
+            <DropdownAlert ref={(ref) => { this.dropDown = ref; }} />
+          </View>
+        </ScrollView>
       </Modal>
     );
   }
